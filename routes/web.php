@@ -1,0 +1,71 @@
+<?php
+
+use App\Http\Controllers\UpcomingController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VideoController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Route;
+
+// Route untuk halaman utama
+Route::get('/', [HomeController::class, 'index3'])->name('dramabox.beranda');
+Route::get('/', [HomeController::class, 'index4'])->name('dramabox.beranda');
+
+// Route untuk dashboard pengguna
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+// Grup route yang memerlukan autentikasi
+Route::middleware('auth')->group(function () {
+    // Routes untuk profil
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile/edit', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile/edit', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Route untuk logout
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+    // Routes untuk video
+    Route::get('/videos/new', [VideoController::class, 'index'])->name('videos.index');
+    Route::get('/videos/create', [VideoController::class, 'create'])->name('videos.create');
+    Route::post('/videos/create', [VideoController::class, 'store'])->name('videos.store');
+    Route::get('/videos/{video}/edit', [VideoController::class, 'edit'])->name('videos.edit');
+    Route::put('/videos/{video}', [VideoController::class, 'update'])->name('videos.update');
+    Route::delete('/videos/{video}', [VideoController::class, 'destroy'])->name('videos.destroy');
+
+
+    // Routes untuk akan tayang
+    Route::get('/upcomings', [UpcomingController::class, 'index'])->name('upcomings.index');
+    Route::get('/upcomings/create', [UpcomingController::class, 'create'])->name('upcomings.create');
+    Route::post('/upcomings', [UpcomingController::class, 'store'])->name('upcomings.store');
+    Route::get('/upcomings/{upcoming}/edit', [UpcomingController::class, 'edit'])->name('upcomings.edit');
+    Route::put('/upcomings/{upcoming}', [UpcomingController::class, 'update'])->name('upcomings.update');
+    Route::delete('/upcomings/{upcoming}', [UpcomingController::class, 'destroy'])->name('upcomings.destroy');
+    
+});
+
+Route::get('/search', [VideoController::class, 'search'])->name('dramabox.search');
+
+Route::get('/detail', [VideoController::class, 'detail'])->name('dramabox.detail');
+
+// Route untuk admin dashboard
+Route::get('/admin/dashboard', [HomeController::class, 'index'])->middleware('auth')->name('admin.dashboard');
+
+// Route untuk dashboard pengguna
+Route::get('/users/dashboard', [HomeController::class, 'index'])->middleware('auth')->name('users.dashboard');
+
+// Routes untuk Dramabox
+Route::get('/beranda', [HomeController::class, 'index3'])->name('dramabox.beranda');
+Route::get('/beranda', [HomeController::class, 'index4']);
+
+
+Route::get('/browse', function () {
+    return view('dramabox.browse');
+})->name('dramabox.browse');
+Route::get('/app', function () {
+    return view('dramabox.app');
+})->name('dramabox.app');
+
+// Impor route autentikasi default Laravel
+require __DIR__.'/auth.php';
