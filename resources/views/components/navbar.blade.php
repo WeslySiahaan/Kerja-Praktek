@@ -28,29 +28,40 @@
       </ul>
 
       <!-- Bagian kanan nav -->
+      <!-- Bagian kanan nav -->
       <ul class="navbar-nav align-items-center">
         @auth
           <li class="nav-item me-3">
             <span class="nav-link text-white">Halo, {{ Auth::user()->name }}</span>
           </li>
+          
+          <li class="nav-item d-flex align-items-center gap-3">
+            @if (Route::has('profile.edit'))
+              <a href="{{ route('profile.edit') }}" class="nav-link text-white d-flex align-items-center">
+                <i class="bi bi-person-fill fs-5"></i>
+              </a>
+            @else
+              <span class="nav-link text-white">Profile tidak tersedia</span>
+            @endif
 
-          <li class="nav-item">
-            <a href="#" class="btn btn-danger" onclick="event.preventDefault(); confirmLogout();">
+            <a href="#" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirmLogout();">
               <i class="fas fa-sign-out-alt"></i> Logout
             </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-              @csrf
-            </form>
           </li>
+
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+            @csrf
+          </form>
+          
         @else
           <li class="nav-item me-2">
-            <a href="{{ route('login') }}" class="btn btn-outline-light">
+            <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm">
               <i class="fas fa-sign-in-alt"></i> Login
             </a>
           </li>
           @if(Route::has('register'))
             <li class="nav-item">
-              <a href="{{ route('register') }}" class="btn btn-light">
+              <a href="{{ route('register') }}" class="btn btn-light btn-sm">
                 <i class="fas fa-user-plus"></i> Register
               </a>
             </li>

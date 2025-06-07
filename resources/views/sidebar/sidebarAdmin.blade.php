@@ -76,13 +76,9 @@
                     </a>
                 </li>
                 <li class="nav-item mb-2">
-                    @if(Route::has('profile.edit'))
-                        <a href="{{ route('profile.edit') }}" class="nav-link text-white d-flex align-items-center">
-                            <i class="bi bi-person-fill me-2"></i> Profile
-                        </a>
-                    @else
-                        <span class="nav-link text-white">Profile route tidak tersedia</span>
-                    @endif
+                    <a href="{{ route('populars.index') }}" class="nav-link text-white d-flex align-items-center">
+                        <i class="bi bi-fire me-2"></i> Popular
+                    </a>
                 </li>
             </ul>
         </div>

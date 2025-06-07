@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UpcomingController;
+use App\Http\Controllers\PopularController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -8,8 +9,8 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 // Route untuk halaman utama
-Route::get('/', [HomeController::class, 'index3'])->name('dramabox.beranda');
 Route::get('/', [HomeController::class, 'index4'])->name('dramabox.beranda');
+Route::get('/beranda', [HomeController::class, 'index4']);
 
 // Route untuk dashboard pengguna
 Route::get('/dashboard', function () {
@@ -42,7 +43,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/upcomings/{upcoming}/edit', [UpcomingController::class, 'edit'])->name('upcomings.edit');
     Route::put('/upcomings/{upcoming}', [UpcomingController::class, 'update'])->name('upcomings.update');
     Route::delete('/upcomings/{upcoming}', [UpcomingController::class, 'destroy'])->name('upcomings.destroy');
-    
+
+    Route::get('/populars', [PopularController::class, 'index'])->name('populars.index');
+    Route::get('/populars/create', [PopularController::class, 'create'])->name('populars.create');
+    Route::post('/populars', [PopularController::class, 'store'])->name('populars.store');
+    Route::get('/populars/{popular}/edit', [PopularController::class, 'edit'])->name('populars.edit');
+    Route::put('/populars/{popular}', [PopularController::class, 'update'])->name('populars.update');
+    Route::delete('/populars/{popular}', [PopularController::class, 'destroy'])->name('populars.destroy');
 });
 
 Route::get('/search', [VideoController::class, 'search'])->name('dramabox.search');
@@ -55,9 +62,7 @@ Route::get('/admin/dashboard', [HomeController::class, 'index'])->middleware('au
 // Route untuk dashboard pengguna
 Route::get('/users/dashboard', [HomeController::class, 'index'])->middleware('auth')->name('users.dashboard');
 
-// Routes untuk Dramabox
-Route::get('/beranda', [HomeController::class, 'index3'])->name('dramabox.beranda');
-Route::get('/beranda', [HomeController::class, 'index4']);
+
 
 
 Route::get('/browse', function () {
