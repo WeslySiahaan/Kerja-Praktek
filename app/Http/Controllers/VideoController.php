@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Popular;
 use App\Models\Upcoming;
 use App\Models\Video;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
 
 class VideoController extends Controller
@@ -87,7 +89,7 @@ class VideoController extends Controller
 
     public function edit(Video $video)
     {
-        $videos = Video::all();
+        $videos = Video::all(); // $videos seharusnya hanya $video untuk edit tunggal
         $categories = [
             "Sudden Wealth", "Werewolves", "Popular", "Average", "Divine Tycoon", "Love Triangle", "Revenge", "Paranormal",
             "Marriage", "Cinderella", "Underdog Rise", "Son-in-Law", "Secret Identity", "Second-chance Love", "Comedy", "Boy's Love",
@@ -98,7 +100,7 @@ class VideoController extends Controller
             "Badboy", "Rebirth", "Small Potato", "Contract Lover", "Wealthy", "Humor", "Misunderstanding", "True Love",
             "Comeback", "Toxic Relationship", "Contract Marriage", "Family", "Time Travel", "Bitter Love", "Steamy", "Destiny"
         ];
-        return view('dramabox.videos.edit', compact('videos', 'categories', 'video'));
+        return view('dramabox.videos.edit', compact('video', 'categories')); // Hapus 'videos', gunakan 'video'
     }
 
     public function update(Request $request, Video $video)
@@ -170,41 +172,36 @@ class VideoController extends Controller
 
     public function search(Request $request)
     {
-      $query = $request->input('query');
+        $query = $request->input('query');
     
-      // Pencarian di model Video
-      $videos = Video::query();
-      if ($query) {
-        $videos->where('name', 'like', '%' . $query . '%');
-      }
-      $videos = $videos->latest()->get();
+        // Pencarian di model Video
+        $videos = Video::query();
+        if ($query) {
+            $videos->where('name', 'like', '%' . $query . '%');
+        }
+        $videos = $videos->latest()->get();
     
-      // Pencarian di model Upcoming
-      $upcomings = Upcoming::query();
-      if ($query) {
-        $upcomings->where('title', 'like', '%' . $query . '%');
-      }
-      $upcomings = $upcomings->latest()->get();
+        // Pencarian di model Upcoming
+        $upcomings = Upcoming::query();
+        if ($query) {
+            $upcomings->where('title', 'like', '%' . $query . '%');
+        }
+        $upcomings = $upcomings->latest()->get();
 
-       // Pencarian di model Upcoming
-       $populars = Popular::query();
-       if ($query) {
-         $populars->where('title', 'like', '%' . $query . '%');
-       }
-       $populars = $populars->latest()->get();
+        // Pencarian di model Popular
+        $populars = Popular::query();
+        if ($query) {
+            $populars->where('title', 'like', '%' . $query . '%');
+        }
+        $populars = $populars->latest()->get();
     
-      // Kirim dua variabel ke view
-      return view('welcome', compact('videos', 'upcomings', 'populars'));
+        // Kirim dua variabel ke view
+        return view('welcome', compact('videos', 'upcomings', 'populars'));
     }
 
-    public function detail(){
-        return view('dramabox.detail');
+    public function detail($id): View
+    {
+        $video = Video::findOrFail($id); // Ubah $videos menjadi $video (singular)
+        return view('dramabox.detail', compact('video')); // Ubah compact('videos') menjadi compact('video')
     }
-
-    public function show($id)
-{
-  $video = Video::findOrFail($id);
-  return view('dramabox.detail', compact('videos'));
-}
-
 }

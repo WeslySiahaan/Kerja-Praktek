@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use App\Models\Video;
 use App\Models\Upcoming;
 use App\Models\Popular;
@@ -25,4 +26,12 @@ class HomeController extends Controller
         $populars = Popular::all();
         return view('welcome', compact('upcomings', 'videos', 'populars'));
     }
+
+    public function detail($id): View
+    {
+      $videos = Video::findOrFail($id);
+      return view('dramabox.detail', compact('videos'));
+    }
+    
+    
 }

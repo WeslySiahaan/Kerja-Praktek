@@ -25,6 +25,22 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+            'profile_photo' => ['nullable', 'image', 'max:2048'], // Validasi untuk foto profil
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     */
+    public function messages(): array
+    {
+        return [
+            'profile_photo.image' => 'File harus berupa gambar.',
+            'profile_photo.max' => 'Ukuran gambar tidak boleh lebih dari 2MB.',
+            'name.required' => 'Nama wajib diisi.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email sudah digunakan.',
         ];
     }
 }

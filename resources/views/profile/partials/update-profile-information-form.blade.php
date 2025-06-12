@@ -4,7 +4,7 @@
       {{ __('Profile Information') }}
     </h2>
     <p class="text-muted">
-      {{ __("Update your account's profile information and email address.") }}
+      {{ __("Update your account's profile information, email address, and profile photo.") }}
     </p>
   </header>
 
@@ -12,7 +12,7 @@
     @csrf
   </form>
 
-  <form method="post" action="{{ route('profile.update') }}">
+  <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data">
     @csrf
     @method('patch')
 
@@ -70,6 +70,26 @@
               {{ __('A new verification link has been sent to your email address.') }}
             </div>
           @endif
+        </div>
+      @endif
+    </div>
+
+    <div class="mb-3">
+      <label for="profile_photo" class="form-label">{{ __('Profile Photo') }}</label>
+      <input
+        type="file"
+        class="form-control"
+        id="profile_photo"
+        name="profile_photo"
+      >
+      @if ($user->profile_photo)
+  <div class="mt-2">
+    <img src="{{ asset('storage/profiles/' . $user->profile_photo) }}" alt="Current Profile Photo" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+  </div>
+@endif
+      @if ($errors->has('profile_photo'))
+        <div class="text-danger mt-1">
+          {{ $errors->first('profile_photo') }}
         </div>
       @endif
     </div>

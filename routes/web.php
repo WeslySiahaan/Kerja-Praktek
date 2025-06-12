@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Route;
 // Route untuk halaman utama
 Route::get('/', [HomeController::class, 'index4'])->name('dramabox.beranda');
 Route::get('/beranda', [HomeController::class, 'index4']);
+Route::get('/video/detail/{id}', [VideoController::class, 'detail'])->name('dramabox.detail');
+
 
 // Route untuk dashboard pengguna
 Route::get('/dashboard', function () {
@@ -53,8 +55,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/search', [VideoController::class, 'search'])->name('dramabox.search');
-
-Route::get('/detail', [VideoController::class, 'detail'])->name('dramabox.detail');
 
 // Route untuk admin dashboard
 Route::get('/admin/dashboard', [HomeController::class, 'index'])->middleware('auth')->name('admin.dashboard');

@@ -36,13 +36,17 @@
           </li>
           
           <li class="nav-item d-flex align-items-center gap-3">
-            @if (Route::has('profile.edit'))
-              <a href="{{ route('profile.edit') }}" class="nav-link text-white d-flex align-items-center">
-                <i class="bi bi-person-fill fs-5"></i>
-              </a>
-            @else
-              <span class="nav-link text-white">Profile tidak tersedia</span>
-            @endif
+          @if (Route::has('profile.edit'))
+    <a href="{{ route('profile.edit') }}" class="nav-link text-white d-flex align-items-center">
+        <img 
+            src="{{ auth()->user()->profile_photo ? asset('storage/profiles/' . auth()->user()->profile_photo) : asset('public/logo Tokopedia.png') }}" 
+            alt="Foto Profil" 
+            class="rounded-circle" 
+            style="width: 32px; height: 32px; object-fit: cover;">
+    </a>
+@else
+    <span class="nav-link text-white">Profil tidak tersedia</span>
+@endif
 
             <a href="#" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirmLogout();">
               <i class="fas fa-sign-out-alt"></i> Logout

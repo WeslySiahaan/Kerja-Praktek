@@ -101,7 +101,8 @@
   <!-- Header menggunakan Bootstrap Navbar -->
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">MoraClips</a>
+      <!-- resources/views/layouts/app.blade.php atau sejenis -->
+      <img src="{{ asset('logo_1.png') }}" alt="Logo" style="height: 75px;">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -118,20 +119,43 @@
           </li>
         </ul>
         <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="#">English</a>
-          </li>
-        </ul>
-        <form class="d-flex ms-2" method="GET" action="{{ route('dramabox.search') }}">
-        <input
-          class="form-control me-2"
-          type="search"
-          name="query"
-          placeholder="Search by name"
-          aria-label="Search"
-          value="{{ request('query') }}"
-        >
-        </form>
+  <li class="nav-item">
+    <a class="nav-link" href="?lang=en">English</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="?lang=id">Indonesia</a>
+  </li>
+</ul>
+        <form class="d-flex align-items-center ms-2 position-relative" method="GET" action="{{ route('dramabox.search') }}">
+  <!-- Tombol ikon search -->
+  <button type="button" class="btn btn-outline-secondary" id="searchToggle" aria-label="Toggle Search">
+    <i class="bi bi-search"></i>
+  </button>
+
+  <!-- Input search yang disembunyikan awalnya -->
+  <input
+    id="searchInput"
+    class="form-control ms-2 d-none"
+    type="search"
+    name="query"
+    placeholder="Search by name"
+    aria-label="Search"
+    value="{{ request('query') }}"
+  >
+</form>
+
+<!-- Script Bootstrap + vanilla JS -->
+<script>
+  const toggleBtn = document.getElementById('searchToggle');
+  const searchInput = document.getElementById('searchInput');
+
+  toggleBtn.addEventListener('click', () => {
+    searchInput.classList.toggle('d-none');
+    if (!searchInput.classList.contains('d-none')) {
+      searchInput.focus();
+    }
+  });
+</script>
 
         @if (Route::has('login'))
           <div class="d-flex ms-2">
@@ -178,7 +202,7 @@
             <div class="upcoming-meta" style="transition: margin-top 0.6s ease;">
               <p class="text-white-50 mb-3">{{ $upcoming->category ? implode(', ', $upcoming->category) : 'Kategori belum tersedia.' }}</p>
               <div class="d-flex gap-3">
-                  <a href="{{ route('dramabox.detail', $upcoming->id) }}" 
+                  <a href="{{ route('dramabox.detail', ['id' => $upcoming->id]) }}" 
                     class="btn btn-light text-dark fw-semibold px-4 py-2 d-flex align-items-center gap-2 fs-5">
                     <i class="bi bi-play-fill"></i> Putar
                   </a>
@@ -225,6 +249,52 @@
 </section>
 
 <section class="container my-4">
+  <h1 class="display-5 fw-bold mb-4">populer</h1>
+
+  @if (session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+  @endif
+
+  @if ($videos->isEmpty())
+    <p class="text-center text-muted py-4">Tidak ada video yang diunggah.</p>
+  @else
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4">
+      @foreach ($videos as $video)
+        <div class="col">
+          <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
+            <div class="card bg-dark text-white h-100 d-flex flex-column">
+              @if ($video->video_file)
+                <video 
+                  class="card-img-top w-100" 
+                  preload="metadata" 
+                  muted 
+                  style="height: 300px; object-fit: cover;">
+                  <source src="{{ asset('videos/' . $video->video_file) }}" type="video/mp4">
+                </video>
+              @else
+                <img 
+                  src="{{ asset('Drama__box.png') }}" 
+                  class="card-img-top w-100" 
+                  alt="{{ $video->name }}" 
+                  style="height: 300px; object-fit: cover;">
+              @endif
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title text-truncate">{{ $video->name }}</h5>
+                <p class="card-text mb-2">
+                  <small>★ {{ $video->rating ?? rand(5, 7) . '.' . rand(0, 9) }}</small> |
+                  <small>{{ $video->duration ?? '01:30' }} HD</small>
+                </p>
+                <p class="card-text">{{ Str::limit($video->description, 100) }}</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      @endforeach
+    </div>
+  @endif
+</section>
+
+<section class="container my-4">
   <h1 class="display-5 fw-bold mb-4">Film Populer</h1>
 
   @if (session('success'))
@@ -267,66 +337,8 @@
 </section>
 
 
-<section class="container my-4">
-  <h1 class="display-5 fw-bold mb-4">Video Terbaru</h1>
 
-  @if (session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-  @endif
 
-  @if ($videos->isEmpty())
-    <p class="text-center text-muted py-4">No videos uploaded yet.</p>
-  @else
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-      @foreach ($videos as $video)
-        @php
-          $episodes = is_string($video->episodes) 
-            ? (json_decode($video->episodes, true) ?? [$video->episodes]) 
-            : ($video->episodes ?? []);
-        @endphp
-
-        <div class="col">
-          <a href="{{ route('dramabox.detail', $video->id) }}" class="text-decoration-none text-white">
-            <div class="card h-100">
-              @if ($video->video_file)
-                <video controls class="card-img-top" preload="metadata">
-                  <source src="{{ asset('videos/' . $video->video_file) }}" type="video/mp4">
-                  Your browser does not support the video tag.
-                </video>
-              @else
-                <img src="{{ asset('Drama__box.png') }}" class="card-img-top" alt="{{ $video->name }}">
-              @endif
-
-              <div class="card-body">
-                <h5 class="card-title">{{ $video->name }}</h5>
-                <p class="card-text">{{ $video->description }}</p>
-
-                <p class="card-text text-muted mb-2">
-                  <strong>Category:</strong> {{ $video->category }}<br>
-                  <strong>Rating:</strong> {{ $video->rating }}<br>
-                  <strong>Popular:</strong> {{ $video->is_popular ? 'Yes' : 'No' }}<br>
-                  <strong>Episodes:</strong> {{ count($episodes) }}
-                </p>
-
-                <div>
-                  @if (!empty($episodes))
-                    @foreach ($episodes as $index => $episodePath)
-                      <a href="{{ asset('episodes/' . $episodePath) }}" target="_blank" class="btn btn-sm btn-primary me-1 mb-1">
-                        Episode {{ $index + 1 }}
-                      </a>
-                    @endforeach
-                  @else
-                    <small class="text-muted">No episodes</small>
-                  @endif
-                </div>
-              </div>
-            </div>
-          </a>
-        </div>
-      @endforeach
-    </div>
-  @endif
-</section>
 
 
   <!-- Footer menggunakan Bootstrap dengan jarak yang lebih pas -->

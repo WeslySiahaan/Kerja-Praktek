@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('profile_photo')->nullable(); // Tambahkan kolom untuk foto profil
             $table->enum('role', ['admin', 'users'])->default('users');
             $table->rememberToken();
             $table->timestamps();
@@ -43,6 +44,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('profile_photo'); // Hapus kolom profile_photo saat rollback
+        });
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
