@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile/edit', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/profile/pertanyaanUmum', [ProfileController::class, 'pertanyaanUmum'])->name('profile.pertanyaanUmum');
     Route::get('/profile/layananPelanggan', [ProfileController::class, 'layananPelanggan'])->name('profile.layananPelanggan');
+    Route::get('/profile/hubungi', [ProfileController::class, 'hubungi'])->name('profile.hubungi');
 
 
     // Route untuk logout

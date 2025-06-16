@@ -95,5 +95,12 @@ class ProfileController extends Controller
    public function layananPelanggan()
 {
     return view('profile.layananPelanggan');
+
+}
+
+   public function hubungi()
+{
+    return view('profile.hubungi');
+
 }
 }
