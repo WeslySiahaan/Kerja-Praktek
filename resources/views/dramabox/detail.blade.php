@@ -3,8 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="{{ asset('logo_1.png') }}">
   <title>MoraClips</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <style>
     body {
       background-color: #000;
@@ -88,28 +91,61 @@
 
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">MoraClips</a>
+    <img src="{{ asset('logo_1.png') }}" alt="Logo" style="height: 75px;">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="{{ route('dramabox.beranda') }}">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ route('dramabox.browse') }}">Browse</a></li>
-          <li class="nav-item"><a class="nav-link" href="{{ route('dramabox.app') }}">App</a></li>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('dramabox.beranda') }}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('dramabox.browse') }}">kategori</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('dramabox.rekomendasi') }}">Rekomendasi</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('dramabox.koleksi') }}">Koleksi</a>
+          </li>
         </ul>
         <ul class="navbar-nav">
           <li class="nav-item"><a class="nav-link" href="#">English</a></li>
         </ul>
-        <form class="d-flex ms-2" method="GET" action="{{ route('dramabox.search') }}">
-          <input class="form-control me-2" type="search" name="query" placeholder="Search by name" value="{{ request('query') }}">
-        </form>
+        <form class="d-flex align-items-center ms-2 position-relative" method="GET" action="{{ route('dramabox.search') }}">
+  <!-- Tombol ikon search -->
+  <button type="button" class="btn btn-outline-secondary" id="searchToggle" aria-label="Toggle Search">
+    <i class="bi bi-search"></i>
+  </button>
+
+  <!-- Input search yang disembunyikan awalnya -->
+  <input
+    id="searchInput"
+    class="form-control ms-2 d-none"
+    type="search"
+    name="query"
+    placeholder="Search by name"
+    aria-label="Search"
+    value="{{ request('query') }}"
+  >
+</form>
+
+<!-- Script Bootstrap + vanilla JS -->
+<script>
+  const toggleBtn = document.getElementById('searchToggle');
+  const searchInput = document.getElementById('searchInput');
+
+  toggleBtn.addEventListener('click', () => {
+    searchInput.classList.toggle('d-none');
+    if (!searchInput.classList.contains('d-none')) {
+      searchInput.focus();
+    }
+  });
+</script>
         @if (Route::has('login'))
         <div class="d-flex ms-2">
           <a href="{{ route('login') }}" class="btn btn-primary me-2">Log in</a>
-          @if (Route::has('register'))
-          <a href="{{ route('register') }}" class="btn btn-secondary">Register</a>
-          @endif
         </div>
         @endif
       </div>

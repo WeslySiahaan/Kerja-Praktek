@@ -144,6 +144,9 @@
         @if (Route::has('login'))
           <div class="d-flex ms-2">
             <a href="{{ route('login') }}" class="btn btn-primary me-2">Log in</a>
+           <!-- @if (Route::has('register'))
+              <a href="{{ route('register') }}" class="btn btn-secondary">Register</a>
+            @endif -->
           </div>
         @endif
       </div>
@@ -151,7 +154,7 @@
   </nav>
 
   <div class="container my-4">
-    <h1 class="display-5 fw-bold mb-4">Page Browse</h1>
+    <h1 class="display-5 fw-bold mb-4">Page Koleksi</h1>
   </div>
 
   <!-- Footer menggunakan Bootstrap dengan jarak yang lebih pas -->

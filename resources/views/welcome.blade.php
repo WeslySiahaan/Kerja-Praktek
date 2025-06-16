@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="{{ asset('logo_1.png') }}">
   <title>MoraClips</title>
   <!-- Bootstrap 5 CSS CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -112,10 +113,13 @@
             <a class="nav-link" href="{{ route('dramabox.beranda') }}">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('dramabox.browse') }}">Browse</a>
+            <a class="nav-link" href="{{ route('dramabox.browse') }}">kategori</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('dramabox.app') }}">App</a>
+            <a class="nav-link" href="{{ route('dramabox.rekomendasi') }}">Rekomendasi</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('dramabox.koleksi') }}">Koleksi</a>
           </li>
         </ul>
         <ul class="navbar-nav">
@@ -160,9 +164,6 @@
         @if (Route::has('login'))
           <div class="d-flex ms-2">
             <a href="{{ route('login') }}" class="btn btn-primary me-2">Log in</a>
-            @if (Route::has('register'))
-              <a href="{{ route('register') }}" class="btn btn-secondary">Register</a>
-            @endif
           </div>
         @endif
       </div>
