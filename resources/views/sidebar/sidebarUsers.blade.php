@@ -119,20 +119,36 @@
                 <i class="bi bi-person-fill"></i>
                 <h4>Users</h4>
             </div>
-            <ul class="nav flex-column">
+             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a href="{{ route('users.dashboard') }}" class="nav-link">
-                        <i class="bi bi-house-door-fill"></i> Dashboard
+                    <a href="#" class="nav-link active">
+                        <i class="bi bi-person-circle"></i> Update Profile
                     </a>
                 </li>
                 <li class="nav-item">
-                    @if(Route::has('profile.edit'))
-                        <a href="{{ route('profile.edit') }}" class="nav-link">
-                            <i class="bi bi-person-fill"></i> Profile
-                        </a>
-                    @else
-                        <span class="nav-link">Profile route tidak tersedia</span>
-                    @endif
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-clock-history"></i> Riwayat Tontonan
+                    </a>
+                </li>
+                 <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-question-circle"></i> Pertanyaan Umum
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-headset"></i> Layanan Pelanggan
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-chat-left-text"></i> Hubungi / Saran
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-gear"></i> Pengaturan
+                    </a>
                 </li>
             </ul>
         </div>

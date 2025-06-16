@@ -29,36 +29,31 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        // Validasi data yang diterima
-        $validated = $request->validated();
+        // Perbarui data pengguna (nama dan email)
+        $user->fill($request->validated());
 
-        // Perbarui data pengguna
-        $user->fill($validated);
-
-        // Jika email berubah, reset email_verified_at
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
 
+        // --- START PERUBAHAN ---
         // Tangani upload foto profil
         if ($request->hasFile('profile_photo')) {
-            // Buat direktori profiles jika belum ada
-            $directory = 'public/profiles';
-            if (!Storage::exists($directory)) {
-                Storage::makeDirectory($directory);
+            // Hapus foto lama jika ada, menggunakan nama kolom yang benar
+            if ($user->profile_photo_path) {
+                Storage::disk('public')->delete($user->profile_photo_path);
             }
 
-            // Hapus foto lama jika ada
-            if ($user->profile_photo) {
-                Storage::delete('public/profiles/' . $user->profile_photo);
-            }
-
-            // Simpan foto baru
-            $path = $request->file('profile_photo')->store('public/profiles');
-            $user->profile_photo = basename($path); // Simpan hanya nama file
+            // Simpan file baru di 'storage/app/public/profiles'
+            // dan simpan path relatifnya ke database.
+            $path = $request->file('profile_photo')->store('profiles', 'public');
+            
+            // Simpan path ke kolom yang benar di database
+            $user->profile_photo_path = $path; 
         }
+        // --- AKHIR PERUBAHAN ---
 
-        // Simpan perubahan
+        // Simpan semua perubahan (nama, email, dan path foto)
         $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
@@ -75,10 +70,12 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
-        // Hapus foto profil saat akun dihapus
-        if ($user->profile_photo) {
-            Storage::delete('public/profiles/' . $user->profile_photo);
+        // --- START PERUBAHAN ---
+        // Hapus foto profil saat akun dihapus, menggunakan nama kolom yang benar
+        if ($user->profile_photo_path) {
+            Storage::disk('public')->delete($user->profile_photo_path);
         }
+        // --- AKHIR PERUBAHAN ---
 
         Auth::logout();
 

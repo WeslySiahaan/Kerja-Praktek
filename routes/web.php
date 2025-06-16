@@ -70,9 +70,9 @@ Route::get('/users/dashboard', [HomeController::class, 'index'])->middleware('au
 Route::get('/browse', function () {
     return view('dramabox.browse');
 })->name('dramabox.browse');
-Route::get('/app', function () {return view('dramabox.app');})->name('dramabox.app');
-Route::get('/rekomendasi', function () {return view('dramabox.rekomendasi');})->name('dramabox.rekomendasi');
-Route::get('/koleksi', function () {return view('dramabox.koleksi');})->name('dramabox.koleksi');
+Route::get('/app', function () {
+    return view('dramabox.app');
+})->name('dramabox.app');
 
 // Impor route autentikasi default Laravel
 require __DIR__.'/auth.php';
