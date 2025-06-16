@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +18,8 @@
         /* Wrapper utama untuk layout */
         .layout-wrapper {
             display: flex;
-            min-height: 100vh; /* Tinggi minimum viewport */
+            min-height: 100vh;
+            /* Tinggi minimum viewport */
         }
 
         /* Sidebar */
@@ -30,7 +32,8 @@
             flex-direction: column;
             position: sticky;
             top: 0;
-            height: 100vh; /* Sidebar mengikuti tinggi viewport */
+            height: 100vh;
+            /* Sidebar mengikuti tinggi viewport */
             transition: width 0.3s ease;
         }
 
@@ -90,7 +93,8 @@
             flex: 1;
             padding: 30px;
             background-color: #f4f4f9;
-            min-height: 100vh; /* Konten kanan minimal setinggi viewport */
+            min-height: 100vh;
+            /* Konten kanan minimal setinggi viewport */
         }
 
         /* Responsivitas */
@@ -111,6 +115,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="layout-wrapper">
         <!-- Sidebar -->
@@ -119,40 +124,47 @@
                 <i class="bi bi-person-fill"></i>
                 <h4>Users</h4>
             </div>
-             <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a href="#" class="nav-link active">
-                        <i class="bi bi-person-circle"></i> Update Profile
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="bi bi-clock-history"></i> Riwayat Tontonan
-                    </a>
-                </li>
-                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="bi bi-question-circle"></i> Pertanyaan Umum
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="bi bi-headset"></i> Layanan Pelanggan
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="bi bi-chat-left-text"></i> Hubungi / Saran
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="bi bi-gear"></i> Pengaturan
-                    </a>
-                </li>
-            </ul>
+            <ul class="nav flex-column">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                            <a href="#" class="nav-link active">
+                                <i class="bi bi-person-circle"></i> Update Profile
+                            </a>
+                    </li>
+                    <li class="nav-item">
+                        @if(Route::has('profile.edit'))
+                        <a href="{{ route('profile.edit') }}" class="nav-link">
+                            <i class="bi bi-person-fill"></i> Profile
+                        </a>
+                        @else
+                        <span class="nav-link">Profile route tidak tersedia</span>
+                        @endif
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-clock-history"></i> Riwayat Tontonan
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('profile.pertanyaanUmum') }}" class="nav-link">
+                            <i class="bi bi-question-circle"></i> Pertanyaan Umum
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-headset"></i> Layanan Pelanggan
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-chat-left-text"></i> Hubungi / Saran
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-gear"></i> Pengaturan
+                        </a>
+                    </li>
+                </ul>
         </div>
 
     </div>
 </body>
-</html>
