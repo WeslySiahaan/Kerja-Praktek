@@ -1,175 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="{{ asset('logo_1.png') }}">
-  <title>MoraClips</title>
-  <!-- Bootstrap 5 CSS CDN -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+@extends('layouts.app1')
 
-  <style>
-    body {
-      background-color: #000;
-      color: #fff;
-    }
-    .navbar {
-      background-color: #000;
-      border-bottom: 1px solid #333;
-    }
-    .navbar-brand {
-      color: #ff4500 !important;
-      font-size: 24px;
-      font-weight: bold;
-    }
-    .navbar-nav .nav-link {
-      color: #fff !important;
-    }
-    .navbar-nav .nav-link:hover {
-      color: #ff4500 !important;
-    }
-    .form-control {
-      background-color: #333;
-      border: none;
-      color: #fff;
-    }
-    .form-control::placeholder {
-      color: #ccc;
-    }
-    .card {
-      background-color: #1a1a1a;
-      border: none;
-    }
-    .card-img-top, .card video {
-      width: 100%;
-      height: auto;
-    }
-    .card-title {
-      color: #fff;
-    }
-    .card-text {
-      color: #ccc;
-    }
-    .text-muted {
-      color: #999 !important;
-    }
-    .btn-episode {
-      background-color: #333;
-      color: #fff;
-    }
-    .btn-episode:hover {
-      background-color: #ff4500;
-      color: #fff;
-    }
-    .alert-success {
-      background-color: #28a745;
-    }
-    footer {
-      background-color: #1a1a1a;
-      color: #fff;
-    }
-    footer a {
-      color: #ccc;
-      text-decoration: none;
-    }
-    footer a:hover {
-      color: #ff4500;
-    }
-    .footer-bottom {
-      border-top: 1px solid #333;
-      color: #999;
-    }
-  </style>
-  <style>
-  .modal-content.bg-dark {
-    background-color: #141414;
-  }
-  .modal-body {
-    padding: 1.5rem;
-  }
-  .text-muted {
-    color: #a3a3a3 !important;
-  }
-  .modal-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-</style>
-</head>
-<body>
-  <!-- Header menggunakan Bootstrap Navbar -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-      <!-- resources/views/layouts/app.blade.php atau sejenis -->
-      <img src="{{ asset('logo_1.png') }}" alt="Logo" style="height: 75px;">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('dramabox.beranda') }}">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('dramabox.browse') }}">kategori</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('dramabox.rekomendasi') }}">Rekomendasi</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('dramabox.koleksi') }}">Koleksi</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav">
-  <li class="nav-item">
-    <a class="nav-link" href="?lang=en">English</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="?lang=id">Indonesia</a>
-  </li>
-</ul>
-        <form class="d-flex align-items-center ms-2 position-relative" method="GET" action="{{ route('dramabox.search') }}">
-  <!-- Tombol ikon search -->
-  <button type="button" class="btn btn-outline-secondary" id="searchToggle" aria-label="Toggle Search">
-    <i class="bi bi-search"></i>
-  </button>
-
-  <!-- Input search yang disembunyikan awalnya -->
-  <input
-    id="searchInput"
-    class="form-control ms-2 d-none"
-    type="search"
-    name="query"
-    placeholder="Search by name"
-    aria-label="Search"
-    value="{{ request('query') }}"
-  >
-</form>
-
-<!-- Script Bootstrap + vanilla JS -->
-<script>
-  const toggleBtn = document.getElementById('searchToggle');
-  const searchInput = document.getElementById('searchInput');
-
-  toggleBtn.addEventListener('click', () => {
-    searchInput.classList.toggle('d-none');
-    if (!searchInput.classList.contains('d-none')) {
-      searchInput.focus();
-    }
-  });
-</script>
-
-        @if (Route::has('login'))
-          <div class="d-flex ms-2">
-            <a href="{{ route('login') }}" class="btn btn-primary me-2">Log in</a>
-          </div>
-        @endif
-      </div>
-    </div>
-  </nav>
-
+@section('content')
 <!-- Up Coming Fullscreen Slider -->
 <section class="position-relative">
   <div class="swiper netflixSwiper">
@@ -179,7 +10,7 @@
           <!-- Overlay -->
           <div class="position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0, 0, 0, 0.5); z-index: 1;"></div>
 
-                  <!-- Background Video -->
+          <!-- Background Video -->
           <div class="w-100" style="height: 90vh; overflow: hidden; position: relative; padding-bottom: 0;">
             @if($upcoming->trailer)
               <video class="w-100 h-100" style="object-fit: cover; object-position: center; height: 100%;" autoplay muted loop>
@@ -194,24 +25,24 @@
           </div>
           <!-- Poster dan Text -->
           <div class="position-absolute text-white" style="top: 13%; left: 3%; z-index: 2; max-width: 30%;">
-          @if($upcoming->poster)
-          <img src="{{ $upcoming->poster_url }}" alt="{{ $upcoming->title }}"
-              style="width: 200px; height: 250px; margin-bottom: 2rem; border-radius: 8px; box-shadow: 0 0 10px #000; object-fit: cover;">
-          @endif
+            @if($upcoming->poster)
+              <img src="{{ $upcoming->poster_url }}" alt="{{ $upcoming->title }}"
+                style="width: 200px; height: 250px; margin-bottom: 2rem; border-radius: 8px; box-shadow: 0 0 10px #000; object-fit: cover;">
+            @endif
             <h1 class="fw-bold mb-2">{{ $upcoming->title }}</h1>
 
             <div class="upcoming-meta" style="transition: margin-top 0.6s ease;">
               <p class="text-white-50 mb-3">{{ $upcoming->category ? implode(', ', $upcoming->category) : 'Kategori belum tersedia.' }}</p>
               <div class="d-flex gap-3">
-                  <a href="{{ route('dramabox.detail', ['id' => $upcoming->id]) }}" 
-                    class="btn btn-light text-dark fw-semibold px-4 py-2 d-flex align-items-center gap-2 fs-5">
-                    <i class="bi bi-play-fill"></i> Putar
-                  </a>
-                  <button type="button" class="btn btn-secondary fw-semibold px-4 py-2 d-flex align-items-center gap-2 fs-5" 
-                    data-bs-toggle="modal" data-bs-target="#detailModal{{ $upcoming->id }}">
-                    <i class="bi bi-info-circle"></i> Selengkapnya
-                  </button>
-                </div>
+                <a href="{{ route('dramabox.detail', ['id' => $upcoming->id]) }}"
+                  class="btn btn-light text-dark fw-semibold px-4 py-2 d-flex align-items-center gap-2 fs-5">
+                  <i class="bi bi-play-fill"></i> Putar
+                </a>
+                <button type="button" class="btn btn-secondary fw-semibold px-4 py-2 d-flex align-items-center gap-2 fs-5"
+                  data-bs-toggle="modal" data-bs-target="#detailModal{{ $upcoming->id }}">
+                  <i class="bi bi-info-circle"></i> Selengkapnya
+                </button>
+              </div>
               <!-- Modal -->
               <div class="modal fade" id="detailModal{{ $upcoming->id }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $upcoming->id }}" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
@@ -223,7 +54,7 @@
                     <div class="modal-body">
                       <div class="row g-4">
                         <div class="col-md-4">
-                          <img src="{{ $upcoming->poster_url }}" alt="{{ $upcoming->title }}" 
+                          <img src="{{ $upcoming->poster_url }}" alt="{{ $upcoming->title }}"
                             class="img-fluid rounded" style="width: 100%; height: 300px; object-fit: cover;">
                         </div>
                         <div class="col-md-8">
@@ -265,18 +96,18 @@
           <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
             <div class="card bg-dark text-white h-100 d-flex flex-column">
               @if ($video->video_file)
-                <video 
-                  class="card-img-top w-100" 
-                  preload="metadata" 
-                  muted 
+                <video
+                  class="card-img-top w-100"
+                  preload="metadata"
+                  muted
                   style="height: 300px; object-fit: cover;">
                   <source src="{{ asset('videos/' . $video->video_file) }}" type="video/mp4">
                 </video>
               @else
-                <img 
-                  src="{{ asset('Drama__box.png') }}" 
-                  class="card-img-top w-100" 
-                  alt="{{ $video->name }}" 
+                <img
+                  src="{{ asset('Drama__box.png') }}"
+                  class="card-img-top w-100"
+                  alt="{{ $video->name }}"
                   style="height: 300px; object-fit: cover;">
               @endif
               <div class="card-body d-flex flex-column">
@@ -310,16 +141,16 @@
         <div class="col">
           <div class="card bg-dark text-white h-100 d-flex flex-column">
             @if ($popular->poster_url)
-              <img 
-                src="{{ $popular->poster_url }}" 
-                class="card-img-top w-100" 
-                alt="{{ $popular->title }}" 
+              <img
+                src="{{ $popular->poster_url }}"
+                class="card-img-top w-100"
+                alt="{{ $popular->title }}"
                 style="height: 300px; object-fit: cover;">
             @else
-              <img 
-                src="{{ asset('Drama__box.png') }}" 
-                class="card-img-top w-100" 
-                alt="{{ $popular->title }}" 
+              <img
+                src="{{ asset('Drama__box.png') }}"
+                class="card-img-top w-100"
+                alt="{{ $popular->title }}"
                 style="height: 300px; object-fit: cover;">
             @endif
             <div class="card-body d-flex flex-column">
@@ -337,53 +168,6 @@
   @endif
 </section>
 
-
-
-
-
-
-  <!-- Footer menggunakan Bootstrap dengan jarak yang lebih pas -->
-  <footer class="mt-3 py-3">
-    <div class="container">
-      <div class="row g-3">
-        <div class="col-6 col-md-3">
-          <h5 class="mb-2">About</h5>
-          <ul class="list-unstyled">
-            <li><a href="#" class="d-block mb-1">Terms of Use</a></li>
-            <li><a href="#" class="d-block mb-1">Privacy Policy</a></li>
-          </ul>
-        </div>
-        <div class="col-6 col-md-3">
-          <h5 class="mb-2">More</h5>
-          <ul class="list-unstyled">
-            <li><a href="#" class="d-block mb-1">Resources</a></li>
-          </ul>
-        </div>
-        <div class="col-6 col-md-3">
-          <h5 class="mb-2">Contact Us</h5>
-          <ul class="list-unstyled">
-            <li><a href="mailto:feedback@dramabox.com" class="d-block mb-1">Email: feedback@dramabox.com</a></li>
-            <li><a href="#" class="d-block mb-1">Business Collaborations</a></li>
-          </ul>
-        </div>
-        <div class="col-6 col-md-3">
-          <h5 class="mb-2">Community</h5>
-          <ul class="list-unstyled">
-            <li><a href="#" class="d-block mb-1">Facebook</a></li>
-            <li><a href="#" class="d-block mb-1">YouTube</a></li>
-            <li><a href="#" class="d-block mb-1">TikTok</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom mt-3 text-center">
-        © DramaBox, All Rights Reserved StoryMatrix Pte.Ltd.
-      </div>
-    </div>
-  </footer>
-
-  <!-- Bootstrap 5 JS CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
   new Swiper('.netflixSwiper', {
@@ -402,8 +186,4 @@
     },
   });
 </script>
-
-
-
-</html>
-
+@endsection
