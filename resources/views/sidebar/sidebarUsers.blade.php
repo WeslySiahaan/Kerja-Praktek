@@ -149,7 +149,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('profile.layananPelanggan') }}" class="nav-link">
                             <i class="bi bi-headset"></i> Layanan Pelanggan
                         </a>
                     </li>

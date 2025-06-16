@@ -91,4 +91,9 @@ class ProfileController extends Controller
 {
     return view('profile.pertanyaanUmum');
 }
+
+   public function layananPelanggan()
+{
+    return view('profile.layananPelanggan');
+}
 }

@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile/edit', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile/edit', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/profile/pertanyaanUmum', [ProfileController::class, 'pertanyaanUmum'])->name('profile.pertanyaanUmum');
+    Route::get('/profile/layananPelanggan', [ProfileController::class, 'layananPelanggan'])->name('profile.layananPelanggan');
 
 
     // Route untuk logout
@@ -81,7 +82,7 @@ Route::get('/app', function () {
 
 
 // Impor route autentikasi default Laravel
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('google.redirect');
 Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
