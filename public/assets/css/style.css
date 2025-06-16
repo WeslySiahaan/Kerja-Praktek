@@ -1,0 +1,102 @@
+/* style.css */
+body {
+    background-color: #f5f6f8;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.login-container {
+    max-width: 400px;
+    margin: auto;
+    margin-top: 8%;
+    padding: 2.5rem;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.05);
+}
+
+.login-title {
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.login-input {
+    border-radius: 12px;
+    height: 45px;
+    margin-bottom: 1rem;
+    padding-left: 2.5rem;
+    border: 1px solid #ddd;
+}
+
+.login-input-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+.login-btn {
+    width: 100%;
+    background-color: #fce96a;
+    border: none;
+    height: 45px;
+    border-radius: 12px;
+    font-weight: 600;
+    color: #000;
+    transition: background-color 0.2s;
+}
+
+.login-btn:hover {
+    background-color: #fce240;
+}
+
+.login-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.login-divider::before,
+.login-divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #aaa;
+}
+
+.login-divider:not(:empty)::before {
+    margin-right: 0.75em;
+}
+
+.login-divider:not(:empty)::after {
+    margin-left: 0.75em;
+}
+
+.google-btn {
+    background-color: #f5f6f8;
+    border-radius: 12px;
+    padding: 0.75rem;
+    border: none;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.google-btn img {
+    width: 20px;
+    height: 20px;
+}
+
+.register-link {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    color: #f4b400;
+    font-weight: 500;
+    text-decoration: none;
+}

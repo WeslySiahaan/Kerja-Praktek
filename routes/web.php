@@ -7,6 +7,8 @@ use App\Http\Controllers\VideoController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GoogleController;
+
 
 // Route untuk halaman utama
 Route::get('/', [HomeController::class, 'index4'])->name('dramabox.beranda');
@@ -74,3 +76,6 @@ Route::get('/koleksi', function () {return view('dramabox.koleksi');})->name('dr
 
 // Impor route autentikasi default Laravel
 require __DIR__.'/auth.php';
+
+Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('google.redirect');
+Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
