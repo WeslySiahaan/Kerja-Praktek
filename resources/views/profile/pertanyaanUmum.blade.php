@@ -3,14 +3,14 @@
 @section('styles')
   <style>
     body {
-      font-family: 'poppins';
+      font-family: 'Poppins', sans-serif;
       background: #f5f5f5;
       padding: 0px;
       margin: 0;
     }
 
     h2 {
-      font-family: 'poppins';
+      font-family: 'Poppins', sans-serif;
       font-size: 28px;
       font-weight: bold;
       margin-bottom: 20px;
@@ -28,10 +28,11 @@
 
     .faq-title {
       font-size: 30px;
+      font-family: 'Poppins', sans-serif;
       display: flex;
       align-items: center;
       font-weight: bold;
-      font-size: 16px;
+      font-size: 24px;
       margin-bottom: 15px;
     }
 
@@ -51,6 +52,7 @@
 
     .faq-question {
       font-size: 20px;
+      font-family: 'Poppins', sans-serif;
       font-weight: bold;
       color: #4A90E2;
       display: flex;
@@ -66,6 +68,7 @@
 
     .faq-answer {
       display: none;
+      font-family: 'Poppins', sans-serif;
       font-size: 16px;
       color: #666666;
       margin-top: 8px;
@@ -78,6 +81,13 @@
 
     .faq-item.open .faq-icon i::before {
       content: "\f068"; /* Font Awesome minus icon */
+    }
+
+    h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 20px;
     }
   </style>
 @endsection
