@@ -215,6 +215,30 @@
         </button>
       </div>
     </div>
+    <!-- Movie 9-->
+    <div class="movie-card">
+      <img src="{{ asset('Drama__box.png') }}" alt="Meltdown" class="movie-poster">
+      <div class="movie-info">
+        <h3 class="movie-title">Meltdown</h3>
+        <p class="movie-genre">Aksi / Perampokan (Heist)</p>
+        <p class="movie-description">Seorang ahli strategi perampok legendaris kembali dari masa pensiunnya untuk satu pekerjaan terakhir... <strong>Lihat selengkapnya</strong></p>
+        <button class="watch-btn">
+          <i class="bi bi-play"></i>Tonton Sekarang
+        </button>
+      </div>
+    </div>
+     <!-- Movie 10 -->
+    <div class="movie-card">
+      <img src="{{ asset('Drama__box.png') }}" alt="Taverian Mystery" class="movie-poster">
+      <div class="movie-info">
+        <h3 class="movie-title">Taverian Mystery</h3>
+        <p class="movie-genre">Aksi / Misteri</p>
+        <p class="movie-description">Di masa depan, seorang prajurit android eksperimental dengan kemampuan tempur superior... <strong>Lihat selengkapnya</strong></p>
+        <button class="watch-btn">
+          <i class="bi bi-play"></i>Tonton Sekarang
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 @endsection
