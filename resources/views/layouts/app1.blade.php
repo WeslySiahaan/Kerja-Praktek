@@ -110,9 +110,19 @@
           <li class="nav-item">
             <a class="nav-link" href="{{ route('dramabox.beranda') }}">Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('dramabox.browse') }}">kategori</a>
-          </li>
+          <li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" href="{{ route('dramabox.browse') }}" id="kategoriDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Kategori
+  </a>
+  <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="kategoriDropdown">
+    <li><a class="dropdown-item" href="#">Aksi</a></li>
+    <li><a class="dropdown-item" href="#">Komedi</a></li>
+    <li><a class="dropdown-item" href="#">Romantis</a></li>
+    <li><a class="dropdown-item" href="#">Misteri</a></li>
+    <li><a class="dropdown-item" href="#">Sejarah</a></li>
+  </ul>
+</li>
+
           <li class="nav-item">
             <a class="nav-link" href="{{ route('dramabox.rekomendasi') }}">Rekomendasi</a>
           </li>
