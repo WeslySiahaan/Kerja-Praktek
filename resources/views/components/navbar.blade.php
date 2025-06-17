@@ -47,7 +47,7 @@
             @if (Route::has('profile.edit'))
               <a href="{{ route('profile.edit') }}" class="nav-link text-white d-flex align-items-center">
                 <img 
-                  src="{{ auth()->user()->profile_photo_path ? route('profile.image', ['filename' => basename(auth()->user()->profile_photo_path)]) : asset('logo Tokopedia.png') }}" 
+                  src="{{ auth()->user()->profile_photo_path ? route('profile.image', ['filename' => basename(auth()->user()->profile_photo_path)]) : asset('user.png') }}" 
                   alt="Foto Profil" 
                   class="rounded-circle" 
                   style="width: 32px; height: 32px; object-fit: cover;">
