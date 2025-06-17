@@ -1,3 +1,4 @@
+web
 <?php
 
 use App\Http\Controllers\UpcomingController;
@@ -89,3 +90,4 @@ require __DIR__ . '/auth.php';
 Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('google.redirect');
 Route::get('/auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
 Route::get('/storage/profiles/{filename}', [ImageController::class, 'showProfileImage'])->name('profile.image');
+Route::put('/password', [ProfileController::class, 'updatePassword'])->name('password.update');

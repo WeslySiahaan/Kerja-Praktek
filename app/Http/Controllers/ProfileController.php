@@ -87,6 +87,19 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
+    public function updatePassword(Request $request): RedirectResponse
+    {
+        $validated = $request->validateWithBag('updatePassword', [
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $request->user()->update([
+            'password' => \Illuminate\Support\Facades\Hash::make($validated['password']),
+        ]);
+
+        return back()->with('status', 'password-updated');
+    }
+
     public function pertanyaanUmum()
 {
     return view('profile.pertanyaanUmum');

@@ -124,10 +124,12 @@
                 <i class="bi bi-person-fill"></i>
                 <h4>Users</h4>
             </div>
+            <ul class="nav flex-column">
+                <ul class="nav flex-column">
                     <li class="nav-item">
                         @if(Route::has('profile.edit'))
                         <a href="{{ route('profile.edit') }}" class="nav-link">
-                            <i class="bi bi-person-fill"></i>Update Profile
+                            <i class="bi bi-person-fill"></i> Profile
                         </a>
                         @else
                         <span class="nav-link">Profile route tidak tersedia</span>
