@@ -15,6 +15,8 @@
       background: linear-gradient(180deg, #000000 0%, #4a3c00 100%);
       color: #fff;
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
     .navbar {
       background-color: #000;
@@ -40,31 +42,31 @@
       color: #ccc;
     }
     footer {
-  background-color: #1a1a1a;
-  color: #fff;
-  padding-top: 20px;
-}
-footer a {
-  color: #ccc;
-  text-decoration: none;
-}
-footer a:hover {
-  color: #ff4500;
-}
-.footer-bottom {
-  border-top: 1px solid #333;
-  color: #999;
-}
-
-/* Tambahan khusus untuk geser kolom "Kontak Kami" */
-footer .col-md-2:nth-child(3) {
-  margin-left: -40px; /* Atur sesuai kebutuhan */
-}
-footer .col-md-2:nth-child(4) {
-  padding-left: 40px;
-}
-
-
+      background-color: #1a1a1a;
+      color: #fff;
+      padding-top: 20px;
+      flex-shrink: 0;
+    }
+    footer a {
+      color: #ccc;
+      text-decoration: none;
+    }
+    footer a:hover {
+      color: #ff4500;
+    }
+    .footer-bottom {
+      border-top: 1px solid #333;
+      color: #999;
+    }
+    footer .col-md-2:nth-child(3) {
+      margin-left: -40px; 
+    }
+    footer .col-md-2:nth-child(4) {
+      padding-left: 40px;
+    }
+    main {
+      flex: 1 0 auto;
+    }
   </style>
 </head>
 <body>
@@ -150,7 +152,9 @@ footer .col-md-2:nth-child(4) {
   });
 </script>
 
-  @yield('content')
+  <main>
+    @yield('content')
+  </main>
 
   <!-- Footer -->
 <footer class="bg-dark text-white">
@@ -172,7 +176,7 @@ footer .col-md-2:nth-child(4) {
       <div class="col-6 col-md-2 mb-3">
         <h5>Kontak Kami</h5>
         <ul class="list-unstyled">
-          <li><a href="mailto:support@moraclips.com">Email:info@moratek.id</a></li>
+          <li><a href="mailto:support@CineMora.com">Email:info@moratek.id</a></li>
           
         </ul>
       </div>
@@ -196,7 +200,9 @@ footer .col-md-2:nth-child(4) {
       </div>
     </div>
     <div class="footer-bottom text-center mt-3">
-      © MoraClips 2025 - All rights reserved.
+      © CineMora 2025 - All rights reserved.
     </div>
   </div>
 </footer>
+</body>
+</html>
