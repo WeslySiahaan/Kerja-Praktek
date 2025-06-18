@@ -96,7 +96,7 @@
           aria-label="Search"
           value="{{ request('query') }}">
       </form>
-      <a href="#" class="btn btn-warning ms-3">Login</a>
+      <a href="{{ route('login') }}" class="btn btn-warning ms-3">Login</a>
     </div>
   </div>
 </nav>
@@ -115,7 +115,6 @@
           <li><a class="dropdown-item" href="#">Horor</a></li>
           <li><a class="dropdown-item" href="#">Romantis</a></li>
         </ul>
->>>>>>> 2d28fe784ccbf898ec09931ef999ce1c9a58c70b
       </div>
     </div>
   </div>
@@ -169,8 +168,6 @@
     </div>
   </footer>
 
-<<<<<<< HEAD
-=======
   <!-- Modal Login -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -309,7 +306,6 @@
 </div>
 
   <!-- Bootstrap 5 JS CDN -->
->>>>>>> 2d28fe784ccbf898ec09931ef999ce1c9a58c70b
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     const toggleBtn = document.getElementById('searchToggle');
