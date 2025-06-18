@@ -3,14 +3,12 @@
 @section('content')
     <div class="container mx-auto p-4">
 
-        <!-- Success Message -->
         @if (session('success'))
             <div class="alert alert-success mb-4" role="alert">
                 {{ session('success') }}
             </div>
         @endif
 
-        <!-- Form -->
         <div class="card p-4">
             <h4 class="card-title mb-4">Add New Video</h4>
             <form action="{{ route('videos.store') }}" method="POST" enctype="multipart/form-data">
@@ -39,6 +37,7 @@
                 <div class="mb-3">
                     <label for="category" class="form-label">Category</label>
                     <select name="category" id="category" class="form-select">
+                        <option value="">Select a category</option>
                         @foreach($categories as $category)
                             <option value="{{ $category }}" {{ old('category') == $category ? 'selected' : '' }}>{{ $category }}</option>
                         @endforeach
@@ -51,23 +50,31 @@
                     <input type="checkbox" name="is_popular" id="is_popular" {{ old('is_popular') ? 'checked' : '' }} class="form-check-input">
                     <label for="is_popular" class="form-check-label">Mark as Popular</label>
                 </div>
+
                 <div class="mb-3">
-                    <label for="video_file" class="form-label">Upload Video</label>
-                    <input type="file" name="video_file" id="video_file" class="form-control" accept="video/*" required>
-                    @error('video_file')
+                    <label for="poster_image" class="form-label">Upload Poster Image</label>
+                    <input type="file" name="poster_image" id="poster_image" class="form-control" accept="image/*">
+                    @error('poster_image')
                         <div class="text-danger mt-1">{{ $message }}</div>
                     @enderror
                 </div>
+
                 <div class="mb-3">
-                    <label class="form-label">Upload Episodes</label>
+                    <label class="form-label">Upload Episodes (Video Files)</label>
                     <div id="episodes-container">
-                        @foreach(old('episodes', []) as $episode)
+                        @if(old('episodes'))
+                            @foreach(old('episodes') as $index => $episode)
+                                <div class="mb-2">
+                                    <input type="file" name="episodes[]" class="form-control" accept="video/*">
+                                </div>
+                            @endforeach
+                        @else
                             <div class="mb-2">
                                 <input type="file" name="episodes[]" class="form-control" accept="video/*">
                             </div>
-                        @endforeach
+                        @endif
                     </div>
-                    <button type="button" onclick="addEpisodeInput()" class="btn btn-primary mt-2">Add Episode</button>
+                    <button type="button" onclick="addEpisodeInput()" class="btn btn-secondary mt-2">Add Another Episode</button>
                 </div>
                 <button type="submit" class="btn btn-success">
                     Add Video
@@ -81,7 +88,12 @@
             const container = document.getElementById('episodes-container');
             const input = document.createElement('div');
             input.className = 'mb-2';
-            input.innerHTML = '<input type="file" name="episodes[]" class="form-control" accept="video/*">';
+            input.innerHTML = `
+                <div class="input-group">
+                    <input type="file" name="episodes[]" class="form-control" accept="video/*">
+                    <button type="button" class="btn btn-danger" onclick="this.closest('.input-group').remove()">Remove</button>
+                </div>
+            `;
             container.appendChild(input);
         }
     </script>
