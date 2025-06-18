@@ -55,6 +55,11 @@
             border-top: 1px solid #333;
             color: #999;
         }
+        .modal-content input.form-control {
+          color: #111 !important;
+        }
+
+
     </style>
 </head>
 <body>
@@ -100,7 +105,9 @@
                         aria-label="Search"
                         value="{{ request('query') }}">
                 </form>
-                <a href="{{ route('login') }}" class="btn btn-warning ms-3">Login</a>
+                <button type="button" class="btn btn-warning ms-3" data-bs-toggle="modal" data-bs-target="#loginModal">
+                  Login
+                </button>
             </div>
         </div>
     </nav>
@@ -277,6 +284,156 @@
         </div>
     </div>
 
+    <!-- Modal Login -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content px-4 py-4" style="border-radius: 20px; background: #ffffff;">
+
+      <div class="position-relative mb-3">
+        <h5 class="modal-title fw-bold text-center mb-0" style="font-size: 1.6rem; color: #111;">Masuk</h5>
+        <button type="button" class="btn-close position-absolute top-0 end-0" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <form method="POST" action="{{ route('login') }}">
+        @csrf
+        <div class="d-flex align-items-center px-3 py-2 mb-2"
+             style="gap: 8px; border: 1px solid #D0D0D0; border-radius: 10px;">
+          <i class="bi bi-envelope-fill text-dark"></i>
+          <input type="email" name="email"
+                 class="form-control border-0 bg-transparent shadow-none small"
+                 placeholder="Email" required>
+        </div>
+
+        <div class="d-flex align-items-center px-3 py-2 mb-3"
+             style="gap: 8px; border: 1px solid #D0D0D0; border-radius: 10px;">
+          <i class="bi bi-lock-fill text-dark"></i>
+          <input type="password" name="password"
+  class="form-control border-0 bg-transparent shadow-none small"
+  placeholder="Kata Sandi" required
+  style="color: #111;">
+
+        </div>
+
+        <button type="submit"
+                class="btn w-100 fw-semibold text-dark mb-3"
+                style="background-color: #FDD835; border-radius: 10px; padding: 8px 0;">
+          Masuk
+        </button>
+      </form>
+
+      <div class="d-flex align-items-center justify-content-between mb-3 text-muted fw-medium">
+        <hr class="flex-grow-1" style="height: 1px; background-color: #ccc;">
+        <span class="px-2 small">atau</span>
+        <hr class="flex-grow-1" style="height: 1px; background-color: #ccc;">
+      </div>
+
+      <a href="{{ route('google.redirect') }}" class="d-flex align-items-center justify-content-center gap-2 text-dark text-decoration-none px-3 py-2 rounded-3 mb-3"
+         style="background-color: #fff; border: 1px solid #D0D0D0;">
+        <img src="https://developers.google.com/identity/images/g-logo.png" width="18" height="18" alt="Google logo">
+        <span class="fw-medium small">Masuk dengan Google</span>
+      </a>
+
+      <div class="text-center">
+        <a href="#" id="openRegister" class="fw-bold text-warning text-decoration-none">
+          Daftar Akun Baru
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal Register -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content px-4 py-4" style="border-radius: 20px; background: #fff;">
+
+      <!-- Title & Close -->
+      <div class="position-relative mb-3">
+        <h5 class="modal-title text-center fw-bold mb-0" style="font-size: 1.6rem; color: #111;">Daftar Akun</h5>
+        <button type="button" class="btn-close position-absolute top-0 end-0" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Form -->
+      <form method="POST" action="{{ route('register') }}">
+        @csrf
+
+        <!-- Nama -->
+        <div class="d-flex align-items-center px-3 py-2 mb-2"
+             style="gap: 8px; border: 1px solid #D0D0D0; border-radius: 10px;">
+          <i class="bi bi-person-fill text-dark"></i>
+          <input type="text" name="name"
+                 class="form-control border-0 bg-transparent shadow-none small"
+                 placeholder="Nama" required style="font-size: 0.95rem; padding: 6px 0;">
+        </div>
+
+        <!-- Email -->
+        <div class="d-flex align-items-center px-3 py-2 mb-2"
+             style="gap: 8px; border: 1px solid #D0D0D0; border-radius: 10px;">
+          <i class="bi bi-envelope-fill text-dark"></i>
+          <input type="email" name="email"
+                 class="form-control border-0 bg-transparent shadow-none small"
+                 placeholder="Email" required style="font-size: 0.95rem; padding: 6px 0;">
+        </div>
+
+        <!-- Password -->
+        <div class="d-flex align-items-center px-3 py-2 mb-2"
+             style="gap: 8px; border: 1px solid #D0D0D0; border-radius: 10px;">
+          <i class="bi bi-lock-fill text-dark"></i>
+          <input type="password" name="password"
+                 class="form-control border-0 bg-transparent shadow-none small"
+                 placeholder="Kata Sandi" required style="font-size: 0.95rem; padding: 6px 0;">
+        </div>
+
+        <!-- Konfirmasi Password -->
+        <div class="d-flex align-items-center px-3 py-2 mb-3"
+             style="gap: 8px; border: 1px solid #D0D0D0; border-radius: 10px;">
+          <i class="bi bi-lock-fill text-dark"></i>
+          <input type="password" name="password_confirmation"
+                 class="form-control border-0 bg-transparent shadow-none small"
+                 placeholder="Konfirmasi Kata Sandi" required style="font-size: 0.95rem; padding: 6px 0;">
+        </div>
+
+        <!-- Tombol Daftar -->
+        <button type="submit"
+                class="btn w-100 fw-semibold text-dark mb-3"
+                style="background-color: #FDD835; border-radius: 10px; padding: 8px 0; font-size: 0.95rem;">
+          Daftar
+        </button>
+      </form>
+
+      <!-- Sudah punya akun -->
+      <div class="text-center">
+        <small class="text-warning fw-bold">Sudah punya akun?</small><br>
+        <a href="#" class="fw-bold text-warning text-decoration-none"
+           data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#loginModal">
+          Masuk
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const toggleBtn = document.getElementById('searchToggle');
+  const searchInput = document.getElementById('searchInput');
+
+  toggleBtn.addEventListener('click', (e) => {
+    searchInput.classList.toggle('d-none');
+    if (!searchInput.classList.contains('d-none')) {
+      searchInput.focus();
+    }
+  });
+
+  // Tambahan untuk close input ketika klik di luar tombol & input
+  document.addEventListener('click', function(event) {
+    if (!toggleBtn.contains(event.target) && !searchInput.contains(event.target)) {
+      searchInput.classList.add('d-none');
+    }
+  });
+</script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     {{-- Swiper JS CDN --}}
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -309,5 +466,16 @@
             }
         });
     </script>
+    <script>
+  // Tambahkan ini untuk membuka modal Register dari Login
+  document.getElementById('openRegister')?.addEventListener('click', function (e) {
+    e.preventDefault();
+    const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+    loginModal.hide();
+
+    const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+    registerModal.show();
+  });
+</script>
 </body>
 </html>
