@@ -124,71 +124,86 @@
 
 <body>
   <!-- Header menggunakan Bootstrap Navbar -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-      <img src="{{ asset('logo_1.png') }}" alt="Logo" style="height: 75px;">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('dramabox.beranda') }}">Beranda</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('dramabox.browse') }}">Kategori</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('dramabox.rekomendasi') }}">Rekomendasi</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('dramabox.koleksi') }}">Koleksi</a>
-          </li>
+ <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #141414;">
+  <div class="container-fluid">
+    <img src="{{ asset('logo_1.png') }}" alt="Logo" style="height: 75px;">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('dramabox.beranda') }}">Beranda</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="kategoriToggle" href="#">Kategori</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('dramabox.rekomendasi') }}">Rekomendasi</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('dramabox.koleksi') }}">Koleksi</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="?lang=en">English</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="?lang=id">Indonesia</a>
+        </li>
+      </ul>
+      <form class="d-flex align-items-center ms-2 position-relative" method="GET" action="{{ route('dramabox.search') }}">
+        <button type="button" class="btn btn-outline-secondary" id="searchToggle" aria-label="Toggle Search">
+          <i class="bi bi-search"></i>
+        </button>
+        <input
+          id="searchInput"
+          class="form-control ms-2 d-none"
+          type="search"
+          name="query"
+          placeholder="Search by name"
+          aria-label="Search"
+          value="{{ request('query') }}">
+      </form>
+      <a href="#" class="btn btn-warning ms-3">Login</a>
+    </div>
+  </div>
+</nav>
+
+<nav class="navbar navbar-expand-lg navbar-dark d-none" id="kategoriNavbar" style="background-color: #141414; border-top: 1px solid #333;">
+  <div class="container-fluid">
+    <div class="d-flex align-items-center">
+      <h5 class="text-white mb-0 me-4">Film</h5>
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          Semua Genre
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><a class="dropdown-item" href="#">Aksi</a></li>
+          <li><a class="dropdown-item" href="#">Komedi</a></li>
+          <li><a class="dropdown-item" href="#">Horor</a></li>
+          <li><a class="dropdown-item" href="#">Romantis</a></li>
         </ul>
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="?lang=en">English</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="?lang=id">Indonesia</a>
-          </li>
-        </ul>
-        <form class="d-flex align-items-center ms-2 position-relative" method="GET" action="{{ route('dramabox.search') }}">
-          <button type="button" class="btn btn-outline-secondary" id="searchToggle" aria-label="Toggle Search">
-            <i class="bi bi-search"></i>
-          </button>
-          <input
-            id="searchInput"
-            class="form-control ms-2 d-none"
-            type="search"
-            name="query"
-            placeholder="Search by name"
-            aria-label="Search"
-            value="{{ request('query') }}">
-        </form>
-
-        <script>
-          const toggleBtn = document.getElementById('searchToggle');
-          const searchInput = document.getElementById('searchInput');
-
-          toggleBtn.addEventListener('click', () => {
-            searchInput.classList.toggle('d-none');
-            if (!searchInput.classList.contains('d-none')) {
-              searchInput.focus();
-            }
-          });
-        </script>
-
-        @if (Route::has('login'))
-          <div class="d-flex ms-2">
-            <button class="btn btn-warning text-dark fw-semibold" data-bs-toggle="modal" data-bs-target="#loginModal">
-            Login
-            </button>
-          </div>
-        @endif
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Target diubah ke #kategoriToggle dan #kategoriNavbar
+    const kategoriToggle = document.getElementById('kategoriToggle');
+    const kategoriNavbar = document.getElementById('kategoriNavbar');
+
+    kategoriToggle.addEventListener('click', function (event) {
+      event.preventDefault();
+      
+      // Toggle class 'd-none' pada navbar kategori
+      kategoriNavbar.classList.toggle('d-none');
+    });
+  });
+</script>
 
   <!-- Content placeholder -->
   @yield('content')
