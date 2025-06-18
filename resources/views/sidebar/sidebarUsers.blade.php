@@ -149,12 +149,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                       <a href="{{ route('profile.hubungi') }}" class="nav-link">
+                        <a href="{{ route('profile.hubungi') }}" class="nav-link">
                             <i class="bi bi-chat-left-text"></i> Hubungi / Saran
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('profile.pengaturan') }}" class="nav-link">
                             <i class="bi bi-gear"></i> Pengaturan
                         </a>
                     </li>

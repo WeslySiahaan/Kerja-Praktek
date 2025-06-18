@@ -65,11 +65,12 @@
   }
 
   .section-title {
+    font-family: 'Poppins', sans-serif;
     margin-top: 0px;
     margin-bottom: 20px;
     font-size: 20px;
     font-weight: bold;
-    color: #007bff;
+    color: #4A90E2;
   }
 
   .black-title {

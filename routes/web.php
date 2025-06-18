@@ -32,6 +32,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/pertanyaanUmum', [ProfileController::class, 'pertanyaanUmum'])->name('profile.pertanyaanUmum');
     Route::get('/profile/layananPelanggan', [ProfileController::class, 'layananPelanggan'])->name('profile.layananPelanggan');
     Route::get('/profile/hubungi', [ProfileController::class, 'hubungi'])->name('profile.hubungi');
+    Route::get('/profile/pengaturan', [ProfileController::class, 'pengaturan'])->name('profile.pengaturan');
+    Route::get('profile/persetujuan', [ProfileController::class, 'persetujuan'])->name('profile.persetujuan');
+    Route::get('profile/kebijakan', [ProfileController::class, 'kebijakan'])->name('profile.kebijakan');
+    Route::get('profile/nonaktifAkun', [ProfileController::class, 'nonaktifAkun'])->name('profile.nonaktifAkun');
+
 
 
     // Route untuk logout

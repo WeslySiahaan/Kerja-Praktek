@@ -51,7 +51,7 @@
     }
 
     .faq-question {
-      font-size: 20px;
+      font-size: 18px;
       font-family: 'Poppins', sans-serif;
       font-weight: bold;
       color: #4A90E2;

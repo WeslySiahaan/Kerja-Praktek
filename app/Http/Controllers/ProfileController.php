@@ -47,9 +47,9 @@ class ProfileController extends Controller
             // Simpan file baru di 'storage/app/public/profiles'
             // dan simpan path relatifnya ke database.
             $path = $request->file('profile_photo')->store('profiles', 'public');
-            
+
             // Simpan path ke kolom yang benar di database
-            $user->profile_photo_path = $path; 
+            $user->profile_photo_path = $path;
         }
         // --- AKHIR PERUBAHAN ---
 
@@ -101,19 +101,38 @@ class ProfileController extends Controller
     }
 
     public function pertanyaanUmum()
-{
-    return view('profile.pertanyaanUmum');
+    {
+        return view('profile.pertanyaanUmum');
+    }
+
+    public function layananPelanggan()
+    {
+        return view('profile.layananPelanggan');
+    }
+
+    public function hubungi()
+    {
+        return view('profile.hubungi');
+    }
+
+    public function pengaturan()
+    {
+        return view('profile.pengaturan');
+    }
+
+    public function persetujuan()
+    {
+        return view('profile.persetujuan');
+    }
+
+    public function kebijakan()
+    {
+        return view('profile.kebijakan');
+    }
+
+        public function nonaktifAkun()
+    {
+        return view('profile.nonaktifAkun');
+    }
 }
 
-   public function layananPelanggan()
-{
-    return view('profile.layananPelanggan');
-
-}
-
-   public function hubungi()
-{
-    return view('profile.hubungi');
-
-}
-}
