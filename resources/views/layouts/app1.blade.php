@@ -45,10 +45,6 @@
       background-color: #1a1a1a;
       color: #fff;
       padding-top: 20px;
-<<<<<<< HEAD
-=======
-      flex-shrink: 0;
->>>>>>> 6988bfb3c2e9c0411111c13e40ec66a907f1185f
     }
     footer a {
       color: #ccc;
@@ -61,25 +57,6 @@
       border-top: 1px solid #333;
       color: #999;
     }
-<<<<<<< HEAD
-
-    /* Tambahan khusus untuk geser kolom "Kontak Kami" */
-    footer .col-md-2:nth-child(3) {
-      margin-left: -40px; /* Atur sesuai kebutuhan */
-=======
-    footer .col-md-2:nth-child(3) {
-      margin-left: -40px; 
->>>>>>> 6988bfb3c2e9c0411111c13e40ec66a907f1185f
-    }
-    footer .col-md-2:nth-child(4) {
-      padding-left: 40px;
-    }
-<<<<<<< HEAD
-=======
-    main {
-      flex: 1 0 auto;
-    }
->>>>>>> 6988bfb3c2e9c0411111c13e40ec66a907f1185f
   </style>
 </head>
 <body>
@@ -241,50 +218,5 @@
           </ul>
         </div>
       </div>
-<<<<<<< HEAD
-      <div class="footer-bottom text-center mt-3">
-        © MoraClips 2025 - All rights reserved.
-      </div>
-    </div>
-  </footer>
-=======
-      <div class="col-6 col-md-2 mb-3">
-        <h5>Lainnya</h5>
-        <ul class="list-unstyled">
-          <li><a href="#">Resource</a></li>
-        </ul>
-      </div>
-      <div class="col-6 col-md-2 mb-3">
-        <h5>Kontak Kami</h5>
-        <ul class="list-unstyled">
-          <li><a href="mailto:support@CineMora.com">Email:info@moratek.id</a></li>
-          
-        </ul>
-      </div>
-      <div class="col-6 col-md-2 mb-3">
-        <h5>Bergabung</h5>
-        <ul class="list-unstyled">
-          <li><a href="#">Kolaborasi Bisnis</a></li>
-          <li><a href="#">info@moratek.id</a></li>
-        </ul>
-      </div>
-      <div class="col-6 col-md-2 mb-3 text-center">
-  <h5>Komunitas</h5>
-  <ul class="list-unstyled d-flex justify-content-center gap-3">
-    <li><a href="#"><i class="fab fa-facebook fa-lg text-white"></i></a></li>
-    <li><a href="#"><i class="fab fa-youtube fa-lg text-white"></i></a></li>
-    <li><a href="#"><i class="fab fa-instagram fa-lg text-white"></i></a></li>
-    <li><a href="#"><i class="fab fa-twitter fa-lg text-white"></i></a></li>
-  </ul>
-</div>
-
-      </div>
-    </div>
-    <div class="footer-bottom text-center mt-3">
-      © CineMora 2025 - All rights reserved.
-    </div>
-  </div>
-</footer>
->>>>>>> 6988bfb3c2e9c0411111c13e40ec66a907f1185f
 </body>
 </html>
