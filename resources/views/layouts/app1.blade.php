@@ -7,8 +7,9 @@
     <title>MoraClips</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-
+    {{-- PENTING: Tambahkan @yield('styles') DI SINI --}}
     @yield('styles')
 
     <style>
@@ -123,21 +124,7 @@
         </div>
     </nav>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Target diubah ke #kategoriToggle dan #kategoriNavbar
-            const kategoriToggle = document.getElementById('kategoriToggle');
-            const kategoriNavbar = document.getElementById('kategoriNavbar');
-
-            kategoriToggle.addEventListener('click', function (event) {
-                event.preventDefault();
-
-                // Toggle class 'd-none' pada navbar kategori
-                kategoriNavbar.classList.toggle('d-none');
-            });
-        });
-    </script>
-
+    {{-- Ini adalah tempat konten dari halaman child (koleksi.blade.php) akan disuntikkan --}}
     @yield('content')
 
     <footer class="bg-dark text-light py-4">
@@ -291,13 +278,34 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- Swiper JS CDN --}}
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    {{-- PENTING: Tambahkan @yield('scripts') DI SINI --}}
+    @yield('scripts')
+
     <script>
-        const toggleBtn = document.getElementById('searchToggle');
-        const searchInput = document.getElementById('searchInput');
-        toggleBtn.addEventListener('click', () => {
-            searchInput.classList.toggle('d-none');
-            if (!searchInput.classList.contains('d-none')) {
-                searchInput.focus();
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleBtn = document.getElementById('searchToggle');
+            const searchInput = document.getElementById('searchInput');
+            const kategoriToggle = document.getElementById('kategoriToggle');
+            const kategoriNavbar = document.getElementById('kategoriNavbar');
+
+
+            if (toggleBtn && searchInput) {
+                toggleBtn.addEventListener('click', () => {
+                    searchInput.classList.toggle('d-none');
+                    if (!searchInput.classList.contains('d-none')) {
+                        searchInput.focus();
+                    }
+                });
+            }
+
+            if (kategoriToggle && kategoriNavbar) {
+                kategoriToggle.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    kategoriNavbar.classList.toggle('d-none');
+                });
             }
         });
     </script>

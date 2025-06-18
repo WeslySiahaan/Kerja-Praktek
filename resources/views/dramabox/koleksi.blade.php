@@ -463,14 +463,20 @@
         }
 
         function handleConfirmDelete() {
-            const selected = document.querySelectorAll('.movie-select.active');
-            selected.forEach(el => {
+            // PENTING: Ubah NodeList menjadi Array untuk memastikan semua elemen diproses
+            const selectedNodes = document.querySelectorAll('.movie-select.active');
+            const selectedArray = Array.from(selectedNodes); // Mengubah NodeList menjadi Array
+
+            selectedArray.forEach(el => { // Iterasi melalui Array statis
                 const card = el.closest('.movie-card');
                 if (card) {
                     card.classList.add('fade-out');
+                    // Tambahkan timeout kecil sebelum remove jika transisi tidak bekerja sempurna
                     card.addEventListener('transitionend', () => {
                         card.remove();
                     }, { once: true });
+                    // Optional: Jika transisi tidak bekerja dengan baik, tambahkan ini sebagai fallback
+                    // setTimeout(() => { card.remove(); }, 600); // 100ms lebih lama dari durasi transisi
                 }
             });
             deleteConfirmationModal.hide();
