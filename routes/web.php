@@ -1,4 +1,3 @@
-web
 <?php
 
 use App\Http\Controllers\UpcomingController;

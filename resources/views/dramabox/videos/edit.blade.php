@@ -16,7 +16,6 @@
           @csrf
           @method('PUT')
 
-          <!-- Video Name -->
           <div class="mb-3">
             <label class="form-label">Video Name</label>
             <input type="text" name="name" value="{{ old('name', $video->name) }}" class="form-control" required>
@@ -25,7 +24,6 @@
             @enderror
           </div>
 
-          <!-- Description -->
           <div class="mb-3">
             <label class="form-label">Description</label>
             <textarea name="description" class="form-control" rows="3" required>{{ old('description', $video->description) }}</textarea>
@@ -34,7 +32,6 @@
             @enderror
           </div>
 
-          <!-- Rating -->
           <div class="mb-3">
             <label class="form-label">Rating (1-5)</label>
             <input type="number" name="rating" value="{{ old('rating', $video->rating) }}" min="1" max="5" class="form-control" required>
@@ -43,10 +40,10 @@
             @enderror
           </div>
 
-          <!-- Category -->
           <div class="mb-3">
             <label class="form-label">Category</label>
             <select name="category" class="form-select" required>
+              <option value="">Select a category</option>
               @foreach($categories as $category)
                 <option value="{{ $category }}" {{ old('category', $video->category) == $category ? 'selected' : '' }}>
                   {{ $category }}
@@ -58,52 +55,54 @@
             @enderror
           </div>
 
-          <!-- Is Popular -->
           <div class="form-check mb-3">
             <input class="form-check-input" type="checkbox" name="is_popular" id="is_popular" {{ old('is_popular', $video->is_popular) ? 'checked' : '' }}>
             <label class="form-check-label" for="is_popular">Mark as Popular</label>
           </div>
 
-          <!-- Upload Main Video -->
           <div class="mb-3">
-            <label class="form-label">Upload Video</label>
-            <input type="file" name="video_file" class="form-control" accept="video/*">
-            @if($video->video_file)
-              <div class="form-text">Current Video: {{ $video->video_file }}</div>
+            <label class="form-label">Upload New Poster Image (Optional)</label>
+            <input type="file" name="poster_image" class="form-control" accept="image/*">
+            @if($video->poster_image)
+              <div class="mt-2">
+                <p>Current Poster:</p>
+                <img src="{{ asset('storage/' . $video->poster_image) }}" alt="Current Poster" style="max-width: 200px; height: auto;">
+                <div class="form-text">Path: `{{ $video->poster_image }}`</div>
+              </div>
+            @else
+              <div class="form-text">No poster image uploaded yet.</div>
             @endif
-            @error('video_file')
+            @error('poster_image')
               <div class="text-danger small mt-1">{{ $message }}</div>
             @enderror
           </div>
 
-          <!-- Upload Episodes -->
           <div class="mb-3">
-            <label class="form-label">Upload Episodes</label>
+            <label class="form-label">Upload New Episodes (Optional)</label>
             <div id="episodes-container">
-              @php
-                // Decode existing episodes JSON string to array
-                $existingEpisodes = is_array($video->episodes)
-                  ? $video->episodes
-                  : (is_string($video->episodes) ? json_decode($video->episodes, true) : []);
-              @endphp
-
-              @foreach(old('episodes', $existingEpisodes) as $index => $episode)
-                <div class="mb-2">
-                  <input type="file" name="episodes[]" class="form-control" accept="video/*">
-                  @if(isset($episode))
-                    <div class="form-text">Current Episode: {{ $episode }}</div>
-                  @endif
-                </div>
-              @endforeach
-
-              @if(count($existingEpisodes) == 0)
-                {{-- Jika belum ada episode, tampilkan satu input kosong --}}
-                <div class="mb-2">
-                  <input type="file" name="episodes[]" class="form-control" accept="video/*">
-                </div>
+              @if($video->episodes && count($video->episodes ?? []) > 0)
+                <p class="mb-2">Existing Episodes:</p>
+                @foreach($video->episodes ?? [] as $index => $episodePath)
+                  <div class="input-group mb-2" id="episode-{{ $index }}">
+                    <span class="input-group-text">Episode {{ $index + 1 }}</span>
+                    <input type="text" class="form-control" value="{{ $episodePath }}" readonly>
+                    <a href="{{ asset('storage/' . $episodePath) }}" target="_blank" class="btn btn-info"><i class="bi bi-eye"></i> View</a>
+                    <input type="hidden" name="existing_episodes[]" value="{{ $episodePath }}"> {{-- Penting untuk mempertahankan episode lama --}}
+                    <button type="button" class="btn btn-danger" onclick="removeEpisode('episode-{{ $index }}')"><i class="bi bi-x"></i> Remove</button>
+                  </div>
+                @endforeach
+              @else
+                <p class="mb-2 text-muted">No existing episodes.</p>
               @endif
+
+              <p class="mb-2 mt-3">Add New Episode Files:</p>
+              <div id="new-episodes-input-container">
+                <div class="input-group mb-2">
+                  <input type="file" name="episodes[]" class="form-control" accept="video/*">
+                  <button type="button" class="btn btn-outline-secondary" onclick="addEpisodeInput()"><i class="bi bi-plus"></i> Add</button>
+                </div>
+              </div>
             </div>
-            <button type="button" onclick="addEpisodeInput()" class="btn btn-outline-primary mt-2">Add Episode</button>
             @error('episodes.*')
               <div class="text-danger small mt-1">{{ $message }}</div>
             @enderror
@@ -117,11 +116,23 @@
 
   <script>
     function addEpisodeInput() {
-      const container = document.getElementById('episodes-container');
+      const container = document.getElementById('new-episodes-input-container');
       const div = document.createElement('div');
-      div.className = 'mb-2';
-      div.innerHTML = '<input type="file" name="episodes[]" class="form-control" accept="video/*">';
+      div.className = 'input-group mb-2';
+      div.innerHTML = `
+        <input type="file" name="episodes[]" class="form-control" accept="video/*">
+        <button type="button" class="btn btn-danger" onclick="this.closest('.input-group').remove()"><i class="bi bi-x"></i> Remove</button>
+      `;
       container.appendChild(div);
+    }
+
+    // Fungsi untuk menghapus episode yang sudah ada (secara visual)
+    function removeEpisode(elementId) {
+        if (confirm('Are you sure you want to remove this episode? This will delete the file from storage upon saving changes.')) {
+            document.getElementById(elementId).remove();
+            // Penting: Input hidden untuk episode yang dihapus juga ikut terhapus dari DOM,
+            // sehingga controller akan tahu bahwa episode ini tidak lagi dipertahankan.
+        }
     }
   </script>
 @endsection

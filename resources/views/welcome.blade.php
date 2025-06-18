@@ -81,40 +81,41 @@
 </section>
 
 <section class="container my-4">
-  <h1 class="display-5 fw-bold mb-4">populer</h1>
+  <h1 class="display-5 fw-bold mb-4">Populer</h1> {{-- Judul diubah menjadi "Populer" --}}
 
   @if (session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
   @endif
 
   @if ($videos->isEmpty())
-    <p class="text-center text-muted py-4">Tidak ada video yang diunggah.</p>
+    <p class="text-center text-muted py-4">Tidak ada video populer yang tersedia saat ini.</p> {{-- Pesan disesuaikan --}}
   @else
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4">
       @foreach ($videos as $video)
         <div class="col">
           <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
             <div class="card bg-dark text-white h-100 d-flex flex-column">
-              @if ($video->video_file)
-                <video
-                  class="card-img-top w-100"
-                  preload="metadata"
-                  muted
-                  style="height: 300px; object-fit: cover;">
-                  <source src="{{ asset('videos/' . $video->video_file) }}" type="video/mp4">
-                </video>
-              @else
+              {{-- Menampilkan gambar poster dari kolom poster_image --}}
+              @if ($video->poster_image)
                 <img
-                  src="{{ asset('Drama__box.png') }}"
+                  src="{{ asset('storage/' . $video->poster_image) }}"
                   class="card-img-top w-100"
-                  alt="{{ $video->name }}"
+                  alt="{{ $video->name }} poster"
+                  style="height: 300px; object-fit: cover;">
+              @else
+                {{-- Fallback jika tidak ada poster_image, gunakan gambar default --}}
+                <img
+                  src="{{ asset('Drama__box.png') }}" {{-- Pastikan 'Drama__box.png' ada di direktori public Anda --}}
+                  class="card-img-top w-100"
+                  alt="{{ $video->name }} (No Poster)"
                   style="height: 300px; object-fit: cover;">
               @endif
               <div class="card-body d-flex flex-column">
                 <h5 class="card-title text-truncate">{{ $video->name }}</h5>
                 <p class="card-text mb-2">
-                  <small>★ {{ $video->rating ?? rand(5, 7) . '.' . rand(0, 9) }}</small> |
-                  <small>{{ $video->duration ?? '01:30' }} HD</small>
+                  {{-- Menampilkan rating. Jika duration ada di DB, gunakan itu. --}}
+                  <small>★ {{ $video->rating ?? 'N/A' }}</small> | {{-- Rating akan selalu ada (1-5), jadi rand tidak diperlukan --}}
+                  <small>{{ $video->duration ?? '01:30' }} HD</small> {{-- Placeholder durasi jika kolom 'duration' tidak ada --}}
                 </p>
                 <p class="card-text">{{ Str::limit($video->description, 100) }}</p>
               </div>

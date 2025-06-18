@@ -5,6 +5,11 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateVideosTable extends Migration
 {
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up()
     {
         Schema::create('videos', function (Blueprint $table) {
@@ -14,12 +19,17 @@ class CreateVideosTable extends Migration
             $table->integer('rating');
             $table->string('category');
             $table->boolean('is_popular')->default(false);
-            $table->string('video_file')->nullable();
+            $table->string('poster_image')->nullable();
             $table->json('episodes')->nullable();
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     public function down()
     {
         Schema::dropIfExists('videos');
