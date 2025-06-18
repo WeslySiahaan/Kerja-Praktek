@@ -22,7 +22,7 @@ class HomeController extends Controller
     public function index4()
     {
         $upcomings = Upcoming::all(); // Fetch all upcoming releases for "Up Coming"
-        $videos = Video::latest()->take(6)->get(); // Fetch latest 6 videos for "Video Terbaru"
+        $videos = Video::latest()->get(); // Fetch latest 6 videos for "Video Terbaru"
         $populars = Popular::all();
         return view('welcome', compact('upcomings', 'videos', 'populars'));
     }
