@@ -106,30 +106,13 @@
                         value="{{ request('query') }}">
                 </form>
                 <button type="button" class="btn btn-warning ms-3" data-bs-toggle="modal" data-bs-target="#loginModal">
-                  Login
+                    Login
                 </button>
             </div>
         </div>
     </nav>
 
-    <nav class="navbar navbar-expand-lg navbar-dark d-none" id="kategoriNavbar" style="background-color: #141414; border-top: 1px solid #333;">
-        <div class="container-fluid">
-            <div class="d-flex align-items-center">
-                <h5 class="text-white mb-0 me-4">Film</h5>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        Semua Genre
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="#">Aksi</a></li>
-                        <li><a class="dropdown-item" href="#">Komedi</a></li>
-                        <li><a class="dropdown-item" href="#">Horor</a></li>
-                        <li><a class="dropdown-item" href="#">Romantis</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
+    </body>
 
     {{-- Ini adalah tempat konten dari halaman child (koleksi.blade.php) akan disuntikkan --}}
     @yield('content')
