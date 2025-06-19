@@ -45,6 +45,7 @@
       background-color: #1a1a1a;
       color: #fff;
       padding-top: 20px;
+      flex-shrink: 0;
     }
     footer a {
       color: #ccc;
@@ -56,6 +57,15 @@
     .footer-bottom {
       border-top: 1px solid #333;
       color: #999;
+    }
+     footer .col-md-2:nth-child(3) {
+      margin-left: -40px; 
+    }
+    footer .col-md-2:nth-child(4) {
+      padding-left: 40px;
+    }
+    main {
+      flex: 1 0 auto;
     }
   </style>
 </head>
