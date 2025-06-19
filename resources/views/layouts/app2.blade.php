@@ -69,16 +69,16 @@
       <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('dramabox.beranda') }}">Beranda</a>
+            <a class="nav-link" href="{{ route('users.dashboard') }}">Beranda</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" id="kategoriToggle" href="#">Kategori</a>
+            <a class="nav-link" id="kategoriToggle" href="users.browse">Kategori</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('dramabox.rekomendasi') }}">Rekomendasi</a>
+            <a class="nav-link" href="{{ route('users.rekomendasi') }}">Rekomendasi</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('dramabox.koleksi') }}">Koleksi</a>
+            <a class="nav-link" href="{{ route('users.koleksi') }}">Koleksi</a>
           </li>
         </ul>
         <ul class="navbar-nav">

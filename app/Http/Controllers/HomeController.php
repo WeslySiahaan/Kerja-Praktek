@@ -22,6 +22,27 @@ class HomeController extends Controller
         return view('users.dashboard', compact('upcomings', 'videos', 'populars'));
     }
 
+    public function dashboard()
+    {
+        $upcomings = Upcoming::all(); // Fetch all upcoming releases for "Up Coming"
+        $videos = Video::latest()->get(); // Fetch latest 6 videos for "Video Terbaru"
+        $populars = Popular::all();
+        return view('users.dashboard', compact('upcomings', 'videos', 'populars'));
+    }
+
+    public function koleksi(){
+        return view('users.Koleksi');
+    }
+
+    public function rekomendasi(){
+        return view('users.rekomendasi');
+    }
+
+    public function browse(){
+        return view('users.browse');
+    }
+
+
     public function index4()
     {
         $upcomings = Upcoming::all(); // Fetch all upcoming releases for "Up Coming"

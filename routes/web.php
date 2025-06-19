@@ -51,7 +51,10 @@ Route::middleware('auth')->group(function () {
 Route::post('/videos/{video}/save', [VideoController::class, 'save'])->name('videos.save')->middleware('auth');
 Route::get('/collections', [VideoController::class, 'collections'])->name('collections.index')->middleware('auth');
 
-Route::get('/users/dashboard', [HomeController::class, 'index1'])->middleware('auth')->name('users.dashboard');
+Route::get('/users/dashboard', [HomeController::class, 'dashboard'])->middleware('auth')->name('users.dashboard');
+Route::get('/users/browse', [HomeController::class, 'browse'])->middleware('auth')->name('users.browse');
+Route::get('/users/koleksi', [HomeController::class, 'koleksi'])->middleware('auth')->name('users.koleksi');
+Route::get('/users/rekomendasi', [HomeController::class, 'rekomendasi'])->middleware('auth')->name('users.rekomendasi');
 
 
     // Routes untuk akan tayang
