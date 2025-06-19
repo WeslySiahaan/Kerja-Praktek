@@ -101,8 +101,8 @@
 </section>
 
 <!-- Popular Videos Section -->
-<section class="container-fluid" style="margin-top: 120px; position: relative; z-index: 10;">
-    <h2 class="display-6 fw-bold mb-4 px-3">Popular</h2>
+<section class="container-fluid" style="margin-top: 5px; position: relative; z-index: 10;">
+    <h5 class="display-6 fw-bold mb-4 px-3">Popular</h5>
 
     @if (session('error'))
         <div class="alert alert-danger px-3">{{ session('error') }}</div>
