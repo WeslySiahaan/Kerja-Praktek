@@ -50,7 +50,7 @@ class VideoController extends Controller
             'description' => 'required',
             'rating' => 'required|integer|min:1|max:5',
             'category' => 'required',
-            'poster_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Max 2MB untuk gambar
+            'poster_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:20048', // Max 2MB untuk gambar
             'episodes.*' => 'nullable|file|mimes:mp4,mov,avi|max:102400', // Validasi untuk setiap episode
         ]);
 
@@ -108,7 +108,7 @@ class VideoController extends Controller
             'description' => 'required',
             'rating' => 'required|integer|min:1|max:5',
             'category' => 'required',
-            'poster_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'poster_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:20048',
             'episodes.*' => 'nullable|file|mimes:mp4,mov,avi|max:102400',
             'existing_episodes.*' => 'nullable|string', // Untuk menangani episode yang dipertahankan
         ]);

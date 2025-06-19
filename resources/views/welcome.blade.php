@@ -101,7 +101,7 @@
 </section>
 
 <!-- Popular Videos Section -->
-<section class="container-fluid" style="margin-top: -120px; position: relative; z-index: 10;">
+<section class="container-fluid" style="margin-top: 120px; position: relative; z-index: 10;">
     <h2 class="display-6 fw-bold mb-4 px-3">Popular</h2>
 
     @if (session('error'))
