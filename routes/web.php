@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::get('profile/persetujuan', [ProfileController::class, 'persetujuan'])->name('profile.persetujuan');
     Route::get('profile/kebijakan', [ProfileController::class, 'kebijakan'])->name('profile.kebijakan');
     Route::get('profile/nonaktifAkun', [ProfileController::class, 'nonaktifAkun'])->name('profile.nonaktifAkun');
-
+    Route::get('/profile/riwayat-tontonan', [ProfileController::class, 'riwayatTontonan'])->name('profile.riwayatTontonan');
 
 
     // Route untuk logout

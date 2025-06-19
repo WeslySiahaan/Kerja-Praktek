@@ -134,9 +134,9 @@
                         @else
                         <span class="nav-link">Profile route tidak tersedia</span>
                         @endif
-                        <a href="#" class="nav-link">
-                            <i class="bi bi-clock-history"></i> Riwayat Tontonan
-                        </a>
+                      <a href="{{ route('profile.riwayatTontonan') }}" class="nav-link">
+                         <i class="bi bi-clock-history"></i> Riwayat Tontonan
+                    </a>
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('profile.pertanyaanUmum') }}" class="nav-link">

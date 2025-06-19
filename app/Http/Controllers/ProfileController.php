@@ -134,5 +134,12 @@ class ProfileController extends Controller
     {
         return view('profile.nonaktifAkun');
     }
+
+     public function riwayatTontonan(): View
+    {
+        return view('profile.riwayat-tontonan', [
+        ]);
+    }
+
 }
 
