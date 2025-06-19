@@ -104,33 +104,90 @@
 <section class="container-fluid" style="margin-top: -120px; position: relative; z-index: 10;">
     <h2 class="display-6 fw-bold mb-4 px-3">Popular</h2>
 
+    @if (session('error'))
+        <div class="alert alert-danger px-3">{{ session('error') }}</div>
+    @endif
+    @if (session('success'))
+        <div class="alert alert-success px-3">{{ session('success') }}</div>
+    @endif
+
     @if ($videos->isEmpty())
         <p class="text-center text-muted py-4 px-3">No popular videos available at the moment.</p>
     @else
         <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 row-cols-xl-8 g-3 px-3">
             @foreach ($videos as $video)
                 <div class="col">
-                    <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
-                        <div class="card bg-dark text-white h-100 d-flex flex-column">
+                    <div class="card bg-dark text-white h-100 d-flex flex-column">
+                        <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
                             <img src="{{ $video->poster_image ? asset('storage/' . $video->poster_image) : asset('Drama__box.png') }}"
                                  class="card-img-top" 
                                  alt="{{ $video->name }} poster"
                                  style="height: 300px; object-fit: cover;">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title text-truncate">{{ $video->name }}</h5>
-                                <p class="card-text mb-2">
-                                    <small>★ {{ $video->rating ?? 'N/A' }}</small> |
-                                    <small>{{ $video->duration ?? '01:30' }} HD</small>
-                                </p>
-                                <p class="card-text">{{ Str::limit($video->description, 100) }}</p>
+                        </a>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-truncate">{{ $video->name }}</h5>
+                            <p class="card-text mb-2">
+                                <small>★ {{ $video->rating ?? 'N/A' }}</small> |
+                                <small>{{ $video->duration ?? '01:30' }} HD</small>
+                            </p>
+                            <p class="card-text">{{ Str::limit($video->description, 100) }}</p>
+                            <div class="mt-auto d-flex gap-2">
+                                @if (Auth::check())
+                                    <form action="{{ route('videos.like', $video) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-link p-0 like-btn" title="{{ $video->likedByUsers->contains(Auth::id()) ? 'Batal Suka' : 'Suka' }}">
+                                            <i class="bi {{ $video->likedByUsers->contains(Auth::id()) ? 'bi-heart-fill text-danger' : 'bi-heart text-white' }} fs-5"></i>
+                                        </button>
+                                    </form>
+                                    <form action="{{ route('videos.save', $video) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-link p-0" title="{{ $video->collectedByUsers->contains(Auth::id()) ? 'Sudah Disimpan' : 'Simpan' }}"
+                                                {{ $video->collectedByUsers->contains(Auth::id()) ? 'disabled' : '' }}>
+                                            <i class="bi {{ $video->collectedByUsers->contains(Auth::id()) ? 'bi-bookmark-fill text-success' : 'bi-bookmark text-white' }} fs-5"></i>
+                                        </button>
+                                    </form>
+                                @else
+                                    <a href="{{ route('login') }}" class="btn btn-link p-0" title="Suka">
+                                        <i class="bi bi-heart text-white fs-5"></i>
+                                    </a>
+                                    <a href="{{ route('login') }}" class="btn btn-link p-0" title="Simpan">
+                                        <i class="bi bi-bookmark text-white fs-5"></i>
+                                    </a>
+                                @endif
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
             @endforeach
         </div>
     @endif
 </section>
+
+<style>
+    .like-btn i.bi-heart-fill {
+        animation: heart-pulse 0.3s ease-in-out;
+    }
+    @keyframes heart-pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+    }
+</style>
+
+<script>
+    document.querySelectorAll('.like-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            const icon = this.querySelector('i');
+            if (icon.classList.contains('bi-heart')) {
+                icon.classList.remove('bi-heart', 'text-white');
+                icon.classList.add('bi-heart-fill', 'text-danger');
+            } else {
+                icon.classList.remove('bi-heart-fill', 'text-danger');
+                icon.classList.add('bi-heart', 'text-white');
+            }
+        });
+    });
+</script>
 
 <!-- Popular Movies Section -->
 <section class="container-fluid mb-5">

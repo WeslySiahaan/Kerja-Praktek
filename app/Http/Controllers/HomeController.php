@@ -16,7 +16,10 @@ class HomeController extends Controller
 
     public function index1()
     {
-        return view('users.dashboard');
+        $upcomings = Upcoming::all(); // Fetch all upcoming releases for "Up Coming"
+        $videos = Video::latest()->get(); // Fetch latest 6 videos for "Video Terbaru"
+        $populars = Popular::all();
+        return view('users.dashboard', compact('upcomings', 'videos', 'populars'));
     }
 
     public function index4()

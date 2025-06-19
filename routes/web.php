@@ -18,9 +18,7 @@ Route::get('/video/detail/{id}', [VideoController::class, 'detail'])->name('dram
 
 
 // Route untuk dashboard pengguna
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard',[HomeController::class, 'index1'])->middleware(['auth', 'verified'])->name('dashboard');
 
 // Grup route yang memerlukan autentikasi
 Route::middleware('auth')->group(function () {
@@ -49,6 +47,12 @@ Route::middleware('auth')->group(function () {
     Route::put('/videos/{video}', [VideoController::class, 'update'])->name('videos.update');
     Route::delete('/videos/{video}', [VideoController::class, 'destroy'])->name('videos.destroy');
 
+    Route::post('/videos/{video}/like', [VideoController::class, 'like'])->name('videos.like')->middleware('auth');
+Route::post('/videos/{video}/save', [VideoController::class, 'save'])->name('videos.save')->middleware('auth');
+Route::get('/collections', [VideoController::class, 'collections'])->name('collections.index')->middleware('auth');
+
+Route::get('/users/dashboard', [HomeController::class, 'index1'])->middleware('auth')->name('users.dashboard');
+
 
     // Routes untuk akan tayang
     Route::get('/upcomings', [UpcomingController::class, 'index'])->name('upcomings.index');
@@ -71,8 +75,6 @@ Route::get('/search', [VideoController::class, 'search'])->name('dramabox.search
 // Route untuk admin dashboard
 Route::get('/admin/dashboard', [HomeController::class, 'index'])->middleware('auth')->name('admin.dashboard');
 
-// Route untuk dashboard pengguna
-Route::get('/users/dashboard', [HomeController::class, 'index'])->middleware('auth')->name('users.dashboard');
 
 
 

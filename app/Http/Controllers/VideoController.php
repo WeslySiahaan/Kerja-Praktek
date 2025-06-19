@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Popular; // Jika digunakan
 use App\Models\Upcoming; // Jika digunakan
 use App\Models\Video;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
@@ -208,5 +209,59 @@ class VideoController extends Controller
     {
         $video = Video::findOrFail($id);
         return view('dramabox.detail', compact('video'));
+    }
+
+    public function detail1($id): View
+    {
+        $video = Video::findOrFail($id);
+        $isLiked = Auth::check() ? $video->likedByUsers()->where('user_id', Auth::id())->exists() : false;
+        $isCollected = Auth::check() ? $video->collectedByUsers()->where('user_id', Auth::id())->exists() : false;
+
+        return view('dramabox.detail', compact('video', 'isLiked', 'isCollected'));
+    }
+
+    public function like(Request $request, Video $video)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Silakan login untuk menyukai video.');
+        }
+
+        $user = Auth::user();
+        if ($video->likedByUsers()->where('user_id', $user->id)->exists()) {
+            $video->likedByUsers()->detach($user->id);
+            $message = 'Video tidak lagi disukai.';
+        } else {
+            $video->likedByUsers()->attach($user->id);
+            $message = 'Video berhasil disukai!';
+        }
+
+        return redirect()->back()->with('success', $message);
+    }
+
+    public function save(Request $request, Video $video)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Silakan login untuk menyimpan video.');
+        }
+
+        $user = Auth::user();
+        if ($video->collectedByUsers()->where('user_id', $user->id)->exists()) {
+            $message = 'Video sudah ada di koleksi.';
+        } else {
+            $video->collectedByUsers()->attach($user->id);
+            $message = 'Video berhasil disimpan ke koleksi!';
+        }
+
+        return redirect()->route('collections.index')->with('success', $message);
+    }
+
+    public function collections(): View
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Silakan login untuk melihat koleksi.');
+        }
+
+        $videos = Auth::user()->collectedVideos()->latest()->get();
+        return view('dramabox.collections', compact('videos'));
     }
 }
