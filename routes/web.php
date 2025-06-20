@@ -48,13 +48,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/videos/{video}', [VideoController::class, 'destroy'])->name('videos.destroy');
 
     Route::post('/videos/{video}/like', [VideoController::class, 'like'])->name('videos.like')->middleware('auth');
-Route::post('/videos/{video}/save', [VideoController::class, 'save'])->name('videos.save')->middleware('auth');
-Route::get('/collections', [VideoController::class, 'collections'])->name('collections.index')->middleware('auth');
+    Route::post('/videos/{video}/save', [VideoController::class, 'save'])->name('videos.save')->middleware('auth');
 
-Route::get('/users/dashboard', [HomeController::class, 'dashboard'])->middleware('auth')->name('users.dashboard');
-Route::get('/users/browse', [HomeController::class, 'browse'])->middleware('auth')->name('users.browse');
-Route::get('/users/koleksi', [HomeController::class, 'koleksi'])->middleware('auth')->name('users.koleksi');
-Route::get('/users/rekomendasi', [HomeController::class, 'rekomendasi'])->middleware('auth')->name('users.rekomendasi');
+    Route::get('/users/dashboard', [HomeController::class, 'dashboard'])->middleware('auth')->name('users.dashboard');
+    Route::get('/users/browse', [HomeController::class, 'browse'])->middleware('auth')->name('users.browse');
+    Route::get('/users/koleksi', [VideoController::class, 'collections'])->middleware('auth')->name('users.koleksi');
+    Route::get('/users/rekomendasi', [HomeController::class, 'rekomendasi'])->middleware('auth')->name('users.rekomendasi');
+    Route::get('/users/video/detail/{id}', [HomeController::class, 'detail1'])->name('video.detail');
 
 
     // Routes untuk akan tayang
@@ -88,9 +88,10 @@ Route::get('/browse', function () {
 Route::get('/rekomendasi', function () {
     return view('dramabox.rekomendasi');
 })->name('dramabox.rekomendasi');
-Route::get('/app', function () {
-    return view('dramabox.koleksi');
-})->name('dramabox.koleksi');
+
+//Route::get('/app', function () {
+  //  return view('dramabox.koleksi');
+//})->name('dramabox.koleksi');
 
 
 // Impor route autentikasi default Laravel

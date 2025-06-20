@@ -57,5 +57,10 @@ class HomeController extends Controller
       return view('dramabox.detail', compact('videos'));
     }
     
+    public function detail1($id): View
+    {
+      $video = Video::findOrFail($id);
+      return view('users.detail', compact('video'));
+    }
     
 }

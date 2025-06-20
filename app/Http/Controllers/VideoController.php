@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Popular; // Jika digunakan
 use App\Models\Upcoming; // Jika digunakan
 use App\Models\Video;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -252,7 +253,7 @@ class VideoController extends Controller
             $message = 'Video berhasil disimpan ke koleksi!';
         }
 
-        return redirect()->route('collections.index')->with('success', $message);
+        return redirect()->route('users.koleksi')->with('success', $message);
     }
 
     public function collections(): View
@@ -260,8 +261,15 @@ class VideoController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Silakan login untuk melihat koleksi.');
         }
-
-        $videos = Auth::user()->collectedVideos()->latest()->get();
-        return view('dramabox.collections', compact('videos'));
+    
+        try {
+            $user = Auth::user();
+            $videos = $user->collectedVideos()->latest()->paginate(10);
+    
+            return view('users.Koleksi', compact('videos'));
+        } catch (\Exception $e) {
+            return redirect()->route('login')->with('error', 'Gagal memuat koleksi: ' . $e->getMessage());
+        }
     }
 }
+

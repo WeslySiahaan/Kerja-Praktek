@@ -125,11 +125,7 @@
                                  style="height: 300px; object-fit: cover;">
                         </a>
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title text-truncate">{{ $video->name }}</h5>
-                            <p class="card-text mb-2">
-                                <small>★ {{ $video->rating ?? 'N/A' }}</small> |
-                                <small>{{ $video->duration ?? '01:30' }} HD</small>
-                            </p>
+                            <h5 class="card-title text-truncate">{{ $video->name }}</h5>    
                             <p class="card-text">{{ Str::limit($video->description, 100) }}</p>
                             <div class="mt-auto d-flex gap-2">
                                 @if (Auth::check())
@@ -207,10 +203,6 @@
                                  style="height: 300px; object-fit: cover;">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title text-truncate">{{ $popular->title }}</h5>
-                                <p class="card-text mb-2">
-                                    <small>★ {{ $popular->rating ?? 'N/A' }}</small> |
-                                    <small>{{ $popular->duration ?? '01:30' }} HD</small>
-                                </p>
                                 <p class="card-text">{{ Str::limit($popular->description, 100) }}</p>
                             </div>
                         </div>

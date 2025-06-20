@@ -42,7 +42,7 @@
                                 {{ $upcoming->category ? (is_array($upcoming->category) ? implode(', ', $upcoming->category) : $upcoming->category) : 'No category available' }}
                             </p>
                             <div class="d-flex gap-3">
-                                <a href="{{ route('dramabox.detail', ['id' => $upcoming->id]) }}"
+                                <a href="{{ route('video.detail', ['id' => $upcoming->id]) }}"
                                    class="btn btn-light text-dark fw-semibold px-4 py-2 d-flex align-items-center gap-2 fs-5">
                                     <i class="bi bi-play-fill"></i> Play
                                 </a>
@@ -74,10 +74,6 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <p class="text-muted mb-2">
-                                                    {{ $upcoming->year ?? 'Year N/A' }} | 
-                                                    {{ $upcoming->duration ?? 'Duration N/A' }} | 
-                                                    {{ $upcoming->rating ?? 'Rating N/A' }}
-                                                </p>
                                                 <p>{{ $upcoming->synopsis ?? 'No synopsis available' }}</p>
                                                 <p><small class="text-muted">Cast: {{ $upcoming->cast ?? 'Cast N/A' }}</small></p>
                                                 <p><small class="text-muted">Genre: {{ $upcoming->genre ?? 'Genre N/A' }}</small></p>
@@ -118,7 +114,7 @@
             @foreach ($videos as $video)
                 <div class="col">
                     <div class="card bg-dark text-white h-100 d-flex flex-column">
-                        <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
+                        <a href="{{ route('video.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
                             <img src="{{ $video->poster_image ? asset('storage/' . $video->poster_image) : asset('Drama__box.png') }}"
                                  class="card-img-top" 
                                  alt="{{ $video->name }} poster"
@@ -126,10 +122,6 @@
                         </a>
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title text-truncate">{{ $video->name }}</h5>
-                            <p class="card-text mb-2">
-                                <small>★ {{ $video->rating ?? 'N/A' }}</small> |
-                                <small>{{ $video->duration ?? '01:30' }} HD</small>
-                            </p>
                             <p class="card-text">{{ Str::limit($video->description, 100) }}</p>
                             <div class="mt-auto d-flex gap-2">
                                 @if (Auth::check())
@@ -208,10 +200,6 @@
                                  style="height: 300px; object-fit: cover;">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title text-truncate">{{ $popular->title }}</h5>
-                                <p class="card-text mb-2">
-                                    <small>★ {{ $popular->rating ?? 'N/A' }}</small> |
-                                    <small>{{ $popular->duration ?? '01:30' }} HD</small>
-                                </p>
                                 <p class="card-text">{{ Str::limit($popular->description, 100) }}</p>
                             </div>
                         </div>
