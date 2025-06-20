@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="{{ asset('logo_1.png') }}">
+  <link rel="icon" type="image/png" href="{{ asset('CapekLaLogo.png') }}">
   <title>MoraClips</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -57,12 +57,20 @@
       border-top: 1px solid #333;
       color: #999;
     }
+    .like-btn i.bi-heart-fill {
+        animation: heart-pulse 0.3s ease-in-out;
+    }
+    @keyframes heart-pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+    }
   </style>
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #141414;">
     <div class="container-fluid">
-      <img src="{{ asset('logo_1.png') }}" alt="Logo" style="height: 75px;">
+      <img src="{{ asset('CapekLaLogo.png') }}" alt="Logo" style="height: 75px;">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -188,6 +196,19 @@
           searchInput.classList.add('d-none'); // Sembunyikan input kembali
         }
       });
+    });
+
+    document.querySelectorAll('.like-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            const icon = this.querySelector('i');
+            if (icon.classList.contains('bi-heart')) {
+                icon.classList.remove('bi-heart', 'text-white');
+                icon.classList.add('bi-heart-fill', 'text-danger');
+            } else {
+                icon.classList.remove('bi-heart-fill', 'text-danger');
+                icon.classList.add('bi-heart', 'text-white');
+            }
+        });
     });
   </script>
 

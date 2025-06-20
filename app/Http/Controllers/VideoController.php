@@ -230,13 +230,11 @@ class VideoController extends Controller
         $user = Auth::user();
         if ($video->likedByUsers()->where('user_id', $user->id)->exists()) {
             $video->likedByUsers()->detach($user->id);
-            $message = 'Video tidak lagi disukai.';
         } else {
             $video->likedByUsers()->attach($user->id);
-            $message = 'Video berhasil disukai!';
         }
 
-        return redirect()->back()->with('success', $message);
+        return redirect()->back()->with('success');
     }
 
     public function save(Request $request, Video $video)

@@ -123,6 +123,7 @@
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title text-truncate">{{ $video->name }}</h5>
                             <p class="card-text">{{ Str::limit($video->description, 100) }}</p>
+                            <p class="card-title text-truncate">Ep {{ count($video->episodes ?? []) }}</p>
                             <div class="mt-auto d-flex gap-2">
                                 @if (Auth::check())
                                     <form action="{{ route('videos.like', $video) }}" method="POST">
@@ -138,14 +139,6 @@
                                             <i class="bi {{ $video->collectedByUsers->contains(Auth::id()) ? 'bi-bookmark-fill text-success' : 'bi-bookmark text-white' }} fs-5"></i>
                                         </button>
                                     </form>
-                                @else
-                                <a href="{{ route('profile.edit') }}" class="nav-link text-white d-flex align-items-center">
-                <img 
-                  src="{{ auth()->user()->profile_photo_path ? route('profile.image', ['filename' => basename(auth()->user()->profile_photo_path)]) : asset('user.png') }}" 
-                  alt="Foto Profil" 
-                  class="rounded-circle" 
-                  style="width: 32px; height: 32px; object-fit: cover;">
-              </a>
                                 @endif
                             </div>
                         </div>
