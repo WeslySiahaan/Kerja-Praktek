@@ -50,6 +50,13 @@ class HomeController extends Controller
         $populars = Popular::all();
         return view('welcome', compact('upcomings', 'videos', 'populars'));
     }
+    public function index5()
+    {
+        $upcomings = Upcoming::all(); // Fetch all upcoming releases for "Up Coming"
+        $videos = Video::latest()->get(); // Fetch latest 6 videos for "Video Terbaru"
+        $populars = Popular::all();
+        return view('dramabox.browse', compact('upcomings', 'videos', 'populars'));
+    }
 
     public function detail($id): View
     {

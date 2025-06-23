@@ -15,6 +15,7 @@ use App\Http\Controllers\ImageController;
 Route::get('/', [HomeController::class, 'index4'])->name('dramabox.beranda');
 Route::get('/beranda', [HomeController::class, 'index4']);
 Route::get('/video/detail/{id}', [VideoController::class, 'detail'])->name('dramabox.detail');
+Route::get('/browse', [HomeController::class, 'index5'])->name('dramabox.browse');
 
 
 // Route untuk dashboard pengguna
@@ -74,6 +75,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/search', [VideoController::class, 'search'])->name('dramabox.search');
+Route::get('/category', [PopularController::class, 'search'])->name('dramabox.search1');
 
 // Route untuk admin dashboard
 Route::get('/admin/dashboard', [HomeController::class, 'index'])->middleware('auth')->name('admin.dashboard');
@@ -82,9 +84,7 @@ Route::get('/admin/dashboard', [HomeController::class, 'index'])->middleware('au
 
 
 
-Route::get('/browse', function () {
-    return view('dramabox.browse');
-})->name('dramabox.browse');
+
 Route::get('/rekomendasi', function () {
     return view('dramabox.rekomendasi');
 })->name('dramabox.rekomendasi');

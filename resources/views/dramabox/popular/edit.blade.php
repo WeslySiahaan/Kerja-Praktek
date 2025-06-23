@@ -14,16 +14,16 @@
             @enderror
         </div>
         <div class="mb-3">
-            <label for="categories" class="form-label">Categories</label>
-            <select name="categories[]" id="categories" class="form-select @error('categories') is-invalid @enderror" multiple required>
+            <label for="category" class="form-label">category</label>
+            <select name="category[]" id="category" class="form-select @error('category') is-invalid @enderror" multiple required>
                 @foreach (['Action', 'Drama', 'Comedy', 'Horror', 'Sci-Fi'] as $category)
                     <option value="{{ $category }}"
-                        {{ in_array($category, old('categories', is_array($popular->categories) ? $popular->categories : json_decode($popular->categories, true) ?? [])) ? 'selected' : '' }}>
+                        {{ in_array($category, old('category', is_array($popular->category) ? $popular->category : json_decode($popular->category, true) ?? [])) ? 'selected' : '' }}>
                         {{ $category }}
                     </option>
                 @endforeach
             </select>
-            @error('categories')
+            @error('category')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>

@@ -14,15 +14,15 @@
             @enderror
         </div>
         <div class="mb-3">
-            <label for="categories" class="form-label">Categories</label>
-            <select name="categories[]" id="categories" class="form-select @error('categories') is-invalid @enderror" multiple required>
-                <option value="Action" {{ in_array('Action', old('categories', [])) ? 'selected' : '' }}>Action</option>
-                <option value="Drama" {{ in_array('Drama', old('categories', [])) ? 'selected' : '' }}>Drama</option>
-                <option value="Comedy" {{ in_array('Comedy', old('categories', [])) ? 'selected' : '' }}>Comedy</option>
-                <option value="Horror" {{ in_array('Horror', old('categories', [])) ? 'selected' : '' }}>Horror</option>
-                <option value="Sci-Fi" {{ in_array('Sci-Fi', old('categories', [])) ? 'selected' : '' }}>Sci-Fi</option>
+            <label for="category" class="form-label">category</label>
+            <select name="category[]" id="category" class="form-select @error('category') is-invalid @enderror" multiple required>
+                <option value="Action" {{ in_array('Action', old('category', [])) ? 'selected' : '' }}>Action</option>
+                <option value="Drama" {{ in_array('Drama', old('category', [])) ? 'selected' : '' }}>Drama</option>
+                <option value="Comedy" {{ in_array('Comedy', old('category', [])) ? 'selected' : '' }}>Comedy</option>
+                <option value="Horror" {{ in_array('Horror', old('category', [])) ? 'selected' : '' }}>Horror</option>
+                <option value="Sci-Fi" {{ in_array('Sci-Fi', old('category', [])) ? 'selected' : '' }}>Sci-Fi</option>
             </select>
-            @error('categories')
+            @error('category')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>

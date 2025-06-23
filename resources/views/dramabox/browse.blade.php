@@ -1,73 +1,112 @@
 @extends('layouts.app1')
 
-{{-- Bagian ini khusus untuk mengisi slot navbar kategori di layout utama --}}
 @section('category_navbar')
-<nav class="navbar navbar-expand-lg navbar-dark" id="kategoriNavbar" style="background-color: #141414; border-top: 1px solid #333;">
-    <div class="container-fluid">
-        <div class="d-flex align-items-center">
-            <h5 class="text-white mb-0 me-4">Film</h5>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    Semua Genre
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="#">Aksi</a></li>
-                    <li><a class="dropdown-item" href="#">Komedi</a></li>
-                    <li><a class="dropdown-item" href="#">Horor</a></li>
-                    <li><a class="dropdown-item" href="#">Romantis</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</nav>
+    @include('profile.partials.category_navbar')
 @endsection
 
-
-{{-- Bagian ini adalah untuk konten utama halaman --}}
 @section('content')
+<div class="container mt-4">
+<h2 class="mt-4 text-white">Browse Videos</h2>
+    {{-- Optional: Tampilkan query pencarian atau kategori yang aktif --}}
+    @if(isset($query) && $query)
+        <h3 class="text-white">Hasil Pencarian untuk: "{{ $query }}"</h3>
+    @endif
+    @if(isset($category) && $category && $category !== 'all')
+        <h3 class="text-white">Filter Kategori: "{{ $category }}"</h3>
+    @elseif(isset($category) && $category === 'all')
+        <h3 class="text-white">Menampilkan Semua Kategori</h3>
+    @endif
 
-{{-- Hero Banner dan konten lainnya dimulai di sini --}}
-<section class="hero-banner">
-    <div class="hero-content">
-        <h2>Kampung Digital</h2>
-        <p>Mengisahkan perjalanan teknologi dan kehidupan masyarakat dalam satu desa.</p>
-        <a href="#" class="btn btn-warning mt-2">Mulai Menonton</a>
-    </div>
-</section>
+    {{-- Kumpulkan semua item menjadi satu daftar untuk kemudahan --}}
+    {{-- Ini adalah pendekatan di mana semua item digabung menjadi satu koleksi untuk ditampilkan --}}
+    {{-- Namun, karena Anda ingin judul per kategori ("Videos", "Upcoming Shows", "Popular Shows"), --}}
+    {{-- kita akan pertahankan iterasi terpisah namun menyamakan strukturnya. --}}
 
-@php
-    $sections = ['Populer', 'Terbaru', 'Top 10 Terlaris', 'Akan Tayang'];
-    $movies = [
-        'Final Shot', 'Operasi Senyap', 'Misi Tanpa Nama', 'Chase',
-        'Blackout', 'Detik Zona Mati', 'Gedung Coklat', 'Penghancur',
-        'Kunci Neraka', 'Zona 14'
-    ];
-@endphp
 
-<div class="container-fluid px-4">
-    @foreach ($sections as $section)
-    <div class="my-4">
-        <h4 class="fw-bold">{{ $section }}</h4>
-        <div class="swiper mySwiper">
-            <div class="swiper-wrapper">
-                @foreach ($movies as $movie)
-                <div class="swiper-slide">
-                    <div class="card card-movie">
-                        <img src="{{ asset('poster.jpg') }}" alt="{{ $movie }}">
-                        <div class="card-title">{{ $movie }}</div>
+    {{-- Bagian Tampilkan Video --}}
+    {{-- Mengubah judul menjadi "Browse Videos" --}}
+    @if($videos->isEmpty())
+        <p class="text-white">Tidak ada video ditemukan.</p>
+    @else
+        <div class="row">
+            @foreach($videos as $video)
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="card bg-dark text-white h-100 d-flex flex-column"> {{-- Tambahkan d-flex flex-column di sini juga --}}
+                        <img src="{{ asset('storage/' . $video->poster_image) }}" class="card-img-top" alt="{{ $video->name }}" style="object-fit: cover; height: 250px;">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ $video->name }}</h5>
+                            <p class="card-text flex-grow-1"><small class="text-muted">Kategori: {{ is_array($video->category) ? implode(', ', $video->category) : $video->category }}</small></p>
+                            {{-- Placeholder untuk tinggi yang sama dengan "Rilis" di Upcoming --}}
+                            <p class="card-text invisible"><small class="text-muted">Placeholder</small></p> 
+                            <div class="mt-auto">
+                                <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm">Lihat Detail</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                @endforeach
-            </div>
+            @endforeach
         </div>
-    </div>
-    @endforeach
-</div>
+    @endif
 
+    {{-- Bagian Tampilkan Upcomings 
+    <h2 class="mt-4 text-white">Upcoming Shows</h2>
+    @if($upcomings->isEmpty())
+        <p class="text-white">Tidak ada acara mendatang ditemukan.</p>
+    @else
+        <div class="row">
+            @foreach($upcomings as $upcoming)
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="card bg-dark text-white h-100 d-flex flex-column">
+                        <img src="{{ asset('storage/' . $upcoming->poster) }}" class="card-img-top" alt="{{ $upcoming->title }}" style="object-fit: cover; height: 250px;">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ $upcoming->title }}</h5>
+                            <p class="card-text flex-grow-1"><small class="text-muted">Kategori: {{ is_array($upcoming->category) ? implode(', ', $upcoming->category) : $upcoming->category }}</small></p>
+                            <p class="card-text"><small class="text-muted">Rilis: {{ $upcoming->release_date->format('d M Y') }}</small></p>
+                            <div class="mt-auto">
+                                {{-- Jika ada route untuk detail upcoming --}}
+                                {{-- <a href="{{ route('dramabox.upcoming_detail', $upcoming->id) }}" class="btn btn-primary btn-sm">Lihat Detail</a> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @endif
+
+    --}}
+
+   
+
+    {{-- Bagian Tampilkan Populars 
+    <h2 class="mt-4 text-white">Popular Shows</h2>
+    @if($populars->isEmpty())
+        <p class="text-white">Tidak ada acara populer ditemukan.</p>
+    @else
+        <div class="row">
+            @foreach($populars as $popular)
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="card bg-dark text-white h-100 d-flex flex-column"> {{-- Tambahkan d-flex flex-column di sini juga
+                        <img src="{{ asset('storage/' . $popular->poster) }}" class="card-img-top" alt="{{ $popular->title }}" style="object-fit: cover; height: 250px;">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ $popular->title }}</h5>
+                            <p class="card-text flex-grow-1"><small class="text-muted">Kategori: {{ is_array($popular->category) ? implode(', ', $popular->category) : $popular->category }}</small></p>
+                            {{-- Placeholder untuk tinggi yang sama dengan "Rilis" di Upcoming 
+                            <p class="card-text invisible"><small class="text-muted">Placeholder</small></p> 
+                            <div class="mt-auto">
+                                {{-- <a href="{{ route('dramabox.popular_detail', $popular->id) }}" class="btn btn-primary btn-sm">Lihat Detail</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @endif
+     --}}
+
+</div>
 @endsection
 
 @push('scripts')
-{{-- Script khusus untuk halaman ini (misalnya Swiper.js) akan dimasukkan ke slot @stack('scripts') di layout --}}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
@@ -77,6 +116,14 @@
             slidesPerView: 6,
             spaceBetween: 15,
             freeMode: true,
+        });
+    });
+
+    // Add click event for category buttons
+    document.querySelectorAll('.category-buttons button').forEach(button => {
+        button.addEventListener('click', function() {
+            const category = this.getAttribute('data-category');
+            window.location.href = `{{ route('dramabox.search1') }}?category=${category}`;
         });
     });
 </script>

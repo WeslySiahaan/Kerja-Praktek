@@ -11,7 +11,7 @@ class CreatePopularsTable extends Migration
         Schema::create('populars', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->json('categories');
+            $table->json('category');
             $table->string('poster');
             $table->string('trailer');
             $table->text('description');

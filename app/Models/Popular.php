@@ -12,7 +12,7 @@ class Popular extends Model
      *
      * @var array
      */
-    protected $fillable = ['title', 'categories', 'poster', 'trailer', 'description'];
+    protected $fillable = ['title', 'category', 'poster', 'trailer', 'description'];
 
     /**
      * The attributes that should be cast.

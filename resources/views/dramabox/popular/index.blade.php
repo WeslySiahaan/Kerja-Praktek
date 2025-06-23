@@ -9,7 +9,7 @@
                 <th>No</th>
                 <th>Poster</th>
                 <th>Title</th>
-                <th>Categories</th>
+                <th>category</th>
                 <th>Trailer</th>
                 <th>Description</th>
                 <th>Actions</th>
@@ -22,10 +22,10 @@
                     <td><img src="{{ $popular->poster_url }}" alt="{{ $popular->title }}" width="100"></td>
                     <td>{{ $popular->title }}</td>
                     <td>
-                        @if (is_array($popular->categories))
-                            {{ implode(', ', $popular->categories) }}
+                        @if (is_array($popular->category))
+                            {{ implode(', ', $popular->category) }}
                         @else
-                            {{ $popular->categories ?: 'No categories' }}
+                            {{ $popular->category ?: 'No categories' }}
                         @endif
                     </td>
                     <td>
