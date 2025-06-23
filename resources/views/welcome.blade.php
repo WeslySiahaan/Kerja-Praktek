@@ -148,15 +148,15 @@
                         <img id="modalPoster" src="" alt="Poster" class="img-fluid rounded" style="height: 300px; object-fit: cover;">
                     </div>
                     <div class="col-md-8">
-                        <p class="text-muted mb-2">
+                        <p class="text-white mb-2">
                             <span id="modalYear"></span> |
                             <span id="modalDuration"></span> |
                             <span id="modalRating"></span>
                         </p>
                         <p id="modalDescription"></p>
-                        <p><small class="text-muted">Cast: <span id="modalCast"></span></small></p>
-                        <p><small class="text-muted">Genre: <span id="modalGenre"></span></small></p>
-                        <p><small class="text-muted">Category: <span id="modalCategory"></span></small></p>
+                        <p><small class="text-white">Cast: <span id="modalCast"></span></small></p>
+                        <p><small class="text-white">Genre: <span id="modalGenre"></span></small></p>
+                        <p><small class="text-white">Category: <span id="modalCategory"></span></small></p>
                     </div>
                 </div>
                 <div class="mb-3 mt-4" id="modalTrailerContainer">
