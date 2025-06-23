@@ -17,7 +17,7 @@ class HomeController extends Controller
     public function index1()
     {
         $upcomings = Upcoming::all(); // Fetch all upcoming releases for "Up Coming"
-        $videos = Video::latest()->get(); // Fetch latest 6 videos for "Video Terbaru"
+        $videos = Video::latest()->paginate(12); 
         $populars = Popular::all();
         return view('users.dashboard', compact('upcomings', 'videos', 'populars'));
     }
@@ -25,7 +25,7 @@ class HomeController extends Controller
     public function dashboard()
     {
         $upcomings = Upcoming::all(); // Fetch all upcoming releases for "Up Coming"
-        $videos = Video::latest()->get(); // Fetch latest 6 videos for "Video Terbaru"
+        $videos = Video::latest()->paginate(12); 
         $populars = Popular::all();
         return view('users.dashboard', compact('upcomings', 'videos', 'populars'));
     }
@@ -48,9 +48,17 @@ class HomeController extends Controller
 
     public function index4()
     {
-        $upcomings = Upcoming::all(); // Fetch all upcoming releases for "Up Coming"
-        $videos = Video::latest()->get(); // Fetch latest 6 videos for "Video Terbaru"
-        $populars = Popular::all();
+        $perPageDefault = 10; // Jumlah item default per halaman
+    
+        // Upcoming releases, dipaginasi dengan nama parameter 'upcomings_page'
+        $upcomings = Upcoming::latest()->paginate($perPageDefault, ['*'], 'upcomings_page'); 
+        
+        // Video terbaru, dipaginasi 6 item per halaman dengan nama parameter 'videos_page'
+        $videos = Video::latest()->paginate(12, ['*'], 'videos_page'); 
+        
+        // Popular, dipaginasi dengan nama parameter 'populars_page'
+        $populars = Popular::latest()->paginate($perPageDefault, ['*'], 'populars_page');
+        
         return view('welcome', compact('upcomings', 'videos', 'populars'));
     }
     public function index5()

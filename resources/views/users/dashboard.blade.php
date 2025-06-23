@@ -146,6 +146,10 @@
                 </div>
             @endforeach
         </div>
+         <!-- Pagination -->
+<div style="margin-top: 20px;" class="d-flex justify-content-center">
+  {{ $videos->appends(request()->query())->links('pagination::bootstrap-4') }}
+</div>
     @endif
 </section>
 
