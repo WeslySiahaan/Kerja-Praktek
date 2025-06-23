@@ -61,7 +61,7 @@
                                         </form>
                                     @endif
                                     {{-- Tombol "Menonton" jika Anda tetap ingin di sini --}}
-                                    <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm">Menonton</a>
+                                    <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
                                 </div>
                             </div>
                         </div>

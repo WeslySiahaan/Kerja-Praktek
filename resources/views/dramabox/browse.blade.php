@@ -61,7 +61,7 @@
                                         <i class="bi bi-bookmark text-white fs-5"></i>
                                     </a>
                                 @endif
-                                    <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm">Menonton</a>
+                                <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
                                 </div>
                             </div>
                         </div>

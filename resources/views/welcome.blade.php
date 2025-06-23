@@ -96,7 +96,7 @@
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title text-truncate">{{ $video->name }}</h5>
                             <p class="card-text">{{ Str::limit($video->description, 100) }}</p>
-                            <p class="card-title text-truncate">Ep {{ count($video->episodes ?? []) }}</p>
+                            <p class="card-title text-truncate">Total {{ count($video->episodes ?? []) }} Episode</p>
                             <div class="mt-auto d-flex gap-2">
                                 @if (Auth::check())
                                     <form action="{{ route('videos.like', $video) }}" method="POST">
@@ -112,8 +112,16 @@
                                             <i class="bi {{ $video->collectedByUsers->contains(Auth::id()) ? 'bi-bookmark-fill text-success' : 'bi-bookmark text-white' }} fs-5"></i>
                                         </button>
                                     </form>
+                                @else
+                                    <a href="{{ route('login') }}" class="btn btn-link p-0" title="Suka">
+                                        <i class="bi bi-heart text-white fs-5"></i>
+                                    </a>
+                                    <a href="{{ route('login') }}" class="btn btn-link p-0" title="Simpan">
+                                        <i class="bi bi-bookmark text-white fs-5"></i>
+                                    </a>
                                 @endif
-                            </div>
+                                    <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+                                </div>
                         </div>
                     </div>
                 </div>
