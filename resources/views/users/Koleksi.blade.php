@@ -1,9 +1,9 @@
 @extends('layouts.app2')
 
 @section('content')
-<section class="container-fluid" style="margin-top: 20px; position: relative; z-index: 10;">
+<section class="container-fluid" style="margin-top: 20px; position: relative; z-index: 10 ;  margin-bottom: 20px;">
     <div class="d-flex justify-content-between align-items-center mb-4 px-3">
-        <h5 class="display-6 fw-bold m-0">Daftar Koleksi</h5>
+        <h5 class="display-6 fw-bold m-0 text-white">Daftar Koleksi</h5> {{-- Tambahkan text-white --}}
         <div class="edit-buttons">
             <button class="edit-title-btn btn btn-secondary fw-semibold px-3 py-1 d-flex align-items-center gap-2">
                 <i class="bi bi-pencil"></i> Edit
@@ -26,15 +26,34 @@
                 <div class="col">
                     <div class="card bg-dark text-white h-100 d-flex flex-column movie-card" data-video-id="{{ $video->id }}">
                         <span class="movie-select position-absolute top-0 end-0 m-2" data-video-id="{{ $video->id }}" style="display: none; width: 24px; height: 24px; border: 2px solid #fff; border-radius: 50%; background-color: rgba(0,0,0,0.5); cursor: pointer;"></span>
-                        <a href="{{ route('video.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
+                        <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white"> {{-- Gunakan dramabox.detail --}}
                             <img src="{{ $video->poster_image ? asset('storage/' . $video->poster_image) : asset('Drama__box.png') }}"
                                  class="card-img-top movie-poster"
                                  alt="{{ $video->name }} poster"
-                                 style="height: 300px; object-fit: cover;">
+                                 style="height: 300px; object-fit: cover;"> {{-- Diubah dari 250px ke 300px --}}
                         </a>
                         <div class="card-body d-flex flex-column movie-info">
-                            <h5 class="card-title text-truncate">{{ $video->name }}</h5>
-                            <p class="card-text movie-episode">Ep {{ $video->episodes ? count($video->episodes) : rand(1, 10) }} / Ep 20</p>
+                            <h5 class="card-title text-truncate">{{ $video->name }}</h5> {{-- Ditambah text-truncate --}}
+                            {{-- Menambahkan deskripsi singkat --}}
+                            <p class="card-text">{{ Str::limit($video->description, 100) }}</p> {{-- Tambahkan deskripsi --}}
+
+                            {{-- Baris Kategori --}}
+                            <p class="card-text text-white"><small>Kategori: {{ is_array($video->category) ? implode(', ', $video->category) : $video->category }}</small></p>
+
+                            {{-- Baris Jumlah Episode (sesuai referensi Popular, pastikan warnanya putih) --}}
+                            <p class="card-title text-truncate text-white"><small>Ep {{ count($video->episodes ?? []) }}</small></p> {{-- Pastikan menggunakan count($video->episodes ?? []) --}}
+                            
+                            {{-- Menambahkan div mt-auto d-flex gap-2 untuk menjaga konsistensi dengan card lain --}}
+                            <div class="mt-auto d-flex gap-2">
+                                {{-- Jika ada tombol Menonton/Like/Save untuk Koleksi, tambahkan di sini --}}
+                                {{-- Contoh: Tombol Menonton --}}
+                                <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm">Menonton</a>
+                                {{-- Placeholder untuk menjaga tinggi yang sama dengan ikon Like/Save di Popular --}}
+                                <div class="d-flex gap-2 invisible">
+                                    <button type="button" class="btn btn-link p-0"><i class="bi bi-heart fs-5"></i></button>
+                                    <button type="button" class="btn btn-link p-0"><i class="bi bi-bookmark fs-5"></i></button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -42,7 +61,6 @@
         </div>
     @endif
 
-    <!-- Modal Konfirmasi Hapus -->
     <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content bg-dark text-white">
@@ -61,7 +79,6 @@
         </div>
     </div>
 
-    <!-- Modal Peringatan -->
     <div class="modal fade" id="warningModal" tabindex="-1" aria-labelledby="warningModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content bg-dark text-white">

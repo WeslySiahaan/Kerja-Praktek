@@ -68,6 +68,14 @@
         main {
             flex: 1 0 auto;
         }
+        .like-btn i.bi-heart-fill {
+        animation: heart-pulse 0.3s ease-in-out;
+    }
+    @keyframes heart-pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+    }
     </style>
 </head>
 <body>

@@ -17,13 +17,6 @@
         <h3 class="text-white">Menampilkan Semua Kategori</h3>
     @endif
 
-    {{-- Kumpulkan semua item menjadi satu daftar untuk kemudahan --}}
-    {{-- Ini adalah pendekatan di mana semua item digabung menjadi satu koleksi untuk ditampilkan --}}
-    {{-- Namun, karena Anda ingin judul per kategori ("Videos", "Upcoming Shows", "Popular Shows"), --}}
-    {{-- kita akan pertahankan iterasi terpisah namun menyamakan strukturnya. --}}
-
-
-    {{-- Bagian Tampilkan Video --}}
     {{-- Mengubah judul menjadi "Browse Videos" --}}
     @if($videos->isEmpty())
         <p class="text-white">Tidak ada video ditemukan.</p>
@@ -35,11 +28,9 @@
                         <img src="{{ asset('storage/' . $video->poster_image) }}" class="card-img-top" alt="{{ $video->name }}" style="object-fit: cover; height: 250px;">
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">{{ $video->name }}</h5>
-                            <p class="card-text flex-grow-1"><small class="text-muted">Kategori: {{ is_array($video->category) ? implode(', ', $video->category) : $video->category }}</small></p>
-                            {{-- Placeholder untuk tinggi yang sama dengan "Rilis" di Upcoming --}}
-                            <p class="card-text invisible"><small class="text-muted">Placeholder</small></p> 
+                            <p class="card-text text-white flex-grow-1"><small>Kategori: {{ is_array($video->category) ? implode(', ', $video->category) : $video->category }}</small></p>
                             <div class="mt-auto">
-                                <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm">Lihat Detail</a>
+                                <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm">Menonton</a>
                             </div>
                         </div>
                     </div>

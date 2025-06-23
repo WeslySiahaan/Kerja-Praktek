@@ -39,7 +39,10 @@ class HomeController extends Controller
     }
 
     public function browse(){
-        return view('users.browse');
+        $upcomings = Upcoming::all(); // Fetch all upcoming releases for "Up Coming"
+        $videos = Video::latest()->get(); // Fetch latest 6 videos for "Video Terbaru"
+        $populars = Popular::all();
+        return view('users.browse', compact('upcomings', 'videos', 'populars'));
     }
 
 
@@ -68,6 +71,61 @@ class HomeController extends Controller
     {
       $video = Video::findOrFail($id);
       return view('users.detail', compact('video'));
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $category = $request->input('category');
+
+        // Filter for Video
+        $videos = Video::query();
+        if ($query) {
+            $videos->where('name', 'like', '%' . $query . '%');
+        }
+        if ($category && $category !== 'all') {
+            $videos->where('category', $category); // Correct: 'category' for Video model
+        }
+        $videos = $videos->latest()->get();
+
+        // Filter for Upcoming
+        $upcomings = Upcoming::query();
+        if ($query) {
+            $upcomings->where('title', 'like', '%' . $query . '%');
+        }
+        if ($category && $category !== 'all') {
+            // FIX HERE: Change 'categories' to 'category' if your Upcoming table has a 'category' column
+            $upcomings->where('category', $category);
+        }
+        $upcomings = $upcomings->latest()->get();
+
+        // Filter for Popular
+        $populars = Popular::query();
+        if ($query) {
+            $populars->where('title', 'like', '%' . $query . '%');
+        }
+        if ($category && $category !== 'all') {
+            // FIX HERE: Change 'categories' to 'category' if your Popular table has a 'category' column
+            $populars->where('category', $category);
+        }
+        $populars = $populars->latest()->get();
+
+        $allCategories = [
+            "Sudden Wealth", "Werewolves", "Popular", "Average", "Divine Tycoon", "Love Triangle", "Revenge", "Paranormal",
+            "Marriage", "Cinderella", "Underdog Rise", "Son-in-Law", "Secret Identity", "Second-chance Love", "Comedy", "Boy's Love",
+            "Marriage Before Love", "Mafia", "Influencer", "Forbidden Love", "Uplifting Series", "Strong Female Lead", "Romance", "CEO",
+            "Harem", "Fantasy", "Information Gaps", "Soulmate", "Trending", "Concealed Identity", "Counterattack", "Disguise",
+            "Sweet Love", "Suspense", "Betrayal", "Urban", "Cross-dressing", "Time Travel Harem", "Werewolf",
+            "SM", "Enemies to Lovers", "Mystery", "Super Power", "Billionaire", "Hated", "Dominant", "Alternative History",
+            "Badboy", "Rebirth", "Small Potato", "Contract Lover", "Wealthy", "Humor", "Misunderstanding", "True Love",
+            "Comeback", "Toxic Relationship", "Contract Marriage", "Family", "Time Travel", "Bitter Love", "Steamy", "Destiny",
+        ];
+
+        if (!in_array('all', $allCategories)) {
+            $allCategories[] = 'all';
+        }
+
+        return view('users.browse', compact('videos', 'upcomings', 'populars', 'allCategories', 'category'));
     }
     
 }

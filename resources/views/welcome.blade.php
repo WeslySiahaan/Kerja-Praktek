@@ -101,7 +101,7 @@
 </section>
 
 <!-- Popular Videos Section -->
-<section class="container-fluid" style="margin-top: 5px; position: relative; z-index: 10;">
+<section class="container-fluid" style="margin-top: 5px; margin-bottom: 10px ; position: relative; z-index: 10;">
     <h5 class="display-6 fw-bold mb-4 px-3">Popular</h5>
 
     @if (session('error'))
@@ -159,33 +159,7 @@
     @endif
 </section>
 
-<style>
-    .like-btn i.bi-heart-fill {
-        animation: heart-pulse 0.3s ease-in-out;
-    }
-    @keyframes heart-pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.2); }
-        100% { transform: scale(1); }
-    }
-</style>
-
-<script>
-    document.querySelectorAll('.like-btn').forEach(button => {
-        button.addEventListener('click', function(e) {
-            const icon = this.querySelector('i');
-            if (icon.classList.contains('bi-heart')) {
-                icon.classList.remove('bi-heart', 'text-white');
-                icon.classList.add('bi-heart-fill', 'text-danger');
-            } else {
-                icon.classList.remove('bi-heart-fill', 'text-danger');
-                icon.classList.add('bi-heart', 'text-white');
-            }
-        });
-    });
-</script>
-
-<!-- Popular Movies Section -->
+<!-- Popular Movies Section 
 <section class="container-fluid mb-5">
     <h2 class="display-6 fw-bold mb-4 px-3">Popular Movies</h2>
 
@@ -215,6 +189,8 @@
         </div>
     @endif
 </section>
+
+-->
 
 <!-- Styles -->
 <style>
@@ -299,6 +275,18 @@
                 768: { slidesPerView: 5.3, spaceBetween: 20 },
                 1024: { slidesPerView: 6.3, spaceBetween: 25 },
                 1200: { slidesPerView: 7.3, spaceBetween: 25 }
+            }
+        });
+    });
+    document.querySelectorAll('.like-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            const icon = this.querySelector('i');
+            if (icon.classList.contains('bi-heart')) {
+                icon.classList.remove('bi-heart', 'text-white');
+                icon.classList.add('bi-heart-fill', 'text-danger');
+            } else {
+                icon.classList.remove('bi-heart-fill', 'text-danger');
+                icon.classList.add('bi-heart', 'text-white');
             }
         });
     });
