@@ -6,7 +6,6 @@
 
 @section('content')
 <div class="container mt-4">
-<h2 class="mt-4 text-white">Browse Videos</h2>
     {{-- Optional: Tampilkan query pencarian atau kategori yang aktif --}}
     @if(isset($query) && $query)
         <h3 class="text-white">Hasil Pencarian untuk: "{{ $query }}"</h3>
@@ -17,82 +16,110 @@
         <h3 class="text-white">Menampilkan Semua Kategori</h3>
     @endif
 
-    {{-- Mengubah judul menjadi "Browse Videos" --}}
-    @if($videos->isEmpty())
-        <p class="text-white">Tidak ada video ditemukan.</p>
-    @else
-        <div class="row">
-            @foreach($videos as $video)
-                <div class="col-md-3 col-sm-6 mb-4">
-                    <div class="card bg-dark text-white h-100 d-flex flex-column"> {{-- Tambahkan d-flex flex-column di sini juga --}}
-                        <img src="{{ asset('storage/' . $video->poster_image) }}" class="card-img-top" alt="{{ $video->name }}" style="object-fit: cover; height: 250px;">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">{{ $video->name }}</h5>
-                            <p class="card-text text-white flex-grow-1"><small>Kategori: {{ is_array($video->category) ? implode(', ', $video->category) : $video->category }}</small></p>
-                            <div class="mt-auto">
-                                <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm">Menonton</a>
+    {{-- Tampilkan Video --}}
+    <section class="mb-5">
+        <h2 class="display-6 fw-bold mb-4 px-3 text-white">Browse Videos</h2>
+        @if($videos->isEmpty())
+            <p class="text-center text-muted py-4 px-3">Tidak ada video ditemukan.</p>
+        @else
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 row-cols-xl-8 g-3 px-3">
+                @foreach ($videos as $video)
+                    <div class="col">
+                        <div class="card bg-dark text-white h-100 d-flex flex-column">
+                            <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
+                                <img src="{{ $video->poster_image ? asset('storage/' . $video->poster_image) : asset('Drama__box.png') }}"
+                                     class="card-img-top"
+                                     alt="{{ $video->name }} poster"
+                                     style="height: 300px; object-fit: cover;">
+                            </a>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title text-truncate">{{ $video->name }}</h5>
+                                <p class="card-text">{{ Str::limit($video->description, 100) }}</p>
+                                <p class="card-text text-white"><small>Kategori: {{ is_array($video->category) ? implode(', ', $video->category) : $video->category }}</small></p>
+                                <p class="card-title text-truncate text-white"><small>Ep {{ count($video->episodes ?? []) }}</small></p>
+                                
+                                <div class="mt-auto d-flex gap-2">
+                                @if (Auth::check())
+                                    <form action="{{ route('videos.like', $video) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-link p-0 like-btn" title="{{ $video->likedByUsers->contains(Auth::id()) ? 'Batal Suka' : 'Suka' }}">
+                                            <i class="bi {{ $video->likedByUsers->contains(Auth::id()) ? 'bi-heart-fill text-danger' : 'bi-heart text-white' }} fs-5"></i>
+                                        </button>
+                                    </form>
+                                    <form action="{{ route('videos.save', $video) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-link p-0" title="{{ $video->collectedByUsers->contains(Auth::id()) ? 'Sudah Disimpan' : 'Simpan' }}"
+                                                {{ $video->collectedByUsers->contains(Auth::id()) ? 'disabled' : '' }}>
+                                            <i class="bi {{ $video->collectedByUsers->contains(Auth::id()) ? 'bi-bookmark-fill text-success' : 'bi-bookmark text-white' }} fs-5"></i>
+                                        </button>
+                                    </form>
+                                @else
+                                    <a href="{{ route('login') }}" class="btn btn-link p-0" title="Suka">
+                                        <i class="bi bi-heart text-white fs-5"></i>
+                                    </a>
+                                    <a href="{{ route('login') }}" class="btn btn-link p-0" title="Simpan">
+                                        <i class="bi bi-bookmark text-white fs-5"></i>
+                                    </a>
+                                @endif
+                                    <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm">Menonton</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
-    @endif
-
-    {{-- Bagian Tampilkan Upcomings 
-    <h2 class="mt-4 text-white">Upcoming Shows</h2>
-    @if($upcomings->isEmpty())
-        <p class="text-white">Tidak ada acara mendatang ditemukan.</p>
-    @else
-        <div class="row">
-            @foreach($upcomings as $upcoming)
-                <div class="col-md-3 col-sm-6 mb-4">
-                    <div class="card bg-dark text-white h-100 d-flex flex-column">
-                        <img src="{{ asset('storage/' . $upcoming->poster) }}" class="card-img-top" alt="{{ $upcoming->title }}" style="object-fit: cover; height: 250px;">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">{{ $upcoming->title }}</h5>
-                            <p class="card-text flex-grow-1"><small class="text-muted">Kategori: {{ is_array($upcoming->category) ? implode(', ', $upcoming->category) : $upcoming->category }}</small></p>
-                            <p class="card-text"><small class="text-muted">Rilis: {{ $upcoming->release_date->format('d M Y') }}</small></p>
-                            <div class="mt-auto">
-                                {{-- Jika ada route untuk detail upcoming --}}
-                                {{-- <a href="{{ route('dramabox.upcoming_detail', $upcoming->id) }}" class="btn btn-primary btn-sm">Lihat Detail</a> 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    @endif
-
-    --}}
-
-   
+                @endforeach
+            </div>
+        @endif
+    </section>
 
     {{-- Bagian Tampilkan Populars 
-    <h2 class="mt-4 text-white">Popular Shows</h2>
-    @if($populars->isEmpty())
-        <p class="text-white">Tidak ada acara populer ditemukan.</p>
-    @else
-        <div class="row">
-            @foreach($populars as $popular)
-                <div class="col-md-3 col-sm-6 mb-4">
-                    <div class="card bg-dark text-white h-100 d-flex flex-column"> {{-- Tambahkan d-flex flex-column di sini juga
-                        <img src="{{ asset('storage/' . $popular->poster) }}" class="card-img-top" alt="{{ $popular->title }}" style="object-fit: cover; height: 250px;">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">{{ $popular->title }}</h5>
-                            <p class="card-text flex-grow-1"><small class="text-muted">Kategori: {{ is_array($popular->category) ? implode(', ', $popular->category) : $popular->category }}</small></p>
-                            {{-- Placeholder untuk tinggi yang sama dengan "Rilis" di Upcoming 
-                            <p class="card-text invisible"><small class="text-muted">Placeholder</small></p> 
-                            <div class="mt-auto">
-                                {{-- <a href="{{ route('dramabox.popular_detail', $popular->id) }}" class="btn btn-primary btn-sm">Lihat Detail</a>
+    <section class="mb-5">
+        <h2 class="display-6 fw-bold mb-4 px-3 text-white">Popular Shows</h2>
+        @if($populars->isEmpty())
+            <p class="text-center text-muted py-4 px-3">Tidak ada acara populer ditemukan.</p>
+        @else
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 row-cols-xl-8 g-3 px-3">
+                @foreach($populars as $popular)
+                    <div class="col">
+                        <div class="card bg-dark text-white h-100 d-flex flex-column">
+                            {{-- Asumsi Anda memiliki route detail untuk popular 
+                            <a href="#" class="text-decoration-none text-white">
+                                <img src="{{ $popular->poster ? asset('storage/' . $popular->poster) : asset('Drama__box.png') }}"
+                                    class="card-img-top"
+                                    alt="{{ $popular->title }} poster"
+                                    style="height: 300px; object-fit: cover;">
+                            </a>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title text-truncate">{{ $popular->title }}</h5>
+                                <p class="card-text">{{ Str::limit($popular->description, 100) ?? 'No description available.' }}</p>
+                                <p class="card-text text-white"><small>Kategori: {{ is_array($popular->category) ? implode(', ', $popular->category) : $popular->category }}</small></p>
+                                <p class="card-title text-truncate invisible"><small>Placeholder</small></p>
+                                <div class="mt-auto d-flex gap-2">
+                                    @if (Auth::check())
+                                        <form action="{{-- route('populars.like', $popular) " method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-link p-0 like-btn" title="{{-- $popular->likedByUsers->contains(Auth::id()) ? 'Batal Suka' : 'Suka' ">
+                                                <i class="bi bi-heart text-white fs-5"></i>
+                                            </button>
+                                        </form>
+                                        <form action="{{-- route('populars.save', $popular) " method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-link p-0" title="{{-- $popular->collectedByUsers->contains(Auth::id()) ? 'Sudah Disimpan' : 'Simpan' ">
+                                                <i class="bi bi-bookmark text-white fs-5"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+                                    {{-- Placeholder tombol Menonton 
+                                    <div class="invisible">
+                                        <a href="#" class="btn btn-primary btn-sm">Menonton</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
-    @endif
-     --}}
+                @endforeach
+            </div>
+        @endif
+    </section> --}}
 
 </div>
 @endsection
