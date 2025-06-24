@@ -9,16 +9,16 @@
     @auth
       @if(Auth::user()->role === 'admin')
         <a class="navbar-brand fw-bold text-white" href="{{ route('admin.dashboard') }}">
-          <img src="{{ asset('logo_Moratek-.png') }}" alt="Logo" width="90" height="67" class="d-inline-block align-text-top me-2">
+          <img src="{{ asset('LogoFix.png') }}" alt="Logo" width="90" height="67" class="d-inline-block align-text-top me-2">
         </a>
       @else
         <a class="navbar-brand fw-bold text-white" href="{{ route('users.dashboard') }}">
-          <img src="{{ asset('logo_Moratek-.png') }}" alt="Logo" width="90" height="67" class="d-inline-block align-text-top me-2">
+          <img src="{{ asset('LogoFix.png') }}" alt="Logo" width="90" height="67" class="d-inline-block align-text-top me-2">
         </a>
       @endif
     @else
       <a class="navbar-brand fw-bold text-white" href="/">
-        <img src="{{ asset('logo_Moratek-.png') }}" alt="Logo" width="90" height="67" class="d-inline-block align-text-top me-2">
+        <img src="{{ asset('LogoFix.png') }}" alt="Logo" width="90" height="67" class="d-inline-block align-text-top me-2">
       </a>
     @endauth
 

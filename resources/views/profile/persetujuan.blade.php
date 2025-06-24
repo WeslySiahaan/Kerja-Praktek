@@ -75,7 +75,7 @@
 
     <div class="terms-item">
       <strong>3. Akun Pengguna</strong>
-      Anda bertanggung jawab untuk menjaga kerahasiaan informasi akun dan kata sandi Anda. MoraClips tidak bertanggung jawab atas kerugian yang mungkin timbul akibat kelalaian Anda dalam menjaga keamanan akun.
+      Anda bertanggung jawab untuk menjaga kerahasiaan informasi akun dan kata sandi Anda. CineMora tidak bertanggung jawab atas kerugian yang mungkin timbul akibat kelalaian Anda dalam menjaga keamanan akun.
     </div>
 
     <div class="terms-item">
