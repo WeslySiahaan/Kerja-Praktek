@@ -22,41 +22,41 @@
             /* Tinggi minimum viewport */
         }
 
-        /* Sidebar */
-        .sidebar {
-            width: 250px;
-            background-color: #212529;
-            color: #ffffff;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            /* Sidebar mengikuti tinggi viewport */
-            transition: width 0.3s ease;
-        }
+       
+       /* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #212529;
+    color: #ffffff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    /* Sidebar mengikuti tinggi viewport */
+    transition: width 0.3s ease;
+}
 
-        .sidebar-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #444;
-            margin-bottom: 20px;
-        }
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #444;
+    margin-bottom: 20px;
+}
 
-        .sidebar-header h4 {
-            margin: 0;
-            font-size: 20px;
-            font-weight: 600;
-        }
 
-        .sidebar-header i {
-            font-size: 24px;
-            margin-right: 10px;
-        }
-
+.sidebar-header .custom-text {
+    margin: 0;
+    font-size: 40px; 
+    font-weight: 600;
+}
+.sidebar-header i {
+    font-size: 17px;
+    margin-right: 10px;
+}
         /* Navigasi sidebar */
         .nav {
             list-style: none;
@@ -112,18 +112,23 @@
             .main-content {
                 padding: 20px;
             }
-        }
+          
+    }
     </style>
 </head>
 
 <body>
     <div class="layout-wrapper">
         <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <i class="bi bi-person-fill"></i>
-                <h4>Users</h4>
-            </div>
+<div class="sidebar">
+    <div class="sidebar-header" style="display: flex; align-items: center; justify-content: flex-start;">
+        <img src="{{ asset('LogoFix.png') }}" alt="Logo" style="width: 90px; height: 70px; margin-right: 15px; max-height: 32px;">
+        <div style="display: flex; align-items: center;">
+            <i class="bi bi-person-fill" style="font-size: 15px; margin-right: 5px;"></i>
+            <h4 style="font-size: 15px; margin: 0; font-weight: 400;">Users</h4>
+        </div>
+
+    </div>
             <ul class="nav flex-column">
                 <ul class="nav flex-column">
                     <li class="nav-item">

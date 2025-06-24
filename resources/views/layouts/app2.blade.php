@@ -110,14 +110,7 @@
                         <a class="nav-link" href="{{ route('users.koleksi') }}">Koleksi</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="?lang=en">English</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="?lang=id">Indonesia</a>
-                    </li>
-                </ul>
+               
                 <div class="d-flex align-items-center gap-3">
                     <form class="d-flex align-items-center ms-2 position-relative" id="searchForm" method="GET" action="{{ route('users.search') }}">
                         <button type="button" class="btn btn-outline-secondary" id="searchToggle" aria-label="Toggle Search">
