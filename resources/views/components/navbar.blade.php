@@ -10,7 +10,7 @@
       @if(Auth::user()->role === 'admin')
       @else
         <a class="navbar-brand fw-bold text-white" href="{{ route('users.dashboard') }}">
-          <img src="{{ asset('LogoFix.png') }}" alt="Logo" width="90" height="67" class="d-inline-block align-text-top me-2">
+          
         </a>
       @endif
     @else
