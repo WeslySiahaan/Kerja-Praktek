@@ -293,5 +293,19 @@ class VideoController extends Controller
         return redirect()->route('users.koleksi')->with('success', $message);
     }
 
+    public function dashboard()
+    {
+        // Ambil 5 video teratas berdasarkan jumlah like atau simpan (misalnya, urutkan berdasarkan like)
+        $videos = Video::withCount(['likedByUsers', 'collectedByUsers'])
+                       ->orderBy('liked_by_users_count', 'desc')
+                       ->limit(10)
+                       ->get();
+
+        $videoLabels = $videos->pluck('name')->toArray();
+        $likeData = $videos->pluck('liked_by_users_count')->toArray();
+        $collectionData = $videos->pluck('collected_by_users_count')->toArray();
+
+        return view('admin.dashboard', compact('videoLabels', 'likeData', 'collectionData'));
+    }
 }
 

@@ -19,6 +19,7 @@ Route::get('/video/detail/{id}', [VideoController::class, 'detail'])->name('dram
 Route::get('/browse', [HomeController::class, 'index5'])->name('dramabox.browse');
 
 
+
 // Route untuk dashboard pengguna
 Route::get('/dashboard',[HomeController::class, 'index1'])->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -81,7 +82,7 @@ Route::get('/search', [VideoController::class, 'search'])->name('dramabox.search
 Route::get('/category', [PopularController::class, 'search'])->name('dramabox.search1');
 
 // Route untuk admin dashboard
-Route::get('/admin/dashboard', [HomeController::class, 'index'])->middleware('auth')->name('admin.dashboard');
+Route::get('/admin/dashboard', [VideoController::class, 'dashboard'])->name('admin.dashboard')->middleware('auth');
 
 
 

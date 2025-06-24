@@ -27,20 +27,20 @@
     const videoChart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['Video A', 'Video B', 'Video C', 'Video D', 'Video E'],
+        labels: @json($videoLabels),
         datasets: [
           {
             label: 'Likes',
-            data: [120, 90, 150, 80, 60],
+            data: @json($likeData),
             backgroundColor: 'rgba(54, 162, 235, 0.7)',
             borderColor: 'rgba(54, 162, 235, 1)',
             borderWidth: 1
           },
           {
-            label: 'Views',
-            data: [1000, 850, 1200, 780, 620],
-            backgroundColor: 'rgba(255, 206, 86, 0.7)',
-            borderColor: 'rgba(255, 206, 86, 1)',
+            label: 'Simpan',
+            data: @json($collectionData),
+            backgroundColor: 'rgba(75, 192, 192, 0.7)',
+            borderColor: 'rgba(75, 192, 192, 1)',
             borderWidth: 1
           }
         ]
@@ -51,8 +51,17 @@
           y: {
             beginAtZero: true,
             ticks: {
-              stepSize: 100
+              stepSize: 1
             }
+          }
+        },
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Statistik Like dan Simpan Video Terpopuler'
           }
         }
       }
