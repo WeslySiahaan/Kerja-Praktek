@@ -18,7 +18,7 @@
     <div class="row mb-5">
       <div class="col-md-8">
         <div class="ratio ratio-16x9 mb-3 video-player-with-border"> {{-- Tambahkan kelas baru di sini --}}
-          <video controls width="800" height="450" class="w-100 video-highlight" id="videoPlayer">
+          <video controls width="900" height="450" class="w-100 video-highlight" id="videoPlayer">
             @if (!empty($episodes))
               <source src="{{ asset('storage/' . $episodes[0]) }}" type="video/mp4">
             @else
@@ -30,7 +30,7 @@
       </div>
 
       <div class="col-md-4">
-        <div class="bg-dark p-3 rounded h-100 overflow-auto" style="max-height: 450px;">
+        <div class="bg-dark p-3 rounded h-100 overflow-auto" style="max-height: 485px;">
           <h6 class="text-white mb-3">Daftar Episode</h6>
           @if (!empty($episodes))
             <div class="row row-cols-3 g-2">
@@ -56,11 +56,33 @@
           <div class="card-body">
             <h5 class="card-title fw-bold">{{ $video->name }}</h5>
             <p class="card-text text-break">{{ $video->description }}</p>
-            <p class="card-text mb-0 small text-muted">
+            <p class="card-text text-break">
               <span class="me-3"><strong>Category:</strong> {{ $video->category }}</span>
-              <span class="me-3"><strong>Rating:</strong> ★ {{ $video->rating }}</span>
-              <span><strong>Popular:</strong> {{ $video->is_popular ? 'Yes' : 'No' }}</span>
             </p>
+            <div class="mt-auto d-flex gap-2">
+                                @if (Auth::check())
+                                    <form action="{{ route('videos.like', $video) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-link p-0 like-btn" title="{{ $video->likedByUsers->contains(Auth::id()) ? 'Batal Suka' : 'Suka' }}">
+                                            <i class="bi {{ $video->likedByUsers->contains(Auth::id()) ? 'bi-heart-fill text-danger' : 'bi-heart text-white' }} fs-5"></i>
+                                        </button>
+                                    </form>
+                                    <form action="{{ route('videos.save', $video) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-link p-0" title="{{ $video->collectedByUsers->contains(Auth::id()) ? 'Sudah Disimpan' : 'Simpan' }}"
+                                                {{ $video->collectedByUsers->contains(Auth::id()) ? 'disabled' : '' }}>
+                                            <i class="bi {{ $video->collectedByUsers->contains(Auth::id()) ? 'bi-bookmark-fill text-success' : 'bi-bookmark text-white' }} fs-5"></i>
+                                        </button>
+                                    </form>
+                                @else
+                                    <a href="{{ route('login') }}" class="btn btn-link p-0" title="Suka">
+                                        <i class="bi bi-heart text-white fs-5"></i>
+                                    </a>
+                                    <a href="{{ route('login') }}" class="btn btn-link p-0" title="Simpan">
+                                        <i class="bi bi-bookmark text-white fs-5"></i>
+                                    </a>
+                                @endif
+                                </div>
           </div>
         </div>
       </div>

@@ -9,6 +9,7 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\KoleksiController;
 
 
 // Route untuk halaman utama
@@ -53,7 +54,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/users/dashboard', [HomeController::class, 'dashboard'])->middleware('auth')->name('users.dashboard');
     Route::get('/users/browse', [HomeController::class, 'browse'])->middleware('auth')->name('users.browse');
-    Route::get('/users/koleksi', [VideoController::class, 'collections'])->middleware('auth')->name('users.koleksi');
+    Route::get('/users/koleksi', [KoleksiController::class, 'index'])->middleware('auth')->name('users.koleksi');
+    Route::delete('/collections/destroy-multiple', [KoleksiController::class, 'destroyMultiple'])->name('collections.destroy_multiple');
     Route::get('/users/rekomendasi', [HomeController::class, 'rekomendasi'])->middleware('auth')->name('users.rekomendasi');
     Route::get('/users/search', [HomeController::class, 'search'])->middleware('auth')->name('users.search');
     Route::get('/users/video/detail/{id}', [HomeController::class, 'detail1'])->name('video.detail');

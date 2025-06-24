@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="{{ asset('tanpaBG.png') }}">
     <title>CineMora</title>
+    {{-- Bootstrap CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    {{-- Bootstrap Icons --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    {{-- Font Awesome --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+    
     @yield('styles') {{-- Ini adalah slot untuk CSS kustom dari halaman anak --}}
 
     <style>
@@ -201,10 +204,10 @@
         </div>
     </footer>
 
-    {{-- Bootstrap JS harus dimuat setelah jQuery jika menggunakan jQuery, atau di akhir body --}}
-    {{-- Dan hanya sekali! --}}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- Bootstrap JS dimuat HANYA SEKALI di sini, di akhir body --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
+    {{-- Skrip khusus layout ini --}}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Logic untuk pencarian
@@ -212,37 +215,43 @@
             const searchInput = document.getElementById('searchInput');
             const searchForm = document.getElementById('searchForm');
 
-            searchToggle.addEventListener('click', function () {
-                searchInput.classList.toggle('d-none'); // Toggle visibilitas input
-                if (!searchInput.classList.contains('d-none')) {
-                    searchInput.focus(); // Fokus ke input jika terlihat
-                }
-            });
-
-            // Opsional: Otomatis submit form saat Enter ditekan di input pencarian
-            searchInput.addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault(); // Mencegah form submit default dari Enter
-                    if (searchInput.value.trim() !== '') { // Hanya submit jika ada input
-                        searchForm.submit(); // Submit form secara manual
+            if (searchToggle && searchInput && searchForm) { // Tambahkan pengecekan null untuk keamanan
+                searchToggle.addEventListener('click', function () {
+                    searchInput.classList.toggle('d-none'); // Toggle visibilitas input
+                    if (!searchInput.classList.contains('d-none')) {
+                        searchInput.focus(); // Fokus ke input jika terlihat
                     }
-                }
-            });
+                });
 
-            // Opsional: Sembunyikan input dan submit form saat klik di luar input pencarian
-            document.addEventListener('click', function(event) {
-                if (!searchForm.contains(event.target) && !searchInput.classList.contains('d-none')) {
-                    // Jika klik di luar form pencarian DAN input pencarian terlihat
-                    if (searchInput.value.trim() !== '') { // Hanya submit jika ada input
-                        searchForm.submit();
+                // Opsional: Otomatis submit form saat Enter ditekan di input pencarian
+                searchInput.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault(); // Mencegah form submit default dari Enter
+                        if (searchInput.value.trim() !== '') { // Hanya submit jika ada input
+                            searchForm.submit(); // Submit form secara manual
+                        }
                     }
-                    searchInput.classList.add('d-none'); // Sembunyikan input kembali
-                }
-            });
+                });
+
+                // Opsional: Sembunyikan input dan submit form saat klik di luar input pencarian
+                document.addEventListener('click', function(event) {
+                    if (!searchForm.contains(event.target) && !searchInput.classList.contains('d-none')) {
+                        // Jika klik di luar form pencarian DAN input pencarian terlihat
+                        if (searchInput.value.trim() !== '') { // Hanya submit jika ada input
+                            searchForm.submit();
+                        }
+                        searchInput.classList.add('d-none'); // Sembunyikan input kembali
+                    }
+                });
+            }
 
             // Logic untuk like button (jika ada di layout utama ini)
+            // Hati-hati: jika like button hanya ada di halaman konten, ini mungkin tidak diperlukan di layout
             document.querySelectorAll('.like-btn').forEach(button => {
                 button.addEventListener('click', function(e) {
+                    // Jika Anda menggunakan AJAX untuk like/unlike, event.preventDefault() perlu ditambahkan
+                    // e.preventDefault(); // Uncomment jika Anda menangani like via AJAX
+
                     const icon = this.querySelector('i');
                     if (icon.classList.contains('bi-heart')) {
                         icon.classList.remove('bi-heart', 'text-white');
@@ -255,6 +264,8 @@
             });
         });
     </script>
-    @stack('scripts') {{-- SLOT PENTING: Untuk script tambahan dari halaman konten seperti category_scripts.js --}}
+    
+    {{-- SLOT PENTING: Untuk script tambahan dari halaman konten seperti koleksi.blade.php --}}
+    @stack('scripts') 
 </body>
 </html>

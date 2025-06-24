@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -12,14 +13,35 @@ class Video extends Model
         'is_popular' => 'boolean',
     ];
 
+    /**
+     * Get the users who liked this video.
+     */
     public function likedByUsers()
     {
         return $this->belongsToMany(User::class, 'user_video_likes')->withTimestamps();
     }
 
-    // Relasi untuk pengguna yang menyimpan video ke koleksi
+    /**
+     * Get the users who collected this video.
+     */
     public function collectedByUsers()
     {
         return $this->belongsToMany(User::class, 'user_video_collections')->withTimestamps();
+    }
+
+    /**
+     * Get the number of likes for the video.
+     */
+    public function getLikeCountAttribute()
+    {
+        return $this->likedByUsers()->count();
+    }
+
+    /**
+     * Get the number of collections (saves) for the video.
+     */
+    public function getCollectionCountAttribute()
+    {
+        return $this->collectedByUsers()->count();
     }
 }

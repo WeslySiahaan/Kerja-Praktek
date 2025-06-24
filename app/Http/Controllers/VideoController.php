@@ -15,7 +15,7 @@ class VideoController extends Controller
 {
     public function index()
     {
-        $videos = Video::all();
+        $videos = Video::withCount(['likedByUsers', 'collectedByUsers'])->paginate(10);
         $categories = [
             "Sudden Wealth", "Werewolves", "Popular", "Average", "Divine Tycoon", "Love Triangle", "Revenge", "Paranormal",
             "Marriage", "Cinderella", "Underdog Rise", "Son-in-Law", "Secret Identity", "Second-chance Love", "Comedy", "Boy's Love",
@@ -293,20 +293,5 @@ class VideoController extends Controller
         return redirect()->route('users.koleksi')->with('success', $message);
     }
 
-    public function collections(): View
-    {
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Silakan login untuk melihat koleksi.');
-        }
-    
-        try {
-            $user = Auth::user();
-            $videos = $user->collectedVideos()->latest()->paginate(10);
-    
-            return view('users.Koleksi', compact('videos'));
-        } catch (\Exception $e) {
-            return redirect()->route('login')->with('error', 'Gagal memuat koleksi: ' . $e->getMessage());
-        }
-    }
 }
 

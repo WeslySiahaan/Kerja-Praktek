@@ -29,6 +29,8 @@
                 <th>Rating</th>
                 <th>Populer</th>
                 <th>Jumlah Episode</th>
+                <th>Jumlah Like</th>
+                <th>Jumlah Simpan</th>
                 <th>Poster</th>
                 <th>Tautan Episode</th>
                 <th>Aksi</th>
@@ -43,8 +45,9 @@
                   <td>{{ $video->category }}</td>
                   <td>{{ $video->rating }}</td>
                   <td>{{ $video->is_popular ? 'Ya' : 'Tidak' }}</td>
-                  <td>{{ count($video->episodes ?? []) }}</td> {{-- Perbaikan untuk error count() --}}
-
+                  <td>{{ count($video->episodes ?? []) }}</td>
+                  <td>{{ $video->liked_by_users_count }}</td> <!-- Menggunakan withCount -->
+                  <td>{{ $video->collected_by_users_count }}</td> <!-- Menggunakan withCount -->
                   <td>
                     @if ($video->poster_image)
                       <img src="{{ asset('storage/' . $video->poster_image) }}" alt="{{ $video->name }} Poster" style="width: 100px; height: auto; object-fit: cover;">
@@ -52,9 +55,8 @@
                       <small class="text-muted">Tidak ada poster</small>
                     @endif
                   </td>
-
                   <td>
-                    @forelse ($video->episodes ?? [] as $index => $episodePath) {{-- Perbaikan untuk error count() --}}
+                    @forelse ($video->episodes ?? [] as $index => $episodePath)
                       <a href="{{ asset('storage/' . $episodePath) }}" target="_blank" class="btn btn-outline-secondary btn-sm mb-1">
                         Episode {{ $index + 1 }}
                       </a><br>
@@ -75,6 +77,7 @@
             </tbody>
           </table>
         </div>
+        {{ $videos->links() }} <!-- Tambahkan ini untuk paginasi -->
       @endif
     </div>
   </div>
