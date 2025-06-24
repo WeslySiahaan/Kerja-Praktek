@@ -81,7 +81,7 @@ class UpcomingController extends Controller
             'release_date' => 'required|date',
             'category' => 'required|array',
             'category.*' => 'in:' . implode(',', $this->categories),
-            'poster' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'poster' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:20048',
             'trailer' => 'nullable|file|mimes:mp4,mov,avi|max:102400',
         ]);
 
