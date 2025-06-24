@@ -98,30 +98,41 @@
                             <p class="card-text">{{ Str::limit($video->description, 100) }}</p>
                             <p class="card-title text-truncate">Total {{ count($video->episodes ?? []) }} Episode</p>
                             <div class="mt-auto d-flex gap-2">
-                                @if (Auth::check())
-                                    <form action="{{ route('videos.like', $video) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-link p-0 like-btn" title="{{ $video->likedByUsers->contains(Auth::id()) ? 'Batal Suka' : 'Suka' }}">
-                                            <i class="bi {{ $video->likedByUsers->contains(Auth::id()) ? 'bi-heart-fill text-danger' : 'bi-heart text-white' }} fs-5"></i>
-                                        </button>
-                                    </form>
-                                    <form action="{{ route('videos.save', $video) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-link p-0" title="{{ $video->collectedByUsers->contains(Auth::id()) ? 'Sudah Disimpan' : 'Simpan' }}"
-                                                {{ $video->collectedByUsers->contains(Auth::id()) ? 'disabled' : '' }}>
-                                            <i class="bi {{ $video->collectedByUsers->contains(Auth::id()) ? 'bi-bookmark-fill text-success' : 'bi-bookmark text-white' }} fs-5"></i>
-                                        </button>
-                                    </form>
-                                @else
-                                    <a href="{{ route('login') }}" class="btn btn-link p-0" title="Suka">
-                                        <i class="bi bi-heart text-white fs-5"></i>
-                                    </a>
-                                    <a href="{{ route('login') }}" class="btn btn-link p-0" title="Simpan">
-                                        <i class="bi bi-bookmark text-white fs-5"></i>
-                                    </a>
-                                @endif
-                                    <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
-                                </div>
+    @if (Auth::check())
+        {{-- Tombol Like --}}
+        <form action="{{ route('videos.like', $video) }}" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-link p-0 like-btn" title="{{ $video->likedByUsers->contains(Auth::id()) ? 'Batal Suka' : 'Suka' }}">
+                <i class="bi {{ $video->likedByUsers->contains(Auth::id()) ? 'bi-heart-fill text-danger' : 'bi-heart text-white' }} fs-5"></i>
+            </button>
+        </form>
+
+        {{-- Tombol Simpan --}}
+        <form action="{{ route('videos.save', $video) }}" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-link p-0" title="{{ $video->collectedByUsers->contains(Auth::id()) ? 'Sudah Disimpan' : 'Simpan' }}"
+                    {{ $video->collectedByUsers->contains(Auth::id()) ? 'disabled' : '' }}>
+                <i class="bi {{ $video->collectedByUsers->contains(Auth::id()) ? 'bi-bookmark-fill text-success' : 'bi-bookmark text-white' }} fs-5"></i>
+            </button>
+        </form>
+
+        {{-- Tombol Menonton --}}
+        <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+    @else
+        {{-- Tombol Like dengan notifikasi --}}
+        <button type="button" class="btn btn-link p-0" onclick="alert('Anda harus login untuk menyukai video ini!'); window.location.href='{{ route('login') }}';" title="Login untuk Suka">
+            <i class="bi bi-heart text-white fs-5"></i>
+        </button>
+
+        {{-- Tombol Simpan dengan notifikasi --}}
+        <button type="button" class="btn btn-link p-0" onclick="alert('Anda harus login untuk menyimpan video ini!'); window.location.href='{{ route('login') }}';" title="Login untuk Simpan">
+            <i class="bi bi-bookmark text-white fs-5"></i>
+        </button>
+
+        {{-- Tombol Menonton dengan notifikasi --}}
+        <button type="button" class="btn btn-primary btn-sm bi bi-play-fill" onclick="alert('Anda harus login untuk menonton video ini!'); window.location.href='{{ route('login') }}';" title="Login untuk menonton">Menonton</button>
+    @endif
+</div>
                         </div>
                     </div>
                 </div>

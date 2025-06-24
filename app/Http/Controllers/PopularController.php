@@ -91,39 +91,46 @@ class PopularController extends Controller
     {
         $query = $request->input('query');
         $category = $request->input('category');
+        $perPage = 12; // Jumlah item per halaman, Anda bisa sesuaikan
 
-        // Filter for Video
+        // --- Filter untuk Model Video ---
         $videos = Video::query();
         if ($query) {
             $videos->where('name', 'like', '%' . $query . '%');
         }
         if ($category && $category !== 'all') {
-            $videos->where('category', $category); // Correct: 'category' for Video model
+            $videos->where('category', $category);
         }
-        $videos = $videos->latest()->get();
+        // Gunakan paginate() dan appends()
+        $videos = $videos->latest()->paginate($perPage)->appends(request()->query());
 
-        // Filter for Upcoming
+        // --- Filter untuk Model Upcoming ---
         $upcomings = Upcoming::query();
         if ($query) {
             $upcomings->where('title', 'like', '%' . $query . '%');
         }
         if ($category && $category !== 'all') {
-            // FIX HERE: Change 'categories' to 'category' if your Upcoming table has a 'category' column
+            // PASTIKAN nama kolom di tabel 'upcomings' adalah 'category'
             $upcomings->where('category', $category);
         }
-        $upcomings = $upcomings->latest()->get();
+        // Gunakan paginate() dan appends()
+        $upcomings = $upcomings->latest()->paginate($perPage)->appends(request()->query());
 
-        // Filter for Popular
+
+        // --- Filter untuk Model Popular ---
         $populars = Popular::query();
         if ($query) {
             $populars->where('title', 'like', '%' . $query . '%');
         }
         if ($category && $category !== 'all') {
-            // FIX HERE: Change 'categories' to 'category' if your Popular table has a 'category' column
+            // PASTIKAN nama kolom di tabel 'populars' adalah 'category'
             $populars->where('category', $category);
         }
-        $populars = $populars->latest()->get();
+        // Gunakan paginate() dan appends()
+        $populars = $populars->latest()->paginate($perPage)->appends(request()->query());
 
+
+        // --- Daftar Kategori ---
         $allCategories = [
             "Sudden Wealth", "Werewolves", "Popular", "Average", "Divine Tycoon", "Love Triangle", "Revenge", "Paranormal",
             "Marriage", "Cinderella", "Underdog Rise", "Son-in-Law", "Secret Identity", "Second-chance Love", "Comedy", "Boy's Love",
@@ -135,10 +142,12 @@ class PopularController extends Controller
             "Comeback", "Toxic Relationship", "Contract Marriage", "Family", "Time Travel", "Bitter Love", "Steamy", "Destiny",
         ];
 
+        // Pastikan 'all' ada di daftar kategori untuk opsi filter
         if (!in_array('all', $allCategories)) {
             $allCategories[] = 'all';
         }
 
+        // --- Mengirim Data ke View ---
         return view('dramabox.browse', compact('videos', 'upcomings', 'populars', 'allCategories', 'category'));
     }
 }
