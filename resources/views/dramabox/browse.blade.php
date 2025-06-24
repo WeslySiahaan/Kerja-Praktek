@@ -19,7 +19,15 @@
     {{-- Tampilkan Video --}}
     <section class="mb-5">
         <h2 class="display-6 fw-bold mb-4 px-3 text-white">Browse Videos</h2>
-        @if($videos->isEmpty())
+
+        @if (session('error'))
+            <div class="alert alert-danger px-3">{{ session('error') }}</div>
+        @endif
+        @if (session('success'))
+            <div class="alert alert-success px-3">{{ session('success') }}</div>
+        @endif
+
+        @if ($videos->isEmpty())
             <p class="text-center text-muted py-4 px-3">Tidak ada video ditemukan.</p>
         @else
             <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 row-cols-xl-8 g-3 px-3">
@@ -39,39 +47,50 @@
                                 <p class="card-title text-truncate text-white"><small>Ep {{ count($video->episodes ?? []) }}</small></p>
                                 
                                 <div class="mt-auto d-flex gap-2">
-                                @if (Auth::check())
-                                    <form action="{{ route('videos.like', $video) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-link p-0 like-btn" title="{{ $video->likedByUsers->contains(Auth::id()) ? 'Batal Suka' : 'Suka' }}">
-                                            <i class="bi {{ $video->likedByUsers->contains(Auth::id()) ? 'bi-heart-fill text-danger' : 'bi-heart text-white' }} fs-5"></i>
-                                        </button>
-                                    </form>
-                                    <form action="{{ route('videos.save', $video) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-link p-0" title="{{ $video->collectedByUsers->contains(Auth::id()) ? 'Sudah Disimpan' : 'Simpan' }}"
-                                                {{ $video->collectedByUsers->contains(Auth::id()) ? 'disabled' : '' }}>
-                                            <i class="bi {{ $video->collectedByUsers->contains(Auth::id()) ? 'bi-bookmark-fill text-success' : 'bi-bookmark text-white' }} fs-5"></i>
-                                        </button>
-                                    </form>
-                                @else
-                                    <a href="{{ route('login') }}" class="btn btn-link p-0" title="Suka">
-                                        <i class="bi bi-heart text-white fs-5"></i>
-                                    </a>
-                                    <a href="{{ route('login') }}" class="btn btn-link p-0" title="Simpan">
-                                        <i class="bi bi-bookmark text-white fs-5"></i>
-                                    </a>
-                                @endif
-                                <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+                                    @if (Auth::check())
+                                        <!-- Tombol Like -->
+                                        <form action="{{ route('videos.like', $video) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-link p-0 like-btn" title="{{ $video->likedByUsers->contains(Auth::id()) ? 'Batal Suka' : 'Suka' }}">
+                                                <i class="bi {{ $video->likedByUsers->contains(Auth::id()) ? 'bi-heart-fill text-danger' : 'bi-heart text-white' }} fs-5"></i>
+                                            </button>
+                                        </form>
+
+                                        <!-- Tombol Simpan -->
+                                        <form action="{{ route('videos.save', $video) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-link p-0" title="{{ $video->collectedByUsers->contains(Auth::id()) ? 'Sudah Disimpan' : 'Simpan' }}"
+                                                    {{ $video->collectedByUsers->contains(Auth::id()) ? 'disabled' : '' }}>
+                                                <i class="bi {{ $video->collectedByUsers->contains(Auth::id()) ? 'bi-bookmark-fill text-success' : 'bi-bookmark text-white' }} fs-5"></i>
+                                            </button>
+                                        </form>
+
+                                        <!-- Tombol Menonton -->
+                                        <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+                                    @else
+                                        <!-- Tombol Like dengan redirect ke login -->
+                                        <a href="{{ route('login') }}" class="btn btn-link p-0" title="Login untuk Suka">
+                                            <i class="bi bi-heart text-white fs-5"></i>
+                                        </a>
+
+                                        <!-- Tombol Simpan dengan redirect ke login -->
+                                        <a href="{{ route('login') }}" class="btn btn-link p-0" title="Login untuk Simpan">
+                                            <i class="bi bi-bookmark text-white fs-5"></i>
+                                        </a>
+
+                                        <!-- Tombol Menonton dengan redirect ke login -->
+                                        <a href="{{ route('login') }}" class="btn btn-primary btn-sm bi bi-play-fill" title="Login untuk Menonton">Menonton</a>
+                                    @endif
                                 </div>
                             </div>
                         </div>
                     </div>
                 @endforeach
             </div>
-                  <!-- Pagination -->
-<div style="margin-top: 20px;" class="d-flex justify-content-center">
-  {{ $videos->appends(request()->query())->links('pagination::bootstrap-4') }}
-</div>
+            <!-- Pagination -->
+            <div style="margin-top: 20px;" class="d-flex justify-content-center">
+                {{ $videos->appends(request()->query())->links('pagination::bootstrap-4') }}
+            </div>
         @endif
     </section>
 

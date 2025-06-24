@@ -56,8 +56,9 @@
         <!-- Sidebar -->
         <div class="sidebar p-3">
             <div class="sidebar-header p-3 border-bottom border-secondary d-flex align-items-center justify-content-center">
-                <i class="bi bi-shield-lock-fill me-2" style="font-size: 1.5rem;"></i>
-                <h4 class="mb-0">Admin</h4>
+                <a class="navbar-brand fw-bold text-white" href="{{ route('admin.dashboard') }}">
+          <img src="{{ asset('LogoFix.png') }}" alt="Logo" width="100" height="67" class="d-inline-block align-text-top me-2">
+        </a>
             </div>
             <ul class="nav flex-column p-3">
                 <li class="nav-item mb-2">

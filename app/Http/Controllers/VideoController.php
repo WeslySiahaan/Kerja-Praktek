@@ -298,7 +298,7 @@ class VideoController extends Controller
         // Ambil 5 video teratas berdasarkan jumlah like atau simpan (misalnya, urutkan berdasarkan like)
         $videos = Video::withCount(['likedByUsers', 'collectedByUsers'])
                        ->orderBy('liked_by_users_count', 'desc')
-                       ->limit(10)
+                       ->limit(20)
                        ->get();
 
         $videoLabels = $videos->pluck('name')->toArray();
