@@ -43,17 +43,10 @@ class ProfileController extends Controller
             if ($user->profile_photo_path) {
                 Storage::disk('public')->delete($user->profile_photo_path);
             }
-
-            // Simpan file baru di 'storage/app/public/profiles'
-            // dan simpan path relatifnya ke database.
             $path = $request->file('profile_photo')->store('profiles', 'public');
-
-            // Simpan path ke kolom yang benar di database
             $user->profile_photo_path = $path;
         }
-        // --- AKHIR PERUBAHAN ---
 
-        // Simpan semua perubahan (nama, email, dan path foto)
         $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');

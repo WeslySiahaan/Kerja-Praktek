@@ -89,7 +89,7 @@
             @foreach ($videos as $video)
                 <div class="col">
                     <div class="card bg-dark text-white h-100 d-flex flex-column">
-                        <a href="{{ route('video.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
+                        <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
                             <img src="{{ $video->poster_image ? asset('storage/' . $video->poster_image) : asset('Drama__box.png') }}"
                                  class="card-img-top" 
                                  alt="{{ $video->name }} poster"

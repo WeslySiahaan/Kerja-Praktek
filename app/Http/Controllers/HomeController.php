@@ -136,12 +136,10 @@ class HomeController extends Controller
             "Comeback", "Toxic Relationship", "Contract Marriage", "Family", "Time Travel", "Bitter Love", "Steamy", "Destiny",
         ];
 
-        // Pastikan 'all' ada di daftar kategori untuk opsi filter
         if (!in_array('all', $allCategories)) {
             $allCategories[] = 'all';
         }
 
-        // --- Mengirim Data ke View ---
         return view('users.browse', compact('videos', 'upcomings', 'populars', 'allCategories', 'category'));
     }
     

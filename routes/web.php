@@ -11,6 +11,7 @@ use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\KoleksiController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\AdminDashboardController;
 
 
 // Route untuk halaman utama
@@ -87,11 +88,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/search', [VideoController::class, 'search'])->name('dramabox.search');
 Route::get('/category', [PopularController::class, 'search'])->name('dramabox.search1');
-
-// Route untuk admin dashboard
-Route::get('/admin/dashboard', [VideoController::class, 'dashboard'])->name('admin.dashboard')->middleware('auth');
-
-
+Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard')->middleware('auth');
 
 
 
