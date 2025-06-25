@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\KoleksiController;
+use App\Http\Controllers\CommentController;
 
 
 // Route untuk halaman utama
@@ -60,6 +61,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/rekomendasi', [HomeController::class, 'rekomendasi'])->middleware('auth')->name('users.rekomendasi');
     Route::get('/users/search', [HomeController::class, 'search'])->middleware('auth')->name('users.search');
     Route::get('/users/video/detail/{id}', [HomeController::class, 'detail1'])->name('video.detail');
+
+    Route::post('/videos/{video}/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
+    Route::get('/videos/{video}', [VideoController::class, 'show'])->name('videos.show');
+    Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update')->middleware('auth');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
 
 
     // Routes untuk akan tayang

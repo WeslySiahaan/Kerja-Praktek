@@ -307,5 +307,17 @@ class VideoController extends Controller
 
         return view('admin.dashboard', compact('videoLabels', 'likeData', 'collectionData'));
     }
+
+    public function show(Video $video)
+    {
+        $video->load([
+            'likedByUsers',
+            'collectedByUsers',
+            'comments.user' => function ($query) {
+                $query->latest(); // Mengurutkan komentar terbaru di atas berdasarkan created_at
+            }
+        ]);
+        return view('dramabox.detail', compact('video'));
+    }
 }
 

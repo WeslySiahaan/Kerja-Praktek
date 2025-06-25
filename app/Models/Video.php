@@ -44,4 +44,9 @@ class Video extends Model
     {
         return $this->collectedByUsers()->count();
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->latest();
+    }
 }
