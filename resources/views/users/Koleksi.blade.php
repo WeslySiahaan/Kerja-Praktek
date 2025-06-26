@@ -69,9 +69,9 @@
                         <div class="card-body d-flex flex-column movie-info">
                             <h5 class="card-title text-truncate">{{ $video->name }}</h5>
                             <p class="card-text text-white"><small>Kategori: {{ is_array($video->category) ? implode(', ', $video->category) : $video->category }}</small></p>
-                            <p class="card-title text-truncate text-white"><small>Ep {{ count($video->episodes ?? []) }}</small></p>
+                            <p class="card-title text-truncate text-white"><small>Total {{ count($video->episodes ?? []) }} episode</small></p>
                             <div class="mt-auto">
-                                <a href="{{ route('dramabox.detail', $video) }}" class="btn btn-primary btn-sm w-100">Menonton</a>
+                                <a href="{{ route('dramabox.detail', $video) }}"  class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
                             </div>
                         </div>
                     </div>

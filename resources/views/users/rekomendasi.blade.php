@@ -3,13 +3,9 @@
 @section('content')
     <section class="container-fluid" style="margin-top: 20px; position: relative; z-index: 10; margin-bottom: 20px;">
         <div class="d-flex justify-content-between align-items-center mb-4 px-3">
-            <h5 class="display-6 fw-bold m-0 text-white">Rekomendasi Video untuk Anda</h5>
+            <h5 class="display-6 fw-bold m-0 text-white">Rekomendasi untuk Anda</h5>
             @auth
             <div class="edit-buttons d-flex gap-2">
-                <!-- Opsional: Tambahkan tombol edit jika diperlukan untuk rekomendasi -->
-                <a href="#" class="btn btn-secondary fw-semibold px-3 py-1 d-flex align-items-center gap-2" disabled>
-                    <i class="bi bi-pencil"></i> Edit (Tidak Tersedia)
-                </a>
             </div>
             @endauth
         </div>
@@ -50,10 +46,10 @@
                             </a>
                             <div class="card-body d-flex flex-column movie-info">
                                 <h5 class="card-title text-truncate">{{ $video->name }}</h5>
-                                <p class="card-text text-white"><small>Rating: {{ $video->rating }}/5</small></p>
+                                <p class="card-title text-truncate text-white"><small>Total {{ count($video->episodes ?? []) }} episode</small></p>
                                 <p class="card-text text-white"><small>Likes: {{ $video->like_count }}</small></p>
                                 <div class="mt-auto">
-                                    <a href="{{ route('dramabox.detail', $video) }}" class="btn btn-primary btn-sm w-100">Lihat Detail</a>
+                                    <a href="{{ route('dramabox.detail', $video) }}"  class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
                                 </div>
                             </div>
                         </div>
