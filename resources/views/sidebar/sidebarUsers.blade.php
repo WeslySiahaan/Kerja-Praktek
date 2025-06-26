@@ -121,14 +121,11 @@
     <div class="layout-wrapper">
         <!-- Sidebar -->
 <div class="sidebar">
-    <div class="sidebar-header" style="display: flex; align-items: center; justify-content: flex-start;">
-        <img src="{{ asset('LogoFix.png') }}" alt="Logo" style="width: 90px; height: 70px; margin-right: 15px; max-height: 32px;">
-        <div style="display: flex; align-items: center;">
-            <i class="bi bi-person-fill" style="font-size: 15px; margin-right: 5px;"></i>
-            <h4 style="font-size: 15px; margin: 0; font-weight: 400;">Users</h4>
-        </div>
-
-    </div>
+    <div class="sidebar-header p-3 border-bottom border-secondary d-flex align-items-center justify-content-center">
+                <a class="navbar-brand fw-bold text-white" href="{{ route('users.dashboard') }}">
+          <img src="{{ asset('LogoFix.png') }}" alt="Logo" width="100" height="67" class="d-inline-block align-text-top me-2">
+        </a>
+            </div>
             <ul class="nav flex-column">
                 <ul class="nav flex-column">
                     <li class="nav-item">

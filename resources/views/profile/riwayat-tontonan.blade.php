@@ -1,4 +1,3 @@
-riwayatt tontonan 
 @extends('layouts.app')
 
 @section('styles')
