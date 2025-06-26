@@ -96,7 +96,7 @@
                         <a class="nav-link {{ Route::is('dramabox.browse') ? 'active' : '' }}" href="{{ route('dramabox.browse') }}">Kategori</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ Route::is('dramabox.rekomendasi') ? 'active' : '' }}" href="{{ route('dramabox.rekomendasi') }}">Rekomendasi</a>
+                        <a class="nav-link {{ Route::is('users.rekomendasi') ? 'active' : '' }}" href="{{ route('users.rekomendasi') }}">Rekomendasi</a>
                     </li>
                 </ul>
                 

@@ -13,6 +13,7 @@ use App\Http\Controllers\KoleksiController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\WatchHistoryController; 
+use App\Http\Controllers\RecommendationController; 
 
 
 // Route untuk halaman utama
@@ -63,7 +64,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/browse', [HomeController::class, 'browse'])->middleware('auth')->name('users.browse');
     Route::get('/users/koleksi', [KoleksiController::class, 'index'])->middleware('auth')->name('users.koleksi');
     Route::delete('/collections/destroy-multiple', [KoleksiController::class, 'destroyMultiple'])->name('collections.destroy_multiple');
-    Route::get('/users/rekomendasi', [HomeController::class, 'rekomendasi'])->middleware('auth')->name('users.rekomendasi');
+    Route::get('/users/recommendations', [RecommendationController::class, 'index'])->name('users.rekomendasi')->middleware('auth');
     Route::get('/users/search', [HomeController::class, 'search'])->middleware('auth')->name('users.search');
     Route::get('/users/video/detail/{id}', [HomeController::class, 'detail1'])->name('video.detail');
 
