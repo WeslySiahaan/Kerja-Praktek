@@ -12,12 +12,13 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\KoleksiController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\WatchHistoryController; 
 
 
 // Route untuk halaman utama
 Route::get('/', [HomeController::class, 'index4'])->name('dramabox.beranda');
 Route::get('/beranda', [HomeController::class, 'index4']);
-Route::get('/video/detail/{id}', [VideoController::class, 'detail'])->name('dramabox.detail');
+Route::get('/video/detail/{id}', [VideoController::class, 'detail1'])->name('dramabox.detail');
 Route::get('/browse', [HomeController::class, 'index5'])->name('dramabox.browse');
 
 
@@ -39,6 +40,9 @@ Route::middleware('auth')->group(function () {
     Route::get('profile/kebijakan', [ProfileController::class, 'kebijakan'])->name('profile.kebijakan');
     Route::get('profile/nonaktifAkun', [ProfileController::class, 'nonaktifAkun'])->name('profile.nonaktifAkun');
     Route::get('/profile/riwayat-tontonan', [ProfileController::class, 'riwayatTontonan'])->name('profile.riwayatTontonan');
+    Route::get('/profile/riwayat-tontonan', [WatchHistoryController::class, 'index'])->name('profile.riwayatTontonan');
+    Route::delete('/profile/riwayat-tontonan/{watchHistory}', [WatchHistoryController::class, 'destroy'])->name('profile.riwayatTontonan.destroy');
+    Route::post('/profile/riwayat-tontonan/clear-all', [WatchHistoryController::class, 'clearAll'])->name('profile.riwayatTontonan.clearAll');
 
 
     // Route untuk logout

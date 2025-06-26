@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\WatchHistory;
 
 class Video extends Model
 {
@@ -48,5 +49,10 @@ class Video extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class)->latest();
+    }
+
+    public function watchHistories()
+    {
+        return $this->hasMany(WatchHistory::class);
     }
 }

@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\WatchHistory;
 
 class User extends Authenticatable
 {
@@ -56,4 +57,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Video::class, 'user_video_collections')->withTimestamps();
     }
+
+      public function watchHistories()
+    {
+        return $this->hasMany(WatchHistory::class);
+    }
 }
+
