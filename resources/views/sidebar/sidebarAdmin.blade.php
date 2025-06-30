@@ -113,9 +113,10 @@
                 <div class="collapse" id="profileCollapse">
                   <ul class="nav flex-column ms-3">
                     <li class="nav-item mb-2">
-                      <a href="{{ route('profile.pertanyaanUmum') }}" class="nav-link text-white d-flex align-items-center">
+                      <a href="{{ route('faq.editAll') }}" class="nav-link text-white d-flex align-items-center">
                         <i class="bi bi-question-circle me-2"></i> Pertanyaan Umum
-                      </a>
+                    </a>
+
                     </li>
                     <li class="nav-item mb-2">
                       <a href="{{ route('profile.layananPelanggan') }}" class="nav-link text-white d-flex align-items-center">

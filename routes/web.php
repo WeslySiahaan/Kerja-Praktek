@@ -15,7 +15,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\WatchHistoryController; 
 use App\Http\Controllers\RecommendationController; 
 use App\Http\Controllers\PrivacyPolicyController;
-
+use App\Http\Controllers\FaqController;
 
 // Route untuk halaman utama
 Route::get('/', [HomeController::class, 'index4'])->name('dramabox.beranda');
@@ -51,6 +51,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/riwayat-tontonan', [WatchHistoryController::class, 'index'])->name('profile.riwayatTontonan');
     Route::delete('/profile/riwayat-tontonan/{watchHistory}', [WatchHistoryController::class, 'destroy'])->name('profile.riwayatTontonan.destroy');
     Route::post('/profile/riwayat-tontonan/clear-all', [WatchHistoryController::class, 'clearAll'])->name('profile.riwayatTontonan.clearAll');
+
+    // Tidak pakai middleware admin jika tidak perlu
+    Route::get('/admin/pertanyaan-umum/edit', [FaqController::class, 'editAll'])->name('faq.editAll');
+    Route::put('/admin/pertanyaan-umum/update', [FaqController::class, 'updateAll'])->name('faq.updateAll');
+    Route::get('/admin/pertanyaan-umum/edit', [FaqController::class, 'editAll'])->name('faq.editAll');
+
 
 
     // Route untuk logout

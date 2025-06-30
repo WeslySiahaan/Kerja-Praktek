@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use App\Models\Faq;
 
 class ProfileController extends Controller
 {
@@ -94,11 +95,12 @@ class ProfileController extends Controller
         return back()->with('status', 'password-updated');
     }
 
+
     public function pertanyaanUmum()
     {
-        return view('profile.pertanyaanUmum');
+        $faqs = Faq::orderBy('id')->get()->groupBy('kategori');
+        return view('profile.pertanyaanUmum', compact('faqs'));
     }
-
     public function layananPelanggan()
     {
         return view('profile.layananPelanggan');
