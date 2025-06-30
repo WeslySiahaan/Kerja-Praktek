@@ -71,13 +71,6 @@
 @section('content')
   <h1>Pengaturan</h1>
 
-  <div class="settings-option">
-    <div class="settings-label">
-      <i class="fas fa-globe"></i> Bahasa
-    </div>
-    <button class="language-button">Indonesia</button>
-  </div>
-
   <a href="{{ route('profile.persetujuan') }}" class="settings-option">
     <div class="settings-label">
       <i class="fas fa-file-alt"></i> Persetujuan Pengguna
@@ -90,9 +83,4 @@
     </div>
   </a>
 
-  <a href="{{ route('profile.nonaktifAkun') }}" class="settings-option">
-    <div class="settings-label">
-      <i class="fas fa-ban"></i> Nonaktifkan Akun
-    </div>
-  </a>
 @endsection
