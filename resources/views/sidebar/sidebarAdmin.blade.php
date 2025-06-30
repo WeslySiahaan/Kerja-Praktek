@@ -152,7 +152,7 @@
                         </a>
                     </li>
                     <li class="nav-item mb-2">
-                        <a href="{{ route('profile.kebijakan') }}" class="nav-link text-white d-flex align-items-center">
+                        <a href="{{ route('privacy_policies.index') }}" class="nav-link text-white d-flex align-items-center">
                         <i class="bi bi-headset me-2"></i> Kebijakan Privasi
                         </a>
                     </li>

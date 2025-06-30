@@ -14,6 +14,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\WatchHistoryController; 
 use App\Http\Controllers\RecommendationController; 
+use App\Http\Controllers\PrivacyPolicyController;
 
 
 // Route untuk halaman utama
@@ -36,8 +37,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/pertanyaanUmum', [ProfileController::class, 'pertanyaanUmum'])->name('profile.pertanyaanUmum');
     Route::get('/profile/layananPelanggan', [ProfileController::class, 'layananPelanggan'])->name('profile.layananPelanggan');
     Route::get('/profile/pengaturan', [ProfileController::class, 'pengaturan'])->name('profile.pengaturan');
-    Route::get('profile/persetujuan', [ProfileController::class, 'persetujuan'])->name('profile.persetujuan');
-    Route::get('profile/kebijakan', [ProfileController::class, 'kebijakan'])->name('profile.kebijakan');
+    Route::get('/profile/persetujuan', [ProfileController::class, 'persetujuan'])->name('profile.persetujuan');
+    Route::get('/profile/kebijakan', [ProfileController::class, 'kebijakan'])->name('profile.kebijakan');
+
+    Route::get('/privacy-policies', [PrivacyPolicyController::class, 'index'])->name('privacy_policies.index');
+    Route::post('/privacy-policies', [PrivacyPolicyController::class, 'store'])->name('privacy_policies.store');
+    Route::get('/privacy-policies/{id}/edit', [PrivacyPolicyController::class, 'edit'])->name('privacy_policies.edit');
+    Route::put('/privacy-policies/{id}', [PrivacyPolicyController::class, 'update'])->name('privacy_policies.update');
+    Route::delete('/privacy-policies/{id}', [PrivacyPolicyController::class, 'destroy'])->name('privacy_policies.destroy');
+
     Route::get('profile/nonaktifAkun', [ProfileController::class, 'nonaktifAkun'])->name('profile.nonaktifAkun');
     Route::get('/profile/riwayat-tontonan', [ProfileController::class, 'riwayatTontonan'])->name('profile.riwayatTontonan');
     Route::get('/profile/riwayat-tontonan', [WatchHistoryController::class, 'index'])->name('profile.riwayatTontonan');
