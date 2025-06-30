@@ -23,9 +23,6 @@ Route::get('/', [HomeController::class, 'index4'])->name('dramabox.beranda');
 Route::get('/beranda', [HomeController::class, 'index4']);
 Route::get('/video/detail/{id}', [VideoController::class, 'detail1'])->name('dramabox.detail');
 Route::get('/browse', [HomeController::class, 'index5'])->name('dramabox.browse');
-
-
-
 // Route untuk dashboard pengguna
 Route::get('/dashboard', [HomeController::class, 'index1'])->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -99,7 +96,6 @@ Route::middleware('auth')->group(function () {
   Route::put('/upcomings/{upcoming}', [UpcomingController::class, 'update'])->name('upcomings.update');
   Route::delete('/upcomings/{upcoming}', [UpcomingController::class, 'destroy'])->name('upcomings.destroy');
 
-<<<<<<< HEAD
     // Routes untuk video
     Route::get('/videos/new', [VideoController::class, 'index'])->name('videos.index');
     Route::get('/videos/create', [VideoController::class, 'create'])->name('videos.create');
@@ -147,14 +143,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/populars/{popular}/edit', [PopularController::class, 'edit'])->name('populars.edit');
     Route::put('/populars/{popular}', [PopularController::class, 'update'])->name('populars.update');
     Route::delete('/populars/{popular}', [PopularController::class, 'destroy'])->name('populars.destroy');
-=======
-  Route::get('/populars', [PopularController::class, 'index'])->name('populars.index');
-  Route::get('/populars/create', [PopularController::class, 'create'])->name('populars.create');
-  Route::post('/populars', [PopularController::class, 'store'])->name('populars.store');
-  Route::get('/populars/{popular}/edit', [PopularController::class, 'edit'])->name('populars.edit');
-  Route::put('/populars/{popular}', [PopularController::class, 'update'])->name('populars.update');
-  Route::delete('/populars/{popular}', [PopularController::class, 'destroy'])->name('populars.destroy');
->>>>>>> b00f0f70aa8fa67c9bd6b1a25cae73cb544607c2
+    Route::get('/populars', [PopularController::class, 'index'])->name('populars.index');
+    Route::get('/populars/create', [PopularController::class, 'create'])->name('populars.create');
+    Route::post('/populars', [PopularController::class, 'store'])->name('populars.store');
+    Route::get('/populars/{popular}/edit', [PopularController::class, 'edit'])->name('populars.edit');
+    Route::put('/populars/{popular}', [PopularController::class, 'update'])->name('populars.update');
+    Route::delete('/populars/{popular}', [PopularController::class, 'destroy'])->name('populars.destroy');
+
 });
 
 Route::get('/search', [VideoController::class, 'search'])->name('dramabox.search');
@@ -162,15 +157,9 @@ Route::get('/category', [PopularController::class, 'search'])->name('dramabox.se
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard')->middleware('auth');
 
 
-<<<<<<< HEAD
 Route::get('/rekomendasi', [HomeController::class, 'rekomendasi1'])->name('dramabox.rekomendasi');
-=======
 
 
-Route::get('/rekomendasi', function () {
-  return view('dramabox.rekomendasi');
-})->name('dramabox.rekomendasi');
->>>>>>> b00f0f70aa8fa67c9bd6b1a25cae73cb544607c2
 
 //Route::get('/app', function () {
 //  return view('dramabox.koleksi');
