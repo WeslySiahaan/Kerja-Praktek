@@ -12,8 +12,8 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\KoleksiController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AdminDashboardController;
-use App\Http\Controllers\WatchHistoryController; 
-use App\Http\Controllers\RecommendationController; 
+use App\Http\Controllers\WatchHistoryController;
+use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\FaqController;
 
@@ -26,82 +26,84 @@ Route::get('/browse', [HomeController::class, 'index5'])->name('dramabox.browse'
 
 
 // Route untuk dashboard pengguna
-Route::get('/dashboard',[HomeController::class, 'index1'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [HomeController::class, 'index1'])->middleware(['auth', 'verified'])->name('dashboard');
 
 // Grup route yang memerlukan autentikasi
 Route::middleware('auth')->group(function () {
-    // Routes untuk profil
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile/edit', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile/edit', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/profile/pertanyaanUmum', [ProfileController::class, 'pertanyaanUmum'])->name('profile.pertanyaanUmum');
-    Route::get('/profile/layananPelanggan', [ProfileController::class, 'layananPelanggan'])->name('profile.layananPelanggan');
-    Route::get('/profile/pengaturan', [ProfileController::class, 'pengaturan'])->name('profile.pengaturan');
-    Route::get('/profile/persetujuan', [ProfileController::class, 'persetujuan'])->name('profile.persetujuan');
-    Route::get('/profile/kebijakan', [ProfileController::class, 'kebijakan'])->name('profile.kebijakan');
+  // Routes untuk profil
+  Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+  Route::patch('/profile/edit', [ProfileController::class, 'update'])->name('profile.update');
+  Route::delete('/profile/edit', [ProfileController::class, 'destroy'])->name('profile.destroy');
+  Route::get('/profile/pertanyaanUmum', [ProfileController::class, 'pertanyaanUmum'])->name('profile.pertanyaanUmum');
+  Route::get('/profile/layananPelanggan', [ProfileController::class, 'layananPelanggan'])->name('profile.layananPelanggan');
+  Route::get('/profile/pengaturan', [ProfileController::class, 'pengaturan'])->name('profile.pengaturan');
+  Route::get('/profile/persetujuan', [ProfileController::class, 'persetujuan'])->name('profile.persetujuan');
+  Route::get('/profile/kebijakan', [ProfileController::class, 'kebijakan'])->name('profile.kebijakan');
 
-    Route::get('/privacy-policies', [PrivacyPolicyController::class, 'index'])->name('privacy_policies.index');
-    Route::post('/privacy-policies', [PrivacyPolicyController::class, 'store'])->name('privacy_policies.store');
-    Route::get('/privacy-policies/{id}/edit', [PrivacyPolicyController::class, 'edit'])->name('privacy_policies.edit');
-    Route::put('/privacy-policies/{id}', [PrivacyPolicyController::class, 'update'])->name('privacy_policies.update');
-    Route::delete('/privacy-policies/{id}', [PrivacyPolicyController::class, 'destroy'])->name('privacy_policies.destroy');
+  Route::get('/privacy-policies', [PrivacyPolicyController::class, 'index'])->name('privacy_policies.index');
+  Route::post('/privacy-policies', [PrivacyPolicyController::class, 'store'])->name('privacy_policies.store');
+  Route::get('/privacy-policies/{id}/edit', [PrivacyPolicyController::class, 'edit'])->name('privacy_policies.edit');
+  Route::put('/privacy-policies/{id}', [PrivacyPolicyController::class, 'update'])->name('privacy_policies.update');
+  Route::delete('/privacy-policies/{id}', [PrivacyPolicyController::class, 'destroy'])->name('privacy_policies.destroy');
 
-    Route::get('profile/nonaktifAkun', [ProfileController::class, 'nonaktifAkun'])->name('profile.nonaktifAkun');
-    Route::get('/profile/riwayat-tontonan', [ProfileController::class, 'riwayatTontonan'])->name('profile.riwayatTontonan');
-    Route::get('/profile/riwayat-tontonan', [WatchHistoryController::class, 'index'])->name('profile.riwayatTontonan');
-    Route::delete('/profile/riwayat-tontonan/{watchHistory}', [WatchHistoryController::class, 'destroy'])->name('profile.riwayatTontonan.destroy');
-    Route::post('/profile/riwayat-tontonan/clear-all', [WatchHistoryController::class, 'clearAll'])->name('profile.riwayatTontonan.clearAll');
+  Route::get('profile/nonaktifAkun', [ProfileController::class, 'nonaktifAkun'])->name('profile.nonaktifAkun');
+  Route::get('/profile/riwayat-tontonan', [ProfileController::class, 'riwayatTontonan'])->name('profile.riwayatTontonan');
+  Route::get('/profile/riwayat-tontonan', [WatchHistoryController::class, 'index'])->name('profile.riwayatTontonan');
+  Route::delete('/profile/riwayat-tontonan/{watchHistory}', [WatchHistoryController::class, 'destroy'])->name('profile.riwayatTontonan.destroy');
+  Route::post('/profile/riwayat-tontonan/clear-all', [WatchHistoryController::class, 'clearAll'])->name('profile.riwayatTontonan.clearAll');
 
-    // Tidak pakai middleware admin jika tidak perlu
-    Route::get('/admin/pertanyaan-umum/edit', [FaqController::class, 'editAll'])->name('faq.editAll');
-    Route::put('/admin/pertanyaan-umum/update', [FaqController::class, 'updateAll'])->name('faq.updateAll');
-    Route::get('/admin/pertanyaan-umum/edit', [FaqController::class, 'editAll'])->name('faq.editAll');
-
-
-
-    // Route untuk logout
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-
-    // Routes untuk video
-    Route::get('/videos/new', [VideoController::class, 'index'])->name('videos.index');
-    Route::get('/videos/create', [VideoController::class, 'create'])->name('videos.create');
-    Route::post('/videos/create', [VideoController::class, 'store'])->name('videos.store');
-    Route::get('/videos/{video}/edit', [VideoController::class, 'edit'])->name('videos.edit');
-    Route::put('/videos/{video}', [VideoController::class, 'update'])->name('videos.update');
-    Route::delete('/videos/{video}', [VideoController::class, 'destroy'])->name('videos.destroy');
-
-    Route::post('/videos/{video}/like', [VideoController::class, 'like'])->name('videos.like')->middleware('auth');
-    Route::post('/videos/{video}/save', [VideoController::class, 'save'])->name('videos.save')->middleware('auth');
-
-    Route::get('/users/dashboard', [HomeController::class, 'dashboard'])->middleware('auth')->name('users.dashboard');
-    Route::get('/users/browse', [HomeController::class, 'browse'])->middleware('auth')->name('users.browse');
-    Route::get('/users/koleksi', [KoleksiController::class, 'index'])->middleware('auth')->name('users.koleksi');
-    Route::delete('/collections/destroy-multiple', [KoleksiController::class, 'destroyMultiple'])->name('collections.destroy_multiple');
-    Route::get('/users/recommendations', [RecommendationController::class, 'index'])->name('users.rekomendasi')->middleware('auth');
-    Route::get('/users/search', [HomeController::class, 'search'])->middleware('auth')->name('users.search');
-    Route::get('/users/video/detail/{id}', [HomeController::class, 'detail1'])->name('video.detail');
-
-    Route::post('/videos/{video}/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
-    Route::get('/videos/{video}', [VideoController::class, 'show'])->name('videos.show');
-    Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update')->middleware('auth');
-    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+  // Tidak pakai middleware admin jika tidak perlu
+  Route::get('/admin/pertanyaan-umum/edit', [FaqController::class, 'editAll'])->name('faq.editAll');
+  Route::put('/admin/pertanyaan-umum/update', [FaqController::class, 'updateAll'])->name('faq.updateAll');
+  Route::get('/admin/pertanyaan-umum/edit', [FaqController::class, 'editAll'])->name('faq.editAll');
+  Route::get('/admin/pertanyaan-umum/create', [FaqController::class, 'create'])->name('faq.create');
+  Route::post('/admin/pertanyaan-umum/store', [FaqController::class, 'store'])->name('faq.store');
+  Route::get('/profil/faq', [FaqController::class, 'showToUser'])->name('user.faq');
 
 
+  // Route untuk logout
+  Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-    // Routes untuk akan tayang
-    Route::get('/upcomings', [UpcomingController::class, 'index'])->name('upcomings.index');
-    Route::get('/upcomings/create', [UpcomingController::class, 'create'])->name('upcomings.create');
-    Route::post('/upcomings', [UpcomingController::class, 'store'])->name('upcomings.store');
-    Route::get('/upcomings/{upcoming}/edit', [UpcomingController::class, 'edit'])->name('upcomings.edit');
-    Route::put('/upcomings/{upcoming}', [UpcomingController::class, 'update'])->name('upcomings.update');
-    Route::delete('/upcomings/{upcoming}', [UpcomingController::class, 'destroy'])->name('upcomings.destroy');
+  // Routes untuk video
+  Route::get('/videos/new', [VideoController::class, 'index'])->name('videos.index');
+  Route::get('/videos/create', [VideoController::class, 'create'])->name('videos.create');
+  Route::post('/videos/create', [VideoController::class, 'store'])->name('videos.store');
+  Route::get('/videos/{video}/edit', [VideoController::class, 'edit'])->name('videos.edit');
+  Route::put('/videos/{video}', [VideoController::class, 'update'])->name('videos.update');
+  Route::delete('/videos/{video}', [VideoController::class, 'destroy'])->name('videos.destroy');
 
-    Route::get('/populars', [PopularController::class, 'index'])->name('populars.index');
-    Route::get('/populars/create', [PopularController::class, 'create'])->name('populars.create');
-    Route::post('/populars', [PopularController::class, 'store'])->name('populars.store');
-    Route::get('/populars/{popular}/edit', [PopularController::class, 'edit'])->name('populars.edit');
-    Route::put('/populars/{popular}', [PopularController::class, 'update'])->name('populars.update');
-    Route::delete('/populars/{popular}', [PopularController::class, 'destroy'])->name('populars.destroy');
+  Route::post('/videos/{video}/like', [VideoController::class, 'like'])->name('videos.like')->middleware('auth');
+  Route::post('/videos/{video}/save', [VideoController::class, 'save'])->name('videos.save')->middleware('auth');
+
+  Route::get('/users/dashboard', [HomeController::class, 'dashboard'])->middleware('auth')->name('users.dashboard');
+  Route::get('/users/browse', [HomeController::class, 'browse'])->middleware('auth')->name('users.browse');
+  Route::get('/users/koleksi', [KoleksiController::class, 'index'])->middleware('auth')->name('users.koleksi');
+  Route::delete('/collections/destroy-multiple', [KoleksiController::class, 'destroyMultiple'])->name('collections.destroy_multiple');
+  Route::get('/users/recommendations', [RecommendationController::class, 'index'])->name('users.rekomendasi')->middleware('auth');
+  Route::get('/users/search', [HomeController::class, 'search'])->middleware('auth')->name('users.search');
+  Route::get('/users/video/detail/{id}', [HomeController::class, 'detail1'])->name('video.detail');
+
+  Route::post('/videos/{video}/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
+  Route::get('/videos/{video}', [VideoController::class, 'show'])->name('videos.show');
+  Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update')->middleware('auth');
+  Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+
+
+  // Routes untuk akan tayang
+  Route::get('/upcomings', [UpcomingController::class, 'index'])->name('upcomings.index');
+  Route::get('/upcomings/create', [UpcomingController::class, 'create'])->name('upcomings.create');
+  Route::post('/upcomings', [UpcomingController::class, 'store'])->name('upcomings.store');
+  Route::get('/upcomings/{upcoming}/edit', [UpcomingController::class, 'edit'])->name('upcomings.edit');
+  Route::put('/upcomings/{upcoming}', [UpcomingController::class, 'update'])->name('upcomings.update');
+  Route::delete('/upcomings/{upcoming}', [UpcomingController::class, 'destroy'])->name('upcomings.destroy');
+
+  Route::get('/populars', [PopularController::class, 'index'])->name('populars.index');
+  Route::get('/populars/create', [PopularController::class, 'create'])->name('populars.create');
+  Route::post('/populars', [PopularController::class, 'store'])->name('populars.store');
+  Route::get('/populars/{popular}/edit', [PopularController::class, 'edit'])->name('populars.edit');
+  Route::put('/populars/{popular}', [PopularController::class, 'update'])->name('populars.update');
+  Route::delete('/populars/{popular}', [PopularController::class, 'destroy'])->name('populars.destroy');
 });
 
 Route::get('/search', [VideoController::class, 'search'])->name('dramabox.search');
@@ -112,11 +114,11 @@ Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name
 
 
 Route::get('/rekomendasi', function () {
-    return view('dramabox.rekomendasi');
+  return view('dramabox.rekomendasi');
 })->name('dramabox.rekomendasi');
 
 //Route::get('/app', function () {
-  //  return view('dramabox.koleksi');
+//  return view('dramabox.koleksi');
 //})->name('dramabox.koleksi');
 
 
