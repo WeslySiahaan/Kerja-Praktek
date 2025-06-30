@@ -123,11 +123,6 @@
                       </a>
                     </li>
                     <li class="nav-item mb-2">
-                      <a href="{{ route('profile.hubungi') }}" class="nav-link text-white d-flex align-items-center">
-                        <i class="bi bi-chat-left-text me-2"></i> Hubungi/Saran
-                      </a>
-                    </li>
-                    <li class="nav-item mb-2">
                       <a href="{{ route('profile.pengaturan') }}" class="nav-link text-white d-flex align-items-center">
                         <i class="bi bi-gear me-2"></i> Pengaturan
                       </a>

@@ -103,11 +103,6 @@ class ProfileController extends Controller
         return view('profile.layananPelanggan');
     }
 
-    public function hubungi()
-    {
-        return view('profile.hubungi');
-    }
-
     public function pengaturan()
     {
         return view('profile.pengaturan');
@@ -123,10 +118,6 @@ class ProfileController extends Controller
         return view('profile.kebijakan');
     }
 
-        public function nonaktifAkun()
-    {
-        return view('profile.nonaktifAkun');
-    }
 
      public function riwayatTontonan(): View
     {
