@@ -98,11 +98,6 @@
                     </a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a href="{{ route('recommendations.index') }}" class="nav-link text-white d-flex align-items-center">
-                        <i class="bi bi-lightning-fill me-2"></i> Rekomendasi
-                    </a>
-                </li>
-                <li class="nav-item mb-2">
                 <a href="#profileCollapse"
                   class="nav-link text-white d-flex align-items-center justify-content-between collapsed"
                   data-bs-toggle="collapse"
@@ -118,10 +113,9 @@
                 <div class="collapse" id="profileCollapse">
                   <ul class="nav flex-column ms-3">
                     <li class="nav-item mb-2">
-                      <a href="{{ route('faq.editAll') }}" class="nav-link text-white d-flex align-items-center">
+                      <a href="{{ route('profile.pertanyaanUmum') }}" class="nav-link text-white d-flex align-items-center">
                         <i class="bi bi-question-circle me-2"></i> Pertanyaan Umum
-                    </a>
-
+                      </a>
                     </li>
                     <li class="nav-item mb-2">
                       <a href="{{ route('profile.layananPelanggan') }}" class="nav-link text-white d-flex align-items-center">
@@ -153,7 +147,7 @@
                 <div class="collapse" id="settingsCollapse">
                     <ul class="nav flex-column ms-3">
                     <li class="nav-item mb-2">
-                        <a href="{{ route('profile.persetujuan') }}" class="nav-link text-white d-flex align-items-center">
+                        <a href="{{ route('user_agreements.index') }}" class="nav-link text-white d-flex align-items-center">
                         <i class="bi bi-question-circle me-2"></i> persetujuan Pengguna
                         </a>
                     </li>

@@ -6,11 +6,11 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\PrivacyPolicy;
+use App\Models\UserAgreement;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
-use App\Models\Faq;
 
 class ProfileController extends Controller
 {
@@ -95,12 +95,11 @@ class ProfileController extends Controller
         return back()->with('status', 'password-updated');
     }
 
-
     public function pertanyaanUmum()
     {
-        $faqs = Faq::orderBy('id')->get()->groupBy('kategori');
-        return view('profile.pertanyaanUmum', compact('faqs'));
+        return view('profile.pertanyaanUmum');
     }
+
     public function layananPelanggan()
     {
         return view('profile.layananPelanggan');
@@ -112,9 +111,11 @@ class ProfileController extends Controller
     }
 
     public function persetujuan()
-    {
-        return view('profile.persetujuan');
-    }
+{
+    $policies = UserAgreement::all(); // <-- GANTI dari $agreements jadi $policies
+    return view('profile.persetujuan', compact('policies'));
+}
+
 
     public function kebijakan()
     {

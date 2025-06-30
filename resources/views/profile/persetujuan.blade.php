@@ -9,7 +9,7 @@
     margin: 0;
   }
 
-  .terms-container {
+  .privacy-container {
     max-width: 1300px;
     margin: 10px auto;
     background: #fff;
@@ -18,81 +18,113 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 
-  h1 {
+  h1, h2, h5 {
     font-family: 'Poppins', sans-serif;
-    font-size: 24px;
     font-weight: bold;
-    margin-bottom: 20px;
-    color: #000;
+    color: #333;
     text-align: left;
   }
 
-  p {
-    font-family: 'Poppins', sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-    color: #333;
-    text-align: justify;
-    margin-bottom: 15px;
+  h1 {
+    font-size: 28px;
+    margin-bottom: 25px;
   }
 
-  .terms-list {
-    margin-top: 20px;
+  h2 {
+    font-size: 24px;
     margin-bottom: 20px;
   }
 
-  .terms-item {
-    margin-bottom: 15px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 16px;
-    color: #333;
-    text-align: justify;
+  h5 {
+    font-size: 20px;
+    margin-top: 25px;
+    margin-bottom: 10px;
   }
 
-  .terms-item strong {
-    display: block;
-    margin-bottom: 5px;
+  p, li {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #555;
+    text-align: justify;
+    margin-bottom: 15px;
+  }
+
+  ul {
+    padding-left: 20px;
+    margin-bottom: 20px;
+  }
+
+  li {
+    margin-bottom: 10px;
+  }
+
+  strong {
     color: #000;
+  }
+
+  .table-responsive {
+    margin-top: 20px;
   }
 </style>
 @endsection
 
 @section('content')
-<div class="terms-container">
+<div class="privacy-container">
   <h1>Persetujuan Pengguna</h1>
-  <p>Terima kasih telah menggunakan layanan CineMora. Dengan mengakses atau menggunakan platform kami, Anda menyatakan bahwa Anda telah membaca, memahami, dan menyetujui untuk terikat oleh ketentuan berikut:</p>
+  <p>Terima kasih telah menggunakan layanan CineMora.</p>
+    <p>Dengan mengakses atau menggunakan platform kami, Anda menyatakan bahwa Anda telah membaca, memahami, dan menyetujui untuk terikat oleh ketentuan berikut:</p>
 
-  <div class="terms-list">
-    <div class="terms-item">
-      <strong>1. Ketentuan Umum</strong>
-      Anda setuju untuk menggunakan layanan sesuai dengan hukum dan peraturan yang berlaku di wilayah hukum Anda.
-    </div>
+  <div class="p-4">
+    @if($policies->isEmpty())
+      <div class="list-group-item text-center">
+        No policies found.
+      </div>
+    @else
+      @foreach($policies as $policy)
+        <h5>1. Ketentuan Umum</h5>
+        <div class="list-group">
+          <div class="list-group-item">
+            <p class="mb-1">{!! nl2br(e($policy->ketentuan_umum ?? '')) !!}</p>
+          </div>
+        </div>
 
-    <div class="terms-item">
-      <strong>2. Hak Kekayaan Intelektual</strong>
-      Seluruh konten, desain, logo, dan fitur yang terdapat dalam platform ini adalah milik CineMora atau pihak ketiga yang bekerja sama, dan dilindungi oleh hukum hak cipta serta kekayaan intelektual.
-    </div>
+        <h5>2. Hak Kekayaan Intelektual</h5>
+        <div class="list-group">
+          <div class="list-group-item">
+            <p class="mb-1">{!! nl2br(e($policy->hak_kekayaan_intelektual ?? '')) !!}</p>
+          </div>
+        </div>
 
-    <div class="terms-item">
-      <strong>3. Akun Pengguna</strong>
-      Anda bertanggung jawab untuk menjaga kerahasiaan informasi akun dan kata sandi Anda. CineMora tidak bertanggung jawab atas kerugian yang mungkin timbul akibat kelalaian Anda dalam menjaga keamanan akun.
-    </div>
+        <h5>3. Akun Pengguna</h5>
+        <div class="list-group">
+          <div class="list-group-item">
+            <p class="mb-1">{!! nl2br(e($policy->akun_pengguna ?? '')) !!}</p>
+          </div>
+        </div>
 
-    <div class="terms-item">
-      <strong>4. Pembatasan Tanggung Jawab</strong>
-      Kami berusaha memberikan layanan terbaik, tetapi kami tidak menjamin bahwa layanan akan selalu bebas dari gangguan, kesalahan, atau virus.<br>
-      Kami tidak bertanggung jawab atas kerugian langsung atau tidak langsung yang timbul akibat penggunaan atau ketidakmampuan penggunaan layanan.
-    </div>
+        <h5>4. Pembatasan Tanggung Jawab</h5>
+        <div class="list-group">
+          <div class="list-group-item">
+            <p class="mb-1">{!! nl2br(e($policy->pembatasan_tanggung_jawab ?? '')) !!}</p>
+          </div>
+        </div>
 
-    <div class="terms-item">
-      <strong>5. Penghentian Layanan</strong>
-      Kami berhak menghentikan atau menangguhkan akses Anda ke layanan jika Anda terbukti melanggar ketentuan ini.
-    </div>
+        <h5>5. Penghentian Layanan</h5>
+        <div class="list-group">
+          <div class="list-group-item">
+            <p class="mb-1">{!! nl2br(e($policy->penghentian_layanan ?? '')) !!}</p>
+          </div>
+        </div>
 
-    <div class="terms-item">
-      <strong>6. Kontak</strong>
-      Jika Anda memiliki pertanyaan mengenai Persetujuan Pengguna ini, silakan hubungi kami melalui halaman "Hubungi Kami" di platform.
-    </div>
+        <h5>6. Kontak</h5>
+        <div class="list-group">
+          <div class="list-group-item">
+            <p class="mb-1">{!! nl2br(e($policy->kontak ?? '')) !!}</p>
+          </div>
+        </div>
+      @endforeach
+    @endif
   </div>
 </div>
 @endsection
