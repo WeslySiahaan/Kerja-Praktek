@@ -6,6 +6,7 @@ use Illuminate\View\View;
 use App\Models\Video;
 use App\Models\Upcoming;
 use App\Models\Popular;
+use App\Models\Recommendation;
 
 class HomeController extends Controller
 {
@@ -37,6 +38,16 @@ class HomeController extends Controller
     public function rekomendasi(){
         return view('users.rekomendasi');
     }
+
+    public function rekomendasi1()
+{
+    // Ambil semua rekomendasi dari model Recommendation
+    $recommendedVideos = Recommendation::all();
+
+    // Kirim ke view dengan nama variabel sesuai blade
+    return view('dramabox.rekomendasi', compact('recommendedVideos'));
+}
+
 
     public function browse(){
         $upcomings = Upcoming::all(); // Fetch all upcoming releases for "Up Coming"

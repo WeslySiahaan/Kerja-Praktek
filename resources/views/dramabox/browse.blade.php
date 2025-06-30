@@ -42,7 +42,6 @@
                             </a>
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title text-truncate">{{ $video->name }}</h5>
-                                <p class="card-text">{{ Str::limit($video->description, 100) }}</p>
                                 <p class="card-text text-white"><small>Kategori: {{ is_array($video->category) ? implode(', ', $video->category) : $video->category }}</small></p>
                                 <p class="card-title text-truncate text-white"><small>Ep {{ count($video->episodes ?? []) }}</small></p>
                                 

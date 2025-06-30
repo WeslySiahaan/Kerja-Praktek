@@ -16,6 +16,7 @@ use App\Http\Controllers\WatchHistoryController;
 use App\Http\Controllers\RecommendationController; 
 use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\RecommendationLandingController;
 
 // Route untuk halaman utama
 Route::get('/', [HomeController::class, 'index4'])->name('dramabox.beranda');
@@ -87,6 +88,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
 
+    Route::get('recommendations', [RecommendationLandingController::class, 'index'])->name('recommendations.index');
+    Route::get('recommendations/create', [RecommendationLandingController::class, 'create'])->name('recommendations.create');
+    Route::post('recommendations', [RecommendationLandingController::class, 'store'])->name('recommendations.store');
+    Route::get('recommendations/{recommendation}/edit', [RecommendationLandingController::class, 'edit'])->name('recommendations.edit');
+    Route::put('recommendations/{recommendation}', [RecommendationLandingController::class, 'update'])->name('recommendations.update');
+    Route::delete('recommendations/{recommendation}', [RecommendationLandingController::class, 'destroy'])->name('recommendations.destroy');
+    Route::get('recommendations/search', [RecommendationLandingController::class, 'search'])->name('recommendations.search');
 
     // Routes untuk akan tayang
     Route::get('/upcomings', [UpcomingController::class, 'index'])->name('upcomings.index');
@@ -109,11 +117,7 @@ Route::get('/category', [PopularController::class, 'search'])->name('dramabox.se
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard')->middleware('auth');
 
 
-
-
-Route::get('/rekomendasi', function () {
-    return view('dramabox.rekomendasi');
-})->name('dramabox.rekomendasi');
+Route::get('/rekomendasi', [HomeController::class, 'rekomendasi1'])->name('dramabox.rekomendasi');
 
 //Route::get('/app', function () {
   //  return view('dramabox.koleksi');

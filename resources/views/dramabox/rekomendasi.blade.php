@@ -1,244 +1,74 @@
 @extends('layouts.app1')
 
 @section('content')
-<style>
-  .main-content {
-    padding: 2rem 0;
-    min-height: calc(100vh - 200px);
-  }
-  
-  .page-title {
-    color: #fff;
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 2rem;
-  }
+<section class="container-fluid" style="margin-top: 5px; position: relative; z-index: 10; margin-bottom: 20px;">
+  <h2 class="display-6 fw-bold mb-4 px-3">Recommended For You</h2>
 
-  .movie-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-  }
-  
-  .movie-card {
-    background-color: #1a1a1a;
-    border-radius: 8px;
-    overflow: hidden;
-    display: flex;
-    transition: transform 0.3s ease;
-    align-items: flex-start;
-  }
+  @if (session('error'))
+    <div class="alert alert-danger px-3">{{ session('error') }}</div>
+  @endif
+  @if (session('success'))
+    <div class="alert alert-success px-3">{{ session('success') }}</div>
+  @endif
 
-  .movie-card:hover {
-    transform: translateY(-5px);
-  }
+  @if ($recommendedVideos->isEmpty())
+    <p class="text-center text-muted py-4 px-3">No recommendations available at the moment.</p>
+  @else
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 row-cols-xl-8 g-3 px-3">
+      @foreach ($recommendedVideos as $video)
+        <div class="col">
+          <div class="card bg-dark text-white h-100 d-flex flex-column">
+            <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
+              <img src="{{ $video->poster_image ? asset('storage/' . $video->poster_image) : asset('Drama__box.png') }}"
+                   class="card-img-top"
+                   alt="{{ $video->name }} poster"
+                   style="height: 300px; object-fit: cover;">
+            </a>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title text-truncate">{{ $video->name }}</h5>
+              <p class="card-text text-white"><small>Kategori: {{ is_array($video->category) ? implode(', ', $video->category) : $video->category }}</small></p>
+              <p class="card-title text-truncate">Total {{ count($video->episodes ?? []) }} Episode</p>
+              <div class="mt-auto d-flex gap-2">
+                                    @if (Auth::check())
+                                        <!-- Tombol Like -->
+                                        <form action="{{ route('videos.like', $video) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-link p-0 like-btn" title="{{ $video->likedByUsers->contains(Auth::id()) ? 'Batal Suka' : 'Suka' }}">
+                                                <i class="bi {{ $video->likedByUsers->contains(Auth::id()) ? 'bi-heart-fill text-danger' : 'bi-heart text-white' }} fs-5"></i>
+                                            </button>
+                                        </form>
 
-  .movie-poster {
-    width: 120px;
-    height: 160px;
-    object-fit: cover;
-    flex-shrink: 0;
-  }
+                                        <!-- Tombol Simpan -->
+                                        <form action="{{ route('videos.save', $video) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-link p-0" title="{{ $video->collectedByUsers->contains(Auth::id()) ? 'Sudah Disimpan' : 'Simpan' }}"
+                                                    {{ $video->collectedByUsers->contains(Auth::id()) ? 'disabled' : '' }}>
+                                                <i class="bi {{ $video->collectedByUsers->contains(Auth::id()) ? 'bi-bookmark-fill text-success' : 'bi-bookmark text-white' }} fs-5"></i>
+                                            </button>
+                                        </form>
 
-  .movie-info {
-    padding: 0.5rem 1rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
+                                        <!-- Tombol Menonton -->
+                                        <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+                                    @else
+                                        <!-- Tombol Like dengan redirect ke login -->
+                                        <a href="{{ route('login') }}" class="btn btn-link p-0" title="Login untuk Suka">
+                                            <i class="bi bi-heart text-white fs-5"></i>
+                                        </a>
 
-  .movie-title {
-    color: #fff;
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    margin-top: -5px;
-  }
+                                        <!-- Tombol Simpan dengan redirect ke login -->
+                                        <a href="{{ route('login') }}" class="btn btn-link p-0" title="Login untuk Simpan">
+                                            <i class="bi bi-bookmark text-white fs-5"></i>
+                                        </a>
 
-  .movie-genre {
-    color: #888;
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .movie-description {
-    color: #fff;
-    font-size: 0.9rem;
-    line-height: 1.4;
-    margin-bottom: 1rem;
-    flex: 1;
-  }
-  
-  .watch-btn {
-    background-color: #DBB941;
-    color: #fff;
-    border: none;
-    padding: 0.25rem 0.75rem;
-    border-radius: 4px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    align-self: flex-start;
-    white-space: nowrap;
-  }
-  
-  .watch-btn:hover {
-    background-color: #DBB941;
-  }
-  
-  .watch-btn i {
-    margin-right: 0.25rem;
-  }
-  
-  @media (max-width: 768px) {
-    .movie-grid {
-      grid-template-columns: repeat(2, minmax(150px, 1fr));
-      overflow-x: auto;
-    }
-    .movie-card {
-      flex-direction: column;
-      min-width: 150px;
-    }
-    .movie-poster {
-      width: 100%;
-      height: 200px;
-    }
-  }
-</style>
-
-<div class="container main-content">
-  <h1 class="page-title">Rekomendasi Teratas untuk Anda</h1>
-  
-  <div class="movie-grid">
-    <!-- Movie 1 -->
-    <div class="movie-card">
-      <img src="{{ asset('Drama__box.png') }}" alt="Final Shot" class="movie-poster">
-      <div class="movie-info">
-        <h3 class="movie-title">Final Shot</h3>
-        <p class="movie-genre">Aksi / Spionase</p>
-        <p class="movie-description">Seorang agen intelijen menentukan sebuah kebenaran fatal dalam sistem pengawasan metropolitan Jakarta yang baru... <strong>Lihat selengkapnya</strong></p>
-        <button class="watch-btn">
-          <i class="bi bi-play"></i>Tonton Sekarang
-        </button>
-      </div>
+                                        <!-- Tombol Menonton dengan redirect ke login -->
+                                        <a href="{{ route('login') }}" class="btn btn-primary btn-sm bi bi-play-fill" title="Login untuk Menonton">Menonton</a>
+                                    @endif
+                                </div>
+            </div>
+          </div>
+        </div>
+      @endforeach
     </div>
-
-    <!-- Movie 2 -->
-    <div class="movie-card">
-      <img src="{{ asset('Drama__box.png') }}" alt="The Commando" class="movie-poster">
-      <div class="movie-info">
-        <h3 class="movie-title">The Commando</h3>
-        <p class="movie-genre">Aksi / Militer</p>
-        <p class="movie-description">Sebuah unit pasukan khusus elit dikirim dalam misi penyusup untuk menyelam ke pulau terpencil yang dikuasai oleh tentara bayaran... <strong>Lihat selengkapnya</strong></p>
-        <button class="watch-btn">
-          <i class="bi bi-play"></i>Tonton Sekarang
-        </button>
-      </div>
-    </div>
-
-    <!-- Movie 3 -->
-    <div class="movie-card">
-      <img src="{{ asset('Drama__box.png') }}" alt="Mojave Diamonds" class="movie-poster">
-      <div class="movie-info">
-        <h3 class="movie-title">Mojave Diamonds</h3>
-        <p class="movie-genre">Aksi / Perampokan (Heist)</p>
-        <p class="movie-description">Seorang ahli strategi perampok legendaris kembali dari masa pensiunnya untuk satu pekerjaan terakhir... <strong>Lihat selengkapnya</strong></p>
-        <button class="watch-btn">
-          <i class="bi bi-play"></i>Tonton Sekarang
-        </button>
-      </div>
-    </div>
-
-    <!-- Movie 4 -->
-    <div class="movie-card">
-      <img src="{{ asset('Drama__box.png') }}" alt="The Comedy" class="movie-poster">
-      <div class="movie-info">
-        <h3 class="movie-title">The Comedy</h3>
-        <p class="movie-genre">Aksi / Komedi</p>
-        <p class="movie-description">Di masa depan, seorang prajurit android eksperimental dengan kemampuan tempur superior... <strong>Lihat selengkapnya</strong></p>
-        <button class="watch-btn">
-          <i class="bi bi-play"></i>Tonton Sekarang
-        </button>
-      </div>
-    </div>
-
-    <!-- Movie 5 -->
-    <div class="movie-card">
-      <img src="{{ asset('Drama__box.png') }}" alt="Bidak Emas Terakhir" class="movie-poster">
-      <div class="movie-info">
-        <h3 class="movie-title">Bidak Emas Terakhir</h3>
-        <p class="movie-genre">Aksi / Perampokan (Heist)</p>
-        <p class="movie-description">Seorang ahli strategi perampok legendaris kembali dari masa pensiunnya untuk satu pekerjaan terakhir... <strong>Lihat selengkapnya</strong></p>
-        <button class="watch-btn">
-          <i class="bi bi-play"></i>Tonton Sekarang
-        </button>
-      </div>
-    </div>
-
-    <!-- Movie 6 -->
-    <div class="movie-card">
-      <img src="{{ asset('Drama__box.png') }}" alt="Venom" class="movie-poster">
-      <div class="movie-info">
-        <h3 class="movie-title">Venom</h3>
-        <p class="movie-genre">Aksi / Fiksi Ilmiah</p>
-        <p class="movie-description">Di masa depan, seorang prajurit android eksperimental dengan kemampuan tempur superior... <strong>Lihat selengkapnya</strong></p>
-        <button class="watch-btn">
-          <i class="bi bi-play"></i>Tonton Sekarang
-        </button>
-      </div>
-    </div>
-
-    <!-- Movie 7 -->
-    <div class="movie-card">
-      <img src="{{ asset('Drama__box.png') }}" alt="Meltdown" class="movie-poster">
-      <div class="movie-info">
-        <h3 class="movie-title">Meltdown</h3>
-        <p class="movie-genre">Aksi / Perampokan (Heist)</p>
-        <p class="movie-description">Seorang ahli strategi perampok legendaris kembali dari masa pensiunnya untuk satu pekerjaan terakhir... <strong>Lihat selengkapnya</strong></p>
-        <button class="watch-btn">
-          <i class="bi bi-play"></i>Tonton Sekarang
-        </button>
-      </div>
-    </div>
-
-    <!-- Movie 8 -->
-    <div class="movie-card">
-      <img src="{{ asset('Drama__box.png') }}" alt="Taverian Mystery" class="movie-poster">
-      <div class="movie-info">
-        <h3 class="movie-title">Taverian Mystery</h3>
-        <p class="movie-genre">Aksi / Misteri</p>
-        <p class="movie-description">Di masa depan, seorang prajurit android eksperimental dengan kemampuan tempur superior... <strong>Lihat selengkapnya</strong></p>
-        <button class="watch-btn">
-          <i class="bi bi-play"></i>Tonton Sekarang
-        </button>
-      </div>
-    </div>
-    <!-- Movie 9-->
-    <div class="movie-card">
-      <img src="{{ asset('Drama__box.png') }}" alt="Meltdown" class="movie-poster">
-      <div class="movie-info">
-        <h3 class="movie-title">Meltdown</h3>
-        <p class="movie-genre">Aksi / Perampokan (Heist)</p>
-        <p class="movie-description">Seorang ahli strategi perampok legendaris kembali dari masa pensiunnya untuk satu pekerjaan terakhir... <strong>Lihat selengkapnya</strong></p>
-        <button class="watch-btn">
-          <i class="bi bi-play"></i>Tonton Sekarang
-        </button>
-      </div>
-    </div>
-     <!-- Movie 10 -->
-    <div class="movie-card">
-      <img src="{{ asset('Drama__box.png') }}" alt="Taverian Mystery" class="movie-poster">
-      <div class="movie-info">
-        <h3 class="movie-title">Taverian Mystery</h3>
-        <p class="movie-genre">Aksi / Misteri</p>
-        <p class="movie-description">Di masa depan, seorang prajurit android eksperimental dengan kemampuan tempur superior... <strong>Lihat selengkapnya</strong></p>
-        <button class="watch-btn">
-          <i class="bi bi-play"></i>Tonton Sekarang
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+  @endif
+</section>
 @endsection

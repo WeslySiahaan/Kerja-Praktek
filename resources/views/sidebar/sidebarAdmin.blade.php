@@ -98,6 +98,11 @@
                     </a>
                 </li>
                 <li class="nav-item mb-2">
+                    <a href="{{ route('recommendations.index') }}" class="nav-link text-white d-flex align-items-center">
+                        <i class="bi bi-lightning-fill me-2"></i> Rekomendasi
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
                 <a href="#profileCollapse"
                   class="nav-link text-white d-flex align-items-center justify-content-between collapsed"
                   data-bs-toggle="collapse"
