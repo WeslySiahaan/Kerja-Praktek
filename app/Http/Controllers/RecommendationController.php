@@ -44,7 +44,6 @@ class RecommendationController extends Controller
                 ->values()
                 ->all();
 
-            // Beri bobot berdasarkan progress tontonan
             $watchedPreferences = $watchHistories->filter(function ($history) {
                 return $history->video_id && is_numeric($history->video_id) && Video::where('id', $history->video_id)->exists();
             })->mapWithKeys(function ($history) {
@@ -58,10 +57,10 @@ class RecommendationController extends Controller
                     $videoIds = array_keys($watchedPreferences->toArray());
                     return $query->orderByRaw("FIELD(id, " . implode(',', array_map('intval', $videoIds)) . ") DESC");
                 }, function ($query) {
-                    return $query; // Tanpa order jika kosong
+                    return $query; 
                 })
                 ->orderBy('rating', 'desc')
-                ->take(5)
+                ->take(10)
                 ->get();
 
             // Jika kurang dari 5, isi dengan video populer lainnya
@@ -69,7 +68,7 @@ class RecommendationController extends Controller
                 $additionalVideos = Video::where('is_popular', true)
                     ->whereNotIn('id', array_filter($excludedVideoIds))
                     ->orderBy('rating', 'desc')
-                    ->take(5 - $recommendedVideos->count())
+                    ->take(10 - $recommendedVideos->count())
                     ->get();
                 $recommendedVideos = $recommendedVideos->merge($additionalVideos)->unique('id')->take(5);
             }

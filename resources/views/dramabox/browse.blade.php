@@ -94,55 +94,6 @@
         @endif
     </section>
 
-    {{-- Bagian Tampilkan Populars 
-    <section class="mb-5">
-        <h2 class="display-6 fw-bold mb-4 px-3 text-white">Popular Shows</h2>
-        @if($populars->isEmpty())
-            <p class="text-center text-muted py-4 px-3">Tidak ada acara populer ditemukan.</p>
-        @else
-            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 row-cols-xl-8 g-3 px-3">
-                @foreach($populars as $popular)
-                    <div class="col">
-                        <div class="card bg-dark text-white h-100 d-flex flex-column">
-                            {{-- Asumsi Anda memiliki route detail untuk popular 
-                            <a href="#" class="text-decoration-none text-white">
-                                <img src="{{ $popular->poster ? asset('storage/' . $popular->poster) : asset('Drama__box.png') }}"
-                                    class="card-img-top"
-                                    alt="{{ $popular->title }} poster"
-                                    style="height: 300px; object-fit: cover;">
-                            </a>
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title text-truncate">{{ $popular->title }}</h5>
-                                <p class="card-text">{{ Str::limit($popular->description, 100) ?? 'No description available.' }}</p>
-                                <p class="card-text text-white"><small>Kategori: {{ is_array($popular->category) ? implode(', ', $popular->category) : $popular->category }}</small></p>
-                                <p class="card-title text-truncate invisible"><small>Placeholder</small></p>
-                                <div class="mt-auto d-flex gap-2">
-                                    @if (Auth::check())
-                                        <form action="{{-- route('populars.like', $popular) " method="POST">
-                                            @csrf
-                                            <button type="submit" class="btn btn-link p-0 like-btn" title="{{-- $popular->likedByUsers->contains(Auth::id()) ? 'Batal Suka' : 'Suka' ">
-                                                <i class="bi bi-heart text-white fs-5"></i>
-                                            </button>
-                                        </form>
-                                        <form action="{{-- route('populars.save', $popular) " method="POST">
-                                            @csrf
-                                            <button type="submit" class="btn btn-link p-0" title="{{-- $popular->collectedByUsers->contains(Auth::id()) ? 'Sudah Disimpan' : 'Simpan' ">
-                                                <i class="bi bi-bookmark text-white fs-5"></i>
-                                            </button>
-                                        </form>
-                                    @endif
-                                    {{-- Placeholder tombol Menonton 
-                                    <div class="invisible">
-                                        <a href="#" class="btn btn-primary btn-sm">Menonton</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        @endif
-    </section> --}}
 
 </div>
 @endsection
