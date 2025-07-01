@@ -15,10 +15,10 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\WatchHistoryController;
 use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\PrivacyPolicyController;
-use App\Http\Controllers\FaqController;
 use App\Http\Controllers\RecommendationLandingController;
 use App\Http\Controllers\PersetujuanPenggunaController;
 use App\Http\Controllers\LayananPelangganController;
+use App\Http\Controllers\FaqController;
 
 
 // Route untuk halaman utama
@@ -56,14 +56,16 @@ Route::middleware('auth')->group(function () {
   Route::delete('/profile/riwayat-tontonan/{watchHistory}', [WatchHistoryController::class, 'destroy'])->name('profile.riwayatTontonan.destroy');
   Route::post('/profile/riwayat-tontonan/clear-all', [WatchHistoryController::class, 'clearAll'])->name('profile.riwayatTontonan.clearAll');
 
-  // Tidak pakai middleware admin jika tidak perlu
+  //admin faq
   Route::get('/admin/pertanyaan-umum/edit', [FaqController::class, 'editAll'])->name('faq.editAll');
   Route::put('/admin/pertanyaan-umum/update', [FaqController::class, 'updateAll'])->name('faq.updateAll');
-  Route::get('/admin/pertanyaan-umum/edit', [FaqController::class, 'editAll'])->name('faq.editAll');
   Route::get('/admin/pertanyaan-umum/create', [FaqController::class, 'create'])->name('faq.create');
   Route::post('/admin/pertanyaan-umum/store', [FaqController::class, 'store'])->name('faq.store');
-  Route::get('/profil/faq', [FaqController::class, 'showToUser'])->name('user.faq');
+  Route::delete('/admin/pertanyaan-umum/{id}', [FaqController::class, 'destroy'])->name('faq.destroy');
+  Route::delete('/admin/pertanyaan-umum/kategori/{kategori}', [FaqController::class, 'destroyKategori'])->name('faq.destroyKategori');
 
+  //user faq
+  Route::get('/profil/faq', [FaqController::class, 'showToUser'])->name('user.faq');
 
   // Route untuk logout
   Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');

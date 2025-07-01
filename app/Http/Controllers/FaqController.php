@@ -9,18 +9,29 @@ class FaqController extends Controller
 {
     public function editAll()
     {
-        $faqs = \App\Models\Faq::orderBy('id')->get();
-        return view('admin.pertanyaanUmum.edit', compact('faqs'));
+        $faqs = Faq::all()->groupBy('kategori');
+        return view('admin.pertanyaanumum.edit', compact('faqs'));
     }
-
     public function updateAll(Request $request)
     {
-        foreach ($request->faq as $id => $jawaban) {
-            \App\Models\Faq::where('id', $id)->update(['jawaban' => $jawaban]);
+        if (!is_array($request->faq)) {
+            return back()->withErrors(['faq' => 'Tidak ada data yang dikirim.']);
         }
 
-        return redirect()->route('faq.editAll')->with('success', 'Semua FAQ berhasil diperbarui!');
+        foreach ($request->faq as $id => $jawaban) {
+            $faq = Faq::find($id);
+            if ($faq) {
+                $faq->jawaban = $jawaban;
+                if (isset($request->pertanyaan[$id])) {
+                    $faq->pertanyaan = $request->pertanyaan[$id];
+                }
+                $faq->save();
+            }
+        }
+
+        return redirect()->back()->with('success', 'Semua FAQ berhasil diperbarui!');
     }
+
 
     public function create()
     {
@@ -41,9 +52,23 @@ class FaqController extends Controller
     }
 
     public function showToUser()
-{
-    $faqs = Faq::all()->groupBy('kategori');
-    return view('user.profile.faq', compact('faqs'));
-}
+    {
+        $faqs = Faq::all()->groupBy('kategori');
+        return view('user.profile.faq', compact('faqs'));
+    }
 
+    public function destroy($id)
+    {
+        $faq = Faq::findOrFail($id);
+        $faq->delete();
+
+        return back()->with('success', 'Pertanyaan berhasil dihapus.');
+    }
+
+    public function destroyKategori($kategori)
+    {
+        Faq::where('kategori', $kategori)->delete();
+
+        return redirect()->route('faq.editAll')->with('success', "Kategori '$kategori' berhasil dihapus.");
+    }
 }

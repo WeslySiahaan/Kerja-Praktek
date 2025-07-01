@@ -13,8 +13,13 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
+
+
   <!-- Custom CSS -->
   <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/2.0.0/trix.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/trix/2.0.0/trix.umd.min.js"></script>
+
 
   @stack('styles')
   @yield('styles')
@@ -28,15 +33,15 @@
     <div class="d-flex flex-grow-1">
       <!-- Sidebar -->
       @auth
-        @if (auth()->user()->role === 'admin')
-          @include('sidebar.sidebarAdmin')
-        @elseif (auth()->user()->role === 'users')
-          @include('sidebar.sidebarUsers')
-        @else
-          <div class="w-100 text-center text-danger p-3">Role tidak dikenali.</div>
-        @endif
+      @if (auth()->user()->role === 'admin')
+      @include('sidebar.sidebarAdmin')
+      @elseif (auth()->user()->role === 'users')
+      @include('sidebar.sidebarUsers')
       @else
-        <div class="w-100 text-center text-danger p-3">Anda belum login.</div>
+      <div class="w-100 text-center text-danger p-3">Role tidak dikenali.</div>
+      @endif
+      @else
+      <div class="w-100 text-center text-danger p-3">Anda belum login.</div>
       @endauth
 
       <!-- Main content -->
@@ -56,6 +61,7 @@
 
   <!-- JavaScript Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
+
 </html>

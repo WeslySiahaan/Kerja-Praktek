@@ -16,29 +16,105 @@
   </div>
   @endif
 
-  <form action="{{ route('faq.updateAll') }}" method="POST" class="bg-white p-4 rounded shadow-sm border">
+  {{-- Form utama --}}
+  <form action="{{ route('faq.updateAll') }}" method="POST">
     @csrf
     @method('PUT')
 
-    @forelse ($faqs as $index => $faq)
-    <div class="mb-4">
-      <label class="form-label fw-semibold">
-        <i class="bi bi-question-circle-fill text-primary me-1"></i>
-        {{ $index + 1 }}. {{ $faq->pertanyaan }}
-      </label>
-      <textarea name="faq[{{ $faq->id }}]" class="form-control d-none" id="jawaban-{{ $faq->id }}" required>{{ old("faq.$faq->id", $faq->jawaban) }}</textarea>
-      <trix-editor input="jawaban-{{ $faq->id }}"></trix-editor>
+    @forelse ($faqs as $kategori => $faqList)
+    <div class="mb-4 p-3 bg-white rounded border shadow-sm position-relative">
+      {{-- Header kategori --}}
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="text-primary mb-0">{{ $kategori }}</h5>
 
+        <button type="button" class="btn btn-sm btn-danger" onclick="submitDeleteKategori('{{ $kategori }}')">
+          <i class="bi bi-trash3"></i> Hapus Kategori
+        </button>
+      </div>
+
+      {{-- Daftar pertanyaan --}}
+      @foreach ($faqList as $i => $faq)
+      <div class="mb-4">
+        {{-- Pertanyaan --}}
+        <label class="form-label fw-semibold">
+          <i class="bi bi-question-circle-fill text-primary me-1"></i>
+          {{ $i + 1 }}. Pertanyaan:
+        </label>
+        <input type="text" name="pertanyaan[{{ $faq->id }}]" class="form-control mb-2"
+          value="{{ old("pertanyaan.$faq->id", $faq->pertanyaan) }}" required>
+
+        {{-- Jawaban --}}
+        <label class="form-label">Jawaban:</label>
+        <textarea name="faq[{{ $faq->id }}]" class="form-control summernote" required>{{ old("faq.$faq->id", $faq->jawaban) }}</textarea>
+
+        {{-- Preview --}}
+        <div class="mt-2">
+          <label class="form-label text-muted">Preview Jawaban:</label>
+          <div class="border rounded p-3 bg-light">{!! $faq->jawaban !!}</div>
+        </div>
+
+        {{-- Tombol hapus pertanyaan --}}
+        <button type="button" class="btn btn-outline-danger btn-sm mt-2" onclick="submitDeletePertanyaan({{ $faq->id }})">
+          <i class="bi bi-trash3"></i> Hapus Pertanyaan
+        </button>
+      </div>
+      @endforeach
     </div>
     @empty
     <p class="text-muted">Belum ada pertanyaan yang tersedia.</p>
     @endforelse
 
-    <div class="text-end">
+    {{-- Tombol Simpan --}}
+    <div class="text-end mt-4">
       <button type="submit" class="btn btn-primary">
         <i class="bi bi-save2 me-1"></i> Simpan Perubahan
       </button>
     </div>
   </form>
+
+  {{-- Form tersembunyi untuk hapus pertanyaan --}}
+  <form id="delete-pertanyaan-form" method="POST" style="display:none;">
+    @csrf
+    @method('DELETE')
+  </form>
+
+  {{-- Form tersembunyi untuk hapus kategori --}}
+  <form id="delete-kategori-form" method="POST" style="display:none;">
+    @csrf
+    @method('DELETE')
+  </form>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+  $(document).ready(function() {
+    $('.summernote').summernote({
+      height: 150
+    });
+
+    $('form').on('submit', function() {
+      $('.summernote').each(function() {
+        let content = $(this).summernote('code');
+        $(this).val(content);
+      });
+    });
+  });
+
+  function submitDeletePertanyaan(id) {
+    if (confirm('Yakin ingin menghapus pertanyaan ini?')) {
+      const form = document.getElementById('delete-pertanyaan-form');
+      form.action = `/admin/pertanyaan-umum/${id}`;
+      form.submit();
+    }
+  }
+
+  function submitDeleteKategori(kategori) {
+    if (confirm('Yakin hapus seluruh kategori ini?')) {
+      const form = document.getElementById('delete-kategori-form');
+      form.action = `/admin/pertanyaan-umum/delete-kategori/${kategori}`;
+      form.submit();
+    }
+  }
+</script>
+@endpush

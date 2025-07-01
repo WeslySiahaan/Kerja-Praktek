@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use App\Models\WatchHistory;
 use Carbon\Carbon; 
+use App\Models\Faq;
+
 
 class ProfileController extends Controller
 {
@@ -98,9 +100,10 @@ class ProfileController extends Controller
         return back()->with('status', 'password-updated');
     }
 
-    public function pertanyaanUmum()
+     public function pertanyaanUmum()
     {
-        return view('profile.pertanyaanUmum');
+        $faqs = Faq::all()->groupBy('kategori');
+        return view('profile.pertanyaanUmum', compact('faqs'));
     }
 
     public function layananPelanggan()
@@ -180,4 +183,5 @@ class ProfileController extends Controller
         $secs = $seconds % 60;
         return sprintf("%02d:%02d:%02d", $hours, $minutes, $secs);
     }
+
 }
