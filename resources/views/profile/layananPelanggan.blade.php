@@ -81,11 +81,6 @@
     padding-bottom: 10px;
   }
 </style>
-@endsection
-
-@extends('layouts.app')
-
-@section('styles')
 <style>
   body {
     font-family: 'Poppins', sans-serif;
