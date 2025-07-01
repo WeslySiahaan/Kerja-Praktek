@@ -79,9 +79,9 @@
     }
 
     input[type="password"]::-ms-reveal,
-input[type="password"]::-webkit-reveal {
-    display: none;
-}
+    input[type="password"]::-webkit-reveal {
+        display: none;
+    }
 
     .modal-header { border-bottom: none; padding: 1.5rem 1.5rem 0.5rem; }
     .modal-title { font-weight: 700; font-size: 1.5rem; }
@@ -168,13 +168,14 @@ input[type="password"]::-webkit-reveal {
                 <button type="button" class="btn-edit" data-bs-toggle="modal" data-bs-target="#editNameModal">Ubah</button>
             </div>
         </div>
-        <div class="profile-card">
+        {{-- DIHAPUS: Bagian kartu untuk Email --}}
+        {{-- <div class="profile-card">
             <div class="profile-card-header"><span class="label">Email</span></div>
             <div class="profile-card-body">
                 <span class="value">{{ $user->email }}</span>
                 <button type="button" class="btn-edit" data-bs-toggle="modal" data-bs-target="#editEmailModal">Ubah</button>
             </div>
-        </div>
+        </div> --}}
         <div class="profile-card">
             <div class="profile-card-header"><span class="label">Kata Sandi</span></div>
             <div class="profile-card-body">
@@ -235,16 +236,16 @@ input[type="password"]::-webkit-reveal {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                     <div class="form-group-modal">
-                         <label class="form-label-modal">Nama saat ini</label>
-                         <input type="text" class="form-control-modal" value="{{ $user->name }}" readonly>
-                     </div>
-                     <div class="form-group-modal">
-                         <label for="name" class="form-label-modal">Nama Baru</label>
-                         <input type="text" id="name" name="name" class="form-control-modal @error('name', 'updateProfileInformation') is-invalid @enderror" required>
-                         @error('name', 'updateProfileInformation')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-                     </div>
-                     {{-- Kolom konfirmasi nama dihapus --}}
+                    <div class="form-group-modal">
+                        <label class="form-label-modal">Nama saat ini</label>
+                        <input type="text" class="form-control-modal" value="{{ $user->name }}" readonly>
+                    </div>
+                    <div class="form-group-modal">
+                        <label for="name" class="form-label-modal">Nama Baru</label>
+                        <input type="text" id="name" name="name" class="form-control-modal @error('name', 'updateProfileInformation') is-invalid @enderror" required>
+                        @error('name', 'updateProfileInformation')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                    </div>
+                    {{-- Kolom konfirmasi nama dihapus --}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Batal</button>
@@ -255,8 +256,8 @@ input[type="password"]::-webkit-reveal {
     </div>
 </div>
 
-{{-- DIUBAH: Modal Email disederhanakan, tanpa konfirmasi --}}
-<div class="modal fade" id="editEmailModal" tabindex="-1" aria-labelledby="editEmailModalLabel" aria-hidden="true">
+{{-- DIHAPUS: Modal Email --}}
+{{-- <div class="modal fade" id="editEmailModal" tabindex="-1" aria-labelledby="editEmailModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="border-radius: 0.75rem;">
             <form action="{{ route('profile.update') }}" method="POST">
@@ -268,16 +269,15 @@ input[type="password"]::-webkit-reveal {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                     <div class="form-group-modal">
-                         <label class="form-label-modal">Email saat ini</label>
-                         <input type="email" class="form-control-modal" value="{{ $user->email }}" readonly>
-                     </div>
-                     <div class="form-group-modal">
-                         <label for="email" class="form-label-modal">Email Baru</label>
-                         <input type="email" id="email" name="email" class="form-control-modal @error('email', 'updateProfileInformation') is-invalid @enderror" required>
-                         @error('email', 'updateProfileInformation')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-                     </div>
-                     {{-- Kolom konfirmasi email dihapus --}}
+                    <div class="form-group-modal">
+                        <label class="form-label-modal">Email saat ini</label>
+                        <input type="email" class="form-control-modal" value="{{ $user->email }}" readonly>
+                    </div>
+                    <div class="form-group-modal">
+                        <label for="email" class="form-label-modal">Email Baru</label>
+                        <input type="email" id="email" name="email" class="form-control-modal @error('email', 'updateProfileInformation') is-invalid @enderror" required>
+                        @error('email', 'updateProfileInformation')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Batal</button>
@@ -286,7 +286,7 @@ input[type="password"]::-webkit-reveal {
             </form>
         </div>
     </div>
-</div>
+</div> --}}
 
 {{-- Modal Password tidak berubah, strukturnya sudah benar dan aman --}}
 <div class="modal fade" id="editPasswordModal" tabindex="-1" aria-labelledby="editPasswordModalLabel" aria-hidden="true">
@@ -304,15 +304,15 @@ input[type="password"]::-webkit-reveal {
 
                     <div class="form-group-modal">
                         <label for="password" class="form-label-modal">Password Baru</label>
-                         <div class="password-wrapper">
+                        <div class="password-wrapper">
                             <input type="password" id="password" name="password" class="form-control-modal @error('password', 'updatePassword') is-invalid @enderror" required>
                             <i class="bi bi-eye-slash toggle-password"></i>
                         </div>
-                         @error('password', 'updatePassword')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                        @error('password', 'updatePassword')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                     </div>
                     <div class="form-group-modal">
                         <label for="password_confirmation" class="form-label-modal">Konfirmasi Password Baru</label>
-                         <div class="password-wrapper">
+                        <div class="password-wrapper">
                             <input type="password" id="password_confirmation" name="password_confirmation" class="form-control-modal" required>
                             <i class="bi bi-eye-slash toggle-password"></i>
                         </div>
@@ -343,7 +343,34 @@ input[type="password"]::-webkit-reveal {
             });
         });
 
-        // --- Skrip untuk validasi konfirmasi ---
+        // --- Skrip untuk upload file foto profil ---
+        const profilePhotoInput = document.getElementById('profile_photo');
+        const fileChosenText = document.getElementById('file-chosen-text');
+        const uploadHintText = document.getElementById('upload-hint-text');
+        const cancelFileBtn = document.getElementById('cancel-file-btn');
+
+        if (profilePhotoInput) {
+            profilePhotoInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    fileChosenText.textContent = this.files[0].name;
+                    uploadHintText.style.display = 'none';
+                    cancelFileBtn.style.display = 'inline-block';
+                } else {
+                    fileChosenText.textContent = 'Pilih file';
+                    uploadHintText.style.display = 'block';
+                    cancelFileBtn.style.display = 'none';
+                }
+            });
+
+            cancelFileBtn.addEventListener('click', function() {
+                profilePhotoInput.value = ''; // Hapus file yang dipilih
+                fileChosenText.textContent = 'Pilih file';
+                uploadHintText.style.display = 'block';
+                cancelFileBtn.style.display = 'none';
+            });
+        }
+
+        // --- Skrip untuk validasi konfirmasi (hanya untuk password sekarang) ---
         function addConfirmationValidation(formId, fieldName, fieldLabel) {
             const form = document.getElementById(formId);
             if (form) {
@@ -360,7 +387,6 @@ input[type="password"]::-webkit-reveal {
             }
         }
 
-        // DIUBAH: Validasi untuk nama dan email dihapus dari frontend
         addConfirmationValidation('form-edit-password', 'password', 'Password Baru');
     });
 </script>
