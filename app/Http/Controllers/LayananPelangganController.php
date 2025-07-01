@@ -35,6 +35,8 @@ class LayananPelangganController extends Controller
         ]);
     }
     return view('admin.layananpelanggan.index', compact('layanan'));
+    return redirect()->route('layanan_pelanggan.edit')->with('success', 'Layanan pelanggan berhasil disimpan.');
+
 }
 
 
@@ -51,5 +53,7 @@ class LayananPelangganController extends Controller
         $layanan->update($validated);
 
         return redirect()->route('layanan_pelanggan.edit')->with('success', 'Data layanan pelanggan diperbarui.');
+    
+
     }
 }
