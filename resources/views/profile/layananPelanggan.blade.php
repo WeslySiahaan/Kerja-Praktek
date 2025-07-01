@@ -81,6 +81,7 @@
     padding-bottom: 10px;
   }
 </style>
+
 <style>
   body {
     font-family: 'Poppins', sans-serif;
@@ -115,33 +116,34 @@
     padding-bottom: 10px;
   }
 </style>
-@endsection
+@extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
-  <h1>Layanan Pelanggan</h1>
-  <p>Terima kasih telah menggunakan layanan CineMora.</p>
+<div class="container mt-5" style="margin-left: 50px; max-width: 900px;">
+  <h1 class="fw-bold fs-1  mb-4">Layanan Pelanggan</h1>
+  <p>Kami siap membantu Anda dengan pertanyaan atau masalah apa pun. Silakan pilih opsi di bawah ini:</p>
 
-  <h5>1. Kontak Kami</h5>
+  <h5 class="fw-bold fs-3 mt-4">1. Kontak Kami</h5>
   @if ($layanan && $layanan->kontak)
       <p>{!! nl2br(e($layanan->kontak)) !!}</p>
   @else
-      <p class="text-muted">Tunggu informasi dari admin.</p>
+      <p class="text-muted fs-4">Tunggu informasi dari admin.</p>
   @endif
 
-  <h5>2. Pertanyaan Umum</h5>
+  <h5 class="fw-bold fs-3 mt-4">2. Pertanyaan Umum</h5>
   @if ($layanan && $layanan->pertanyaan)
       <p>{!! nl2br(e($layanan->pertanyaan)) !!}</p>
   @else
-      <p class="text-muted">Tunggu informasi dari admin.</p>
+      <p class="text-muted fs-4">Tunggu informasi dari admin.</p>
   @endif
 
-  <h5>3. Bantuan</h5>
+  <h5 class="fw-bold fs-3 mt-4">3. Bantuan</h5>
   @if ($layanan && $layanan->bantuan)
       <p>{!! nl2br(e($layanan->bantuan)) !!}</p>
   @else
-      <p class="text-muted">Tunggu informasi dari admin.</p>
+      <p class="text-muted fs-4">Tunggu informasi dari admin.</p>
   @endif
 </div>
 @endsection
+
 
