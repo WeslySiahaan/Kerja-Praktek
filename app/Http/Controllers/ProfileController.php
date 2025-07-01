@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use App\Models\WatchHistory;
+use Carbon\Carbon; 
 
 class ProfileController extends Controller
 {
@@ -132,5 +134,50 @@ class ProfileController extends Controller
         ]);
     }
 
-}
 
+    public function showWatchHistory(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        // Ambil semua riwayat tontonan untuk user yang sedang login
+        // Urutkan berdasarkan updated_at terbaru
+        $watchHistoryItems = WatchHistory::where('user_id', $user->id)
+                                        ->latest('updated_at')
+                                        ->get();
+
+        foreach ($watchHistoryItems as $item) {
+            // Pastikan relasi video ada dan durasi tersedia
+            // Jika Anda menyimpan total_duration di WatchHistory, gunakan $item->total_duration
+            $totalDuration = $item->video->duration ?? 0;
+
+            if ($totalDuration > 0) {
+                $watchedSecondsToUse = min($item->watched_seconds, $totalDuration);
+                $item->progress = min(100, round(($watchedSecondsToUse / $totalDuration) * 100));
+            } else {
+                $item->progress = 0;
+            }
+
+            $item->watched_time_formatted = $this->formatTime($item->watched_seconds);
+            $item->total_duration_formatted = $this->formatTime($totalDuration);
+            $item->description = $item->video->description ?? 'Tidak ada deskripsi.'; // Ambil deskripsi dari model Video
+            $item->category = $item->video->category->name ?? 'Tidak ada kategori.'; // Ambil kategori dari model Video (sesuaikan)
+        }
+
+        // Hanya kirim watchHistoryItems ke view, tanpa variabel filter tanggal
+        return view('profile.riwayat-tontonan', compact('watchHistoryItems'));
+    }
+
+    private function formatTime($seconds) {
+        if ($seconds === null || !is_numeric($seconds)) { // Tambahkan validasi is_numeric
+            return "00:00:00";
+        }
+        $hours = floor($seconds / 3600);
+        $minutes = floor(($seconds / 60) % 60);
+        $secs = $seconds % 60;
+        return sprintf("%02d:%02d:%02d", $hours, $minutes, $secs);
+    }
+}
