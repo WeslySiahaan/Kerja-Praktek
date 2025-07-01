@@ -18,6 +18,7 @@ use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\RecommendationLandingController;
 use App\Http\Controllers\PersetujuanPenggunaController;
+use App\Http\Controllers\LayananPelangganController;
 
 
 // Route untuk halaman utama
@@ -35,7 +36,7 @@ Route::middleware('auth')->group(function () {
   Route::patch('/profile/edit', [ProfileController::class, 'update'])->name('profile.update');
   Route::delete('/profile/edit', [ProfileController::class, 'destroy'])->name('profile.destroy');
   Route::get('/profile/pertanyaanUmum', [ProfileController::class, 'pertanyaanUmum'])->name('profile.pertanyaanUmum');
-  Route::get('/profile/layananPelanggan', [ProfileController::class, 'layananPelanggan'])->name('profile.layananPelanggan');
+  Route::get('/profile/layananPelanggan', [LayananPelangganController::class, 'index'])->name('profile.layananPelanggan');
   Route::get('/profile/pengaturan', [ProfileController::class, 'pengaturan'])->name('profile.pengaturan');
   Route::get('/profile/persetujuan', [ProfileController::class, 'persetujuan'])->name('profile.persetujuan');
   Route::get('/profile/kebijakan', [ProfileController::class, 'kebijakan'])->name('profile.kebijakan');
@@ -45,6 +46,9 @@ Route::middleware('auth')->group(function () {
   Route::get('/privacy-policies/{id}/edit', [PrivacyPolicyController::class, 'edit'])->name('privacy_policies.edit');
   Route::put('/privacy-policies/{id}', [PrivacyPolicyController::class, 'update'])->name('privacy_policies.update');
   Route::delete('/privacy-policies/{id}', [PrivacyPolicyController::class, 'destroy'])->name('privacy_policies.destroy');
+
+  Route::get('/admin/layanan-pelanggan', [LayananPelangganController::class, 'edit'])->name('layanan_pelanggan.edit');
+  Route::put('/admin/layanan-pelanggan/{id}', [LayananPelangganController::class, 'update'])->name('layanan_pelanggan.update');
 
   Route::get('profile/nonaktifAkun', [ProfileController::class, 'nonaktifAkun'])->name('profile.nonaktifAkun');
   Route::get('/profile/riwayat-tontonan', [ProfileController::class, 'riwayatTontonan'])->name('profile.riwayatTontonan');

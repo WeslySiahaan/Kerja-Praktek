@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\PrivacyPolicy;
 use App\Models\UserAgreement;
+use App\Models\LayananPelanggan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -101,9 +102,10 @@ class ProfileController extends Controller
     }
 
     public function layananPelanggan()
-    {
-        return view('profile.layananPelanggan');
-    }
+{
+    $policies = LayananPelanggan::all(); // <-- GANTI dari $agreements jadi $policies
+    return view('profile.layananPelanggan', compact('policies'));
+}
 
     public function pengaturan()
     {

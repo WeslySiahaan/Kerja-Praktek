@@ -118,10 +118,10 @@
                       </a>
                     </li>
                     <li class="nav-item mb-2">
-                      <a href="{{ route('profile.layananPelanggan') }}" class="nav-link text-white d-flex align-items-center">
-                        <i class="bi bi-headset me-2"></i> Layanan Pelanggan
-                      </a>
-                    </li>
+        <a href="{{ route('layanan_pelanggan.edit') }}" class="nav-link text-white d-flex align-items-center">
+  <i class="bi bi-headset me-2"></i> Layanan Pelanggan
+</a>
+      </li>
                     <li class="nav-item mb-2">
                       <a href="{{ route('profile.pengaturan') }}" class="nav-link text-white d-flex align-items-center">
                         <i class="bi bi-gear me-2"></i> Pengaturan
