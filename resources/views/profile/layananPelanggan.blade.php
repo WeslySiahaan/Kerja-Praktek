@@ -116,7 +116,6 @@
     padding-bottom: 10px;
   }
 </style>
-@extends('layouts.app')
 
 @section('content')
 <div class="container mt-5" style="margin-left: 50px; max-width: 900px;">
