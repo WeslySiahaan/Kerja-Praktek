@@ -116,27 +116,32 @@
     padding-bottom: 10px;
   }
 </style>
-
 @section('content')
 <div class="container mt-5" style="margin-left: 50px; max-width: 900px;">
-  <h1 class="fw-bold fs-1  mb-4">Layanan Pelanggan</h1>
+  <h1 class="fw-bold fs-1 mb-4">Layanan Pelanggan</h1>
   <p>Kami siap membantu Anda dengan pertanyaan atau masalah apa pun. Silakan pilih opsi di bawah ini:</p>
 
-  <h5 class="fw-bold fs-3 mt-4">1. Kontak Kami</h5>
+  <div class="border-bottom border-2 border-primary mb-3 mt-4">
+      <h5 class="fw-bold fs-3">1. Kontak Kami</h5>
+  </div>
   @if ($layanan && $layanan->kontak)
       <p>{!! nl2br(e($layanan->kontak)) !!}</p>
   @else
       <p class="text-muted fs-4">Tunggu informasi dari admin.</p>
   @endif
 
-  <h5 class="fw-bold fs-3 mt-4">2. Pertanyaan Umum</h5>
+  <div class="border-bottom border-2 border-primary mb-3 mt-4">
+      <h5 class="fw-bold fs-3">2. Pertanyaan Umum</h5>
+  </div>
   @if ($layanan && $layanan->pertanyaan)
       <p>{!! nl2br(e($layanan->pertanyaan)) !!}</p>
   @else
       <p class="text-muted fs-4">Tunggu informasi dari admin.</p>
   @endif
 
-  <h5 class="fw-bold fs-3 mt-4">3. Bantuan</h5>
+  <div class="border-bottom border-2 border-primary mb-3 mt-4">
+      <h5 class="fw-bold fs-3">3. Bantuan</h5>
+  </div>
   @if ($layanan && $layanan->bantuan)
       <p>{!! nl2br(e($layanan->bantuan)) !!}</p>
   @else
@@ -144,5 +149,3 @@
   @endif
 </div>
 @endsection
-
-
