@@ -62,12 +62,21 @@ class FaqController extends Controller
         $faq = Faq::findOrFail($id);
         $faq->delete();
 
-        return back()->with('success', 'Pertanyaan berhasil dihapus.');
+        return redirect()->route('faq.editAll')->with('success', 'FAQ berhasil dihapus.');
     }
+
 
     public function destroyKategori($kategori)
     {
         Faq::where('kategori', $kategori)->delete();
+
+        return redirect()->route('faq.editAll')->with('success', "Kategori '$kategori' berhasil dihapus.");
+    }
+
+    public function deleteKategori($kategori)
+    {
+        // Hapus semua FAQ dengan kategori tersebut
+        \App\Models\Faq::where('kategori', $kategori)->delete();
 
         return redirect()->route('faq.editAll')->with('success', "Kategori '$kategori' berhasil dihapus.");
     }

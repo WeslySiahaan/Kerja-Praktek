@@ -78,43 +78,21 @@
     @method('DELETE')
   </form>
 
-  {{-- Form tersembunyi untuk hapus kategori --}}
-  <form id="delete-kategori-form" method="POST" style="display:none;">
+  </form> <!-- akhir form utama -->
+  {{-- ganti bagian ini --}}
+  <form id="delete-kategori-form" method="POST" style="display:none;" action="">
     @csrf
     @method('DELETE')
   </form>
+
+  <script>
+    function submitDeleteKategori(kategori) {
+      if (confirm('Yakin hapus seluruh kategori ini?')) {
+        const form = document.getElementById('delete-kategori-form');
+        form.action = "{{ url('/admin/pertanyaan-umum/delete-kategori') }}/" + encodeURIComponent(kategori);
+        form.submit();
+      }
+    }
+  </script>
 </div>
 @endsection
-
-@push('scripts')
-<script>
-  $(document).ready(function() {
-    $('.summernote').summernote({
-      height: 150
-    });
-
-    $('form').on('submit', function() {
-      $('.summernote').each(function() {
-        let content = $(this).summernote('code');
-        $(this).val(content);
-      });
-    });
-  });
-
-  function submitDeletePertanyaan(id) {
-    if (confirm('Yakin ingin menghapus pertanyaan ini?')) {
-      const form = document.getElementById('delete-pertanyaan-form');
-      form.action = `/admin/pertanyaan-umum/${id}`;
-      form.submit();
-    }
-  }
-
-  function submitDeleteKategori(kategori) {
-    if (confirm('Yakin hapus seluruh kategori ini?')) {
-      const form = document.getElementById('delete-kategori-form');
-      form.action = `/admin/pertanyaan-umum/delete-kategori/${kategori}`;
-      form.submit();
-    }
-  }
-</script>
-@endpush

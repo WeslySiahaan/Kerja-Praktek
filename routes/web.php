@@ -63,6 +63,9 @@ Route::middleware('auth')->group(function () {
   Route::post('/admin/pertanyaan-umum/store', [FaqController::class, 'store'])->name('faq.store');
   Route::delete('/admin/pertanyaan-umum/{id}', [FaqController::class, 'destroy'])->name('faq.destroy');
   Route::delete('/admin/pertanyaan-umum/kategori/{kategori}', [FaqController::class, 'destroyKategori'])->name('faq.destroyKategori');
+  Route::delete('/admin/pertanyaan-umum/delete-kategori/{kategori}', [FaqController::class, 'deleteKategori'])->name('faq.deleteKategori');
+
+
 
   //user faq
   Route::get('/profil/faq', [FaqController::class, 'showToUser'])->name('user.faq');
