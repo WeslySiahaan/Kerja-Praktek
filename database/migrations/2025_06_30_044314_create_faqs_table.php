@@ -10,8 +10,10 @@ return new class extends Migration
     {
         Schema::create('faqs', function (Blueprint $table) {
             $table->id();
-            $table->string('kategori'); 
+            $table->string('kategori');
+            $table->text('pertanyaan');
             $table->text('jawaban');
+
             $table->timestamps();
         });
     }
