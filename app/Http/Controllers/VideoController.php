@@ -18,15 +18,15 @@ class VideoController extends Controller
     {
         $videos = Video::withCount(['likedByUsers', 'collectedByUsers'])->paginate(10);
         $categories = [
-    "Kekayaan Mendadak", "Manusia Serigala", "Populer", "Biasa Saja", "Konglomerat Ilahi", "Cinta Segitiga", "Balas Dendam", "Paranormal",
-    "Pernikahan", "Cinderella", "Bangkit dari Keterpurukan", "Menantu Lelaki", "Identitas Rahasia", "Cinta Kesempatan Kedua", "Komedi", "Cinta Sesama Laki-laki",
-    "Menikah Sebelum Cinta", "Mafia", "Influencer", "Cinta Terlarang", "Cerita Inspiratif", "Tokoh Perempuan Kuat", "Romansa", "CEO",
-    "Harem", "Fantasi", "Kesenjangan Informasi", "Belahan Jiwa", "Sedang Tren", "Identitas Tersembunyi", "Serangan Balik", "Penyamaran",
-    "Cinta Manis", "Ketegangan", "Pengkhianatan", "Kehidupan Urban", "Penyamaran Gender", "Harem Penjelajah Waktu", "Manusia Serigala",
-    "Dominasi & Submisi", "Dari Musuh Jadi Cinta", "Misteri", "Kekuatan Super", "Miliarder", "Dibenci", "Dominan", "Sejarah Alternatif",
-    "Anak Nakal", "Reinkarnasi", "Si Kecil yang Diremehkan", "Pasangan Kontrak", "Keluarga Kaya", "Humor", "Kesalahpahaman", "Cinta Sejati",
-    "Comeback", "Hubungan Beracun", "Pernikahan Kontrak", "Keluarga", "Perjalanan Waktu", "Cinta yang Menyakitkan", "Cerita Panas", "Takdir",
-];
+            "Kekayaan Mendadak", "Manusia Serigala", "Populer", "Biasa Saja", "Konglomerat Ilahi", "Cinta Segitiga", "Balas Dendam", "Paranormal",
+            "Pernikahan", "Cinderella", "Bangkit dari Keterpurukan", "Menantu Lelaki", "Identitas Rahasia", "Cinta Kesempatan Kedua", "Komedi", "Cinta Sesama Laki-laki",
+            "Menikah Sebelum Cinta", "Mafia", "Influencer", "Cinta Terlarang", "Cerita Inspiratif", "Tokoh Perempuan Kuat", "Romansa", "CEO",
+            "Harem", "Fantasi", "Kesenjangan Informasi", "Belahan Jiwa", "Sedang Tren", "Identitas Tersembunyi", "Serangan Balik", "Penyamaran",
+            "Cinta Manis", "Ketegangan", "Pengkhianatan", "Kehidupan Urban", "Penyamaran Gender", "Harem Penjelajah Waktu", "Manusia Serigala",
+            "Dominasi & Submisi", "Dari Musuh Jadi Cinta", "Misteri", "Kekuatan Super", "Miliarder", "Dibenci", "Dominan", "Sejarah Alternatif",
+            "Anak Nakal", "Reinkarnasi", "Si Kecil yang Diremehkan", "Pasangan Kontrak", "Keluarga Kaya", "Humor", "Kesalahpahaman", "Cinta Sejati",
+            "Comeback", "Hubungan Beracun", "Pernikahan Kontrak", "Keluarga", "Perjalanan Waktu", "Cinta yang Menyakitkan", "Cerita Panas", "Takdir",
+        ];
 
         return view('dramabox.videos.index', compact('videos', 'categories'));
     }
@@ -34,158 +34,158 @@ class VideoController extends Controller
     public function create()
     {
         $categories = [
-           "Kekayaan Mendadak", "Manusia Serigala", "Populer", "Biasa Saja", "Konglomerat Ilahi", "Cinta Segitiga", "Balas Dendam", "Paranormal",
-        "Pernikahan", "Cinderella", "Bangkit dari Keterpurukan", "Menantu Lelaki", "Identitas Rahasia", "Cinta Kesempatan Kedua", "Komedi", "Cinta Sesama Laki-laki",
-        "Menikah Sebelum Cinta", "Mafia", "Influencer", "Cinta Terlarang", "Cerita Inspiratif", "Tokoh Perempuan Kuat", "Romansa", "CEO",
-        "Harem", "Fantasi", "Kesenjangan Informasi", "Belahan Jiwa", "Sedang Tren", "Identitas Tersembunyi", "Serangan Balik", "Penyamaran",
-        "Cinta Manis", "Ketegangan", "Pengkhianatan", "Kehidupan Urban", "Penyamaran Gender", "Harem Penjelajah Waktu", "Dominasi & Submisi",
-        "Dari Musuh Jadi Cinta", "Misteri", "Kekuatan Super", "Miliarder", "Dibenci", "Dominan", "Sejarah Alternatif", "Anak Nakal",
-        "Reinkarnasi", "Si Kecil yang Diremehkan", "Pasangan Kontrak", "Keluarga Kaya", "Humor", "Kesalahpahaman", "Cinta Sejati",
-        "Comeback", "Hubungan Beracun", "Pernikahan Kontrak", "Keluarga", "Perjalanan Waktu", "Cinta yang Menyakitkan", "Cerita Panas", "Takdir",
-    ];
+            "Kekayaan Mendadak", "Manusia Serigala", "Populer", "Biasa Saja", "Konglomerat Ilahi", "Cinta Segitiga", "Balas Dendam", "Paranormal",
+            "Pernikahan", "Cinderella", "Bangkit dari Keterpurukan", "Menantu Lelaki", "Identitas Rahasia", "Cinta Kesempatan Kedua", "Komedi", "Cinta Sesama Laki-laki",
+            "Menikah Sebelum Cinta", "Mafia", "Influencer", "Cinta Terlarang", "Cerita Inspiratif", "Tokoh Perempuan Kuat", "Romansa", "CEO",
+            "Harem", "Fantasi", "Kesenjangan Informasi", "Belahan Jiwa", "Sedang Tren", "Identitas Tersembunyi", "Serangan Balik", "Penyamaran",
+            "Cinta Manis", "Ketegangan", "Pengkhianatan", "Kehidupan Urban", "Penyamaran Gender", "Harem Penjelajah Waktu", "Manusia Serigala",
+            "Dominasi & Submisi", "Dari Musuh Jadi Cinta", "Misteri", "Kekuatan Super", "Miliarder", "Dibenci", "Dominan", "Sejarah Alternatif",
+            "Anak Nakal", "Reinkarnasi", "Si Kecil yang Diremehkan", "Pasangan Kontrak", "Keluarga Kaya", "Humor", "Kesalahpahaman", "Cinta Sejati",
+            "Comeback", "Hubungan Beracun", "Pernikahan Kontrak", "Keluarga", "Perjalanan Waktu", "Cinta yang Menyakitkan", "Cerita Panas", "Takdir",
+        ];
         
         return view('dramabox.videos.create', compact('categories'));
     }
 
     public function store(Request $request)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'description' => 'required',
-        'rating' => 'required|integer|min:1|max:5',
-        'category' => 'required|array', // Validasi sebagai array
-        'category.*' => 'string|in:' . implode(',', [
-            "Sudden Wealth", "Werewolves", "Popular", "Average", "Divine Tycoon", "Love Triangle", "Revenge", "Paranormal",
-            "Marriage", "Cinderella", "Underdog Rise", "Son-in-Law", "Secret Identity", "Second-chance Love", "Comedy", "Boy's Love",
-            "Marriage Before Love", "Mafia", "Influencer", "Forbidden Love", "Uplifting Series", "Strong Female Lead", "Romance", "CEO",
-            "Harem", "Fantasy", "Information Gaps", "Soulmate", "Trending", "Concealed Identity", "Counterattack", "Disguise",
-            "Sweet Love", "Suspense", "Betrayal", "Urban", "Cross-dressing", "Time Travel Harem", "Werewolf",
-            "SM", "Enemies to Lovers", "Mystery", "Super Power", "Billionaire", "Hated", "Dominant", "Alternative History",
-            "Badboy", "Rebirth", "Small Potato", "Contract Lover", "Wealthy", "Humor", "Misunderstanding", "True Love",
-            "Comeback", "Toxic Relationship", "Contract Marriage", "Family", "Time Travel", "Bitter Love", "Steamy", "Destiny"
-        ]), // Pastikan kategori valid
-        'poster_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:20048',
-        'episodes.*' => 'nullable|file|mimes:mp4,mov,avi|max:1002400',
-    ]);
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required',
+            'rating' => 'required|integer|min:1|max:5',
+            'category' => 'required|array', // Validasi sebagai array
+            'category.*' => 'string|in:' . implode(',', [
+                "Kekayaan Mendadak", "Manusia Serigala", "Populer", "Biasa Saja", "Konglomerat Ilahi", "Cinta Segitiga", "Balas Dendam", "Paranormal",
+                "Pernikahan", "Cinderella", "Bangkit dari Keterpurukan", "Menantu Lelaki", "Identitas Rahasia", "Cinta Kesempatan Kedua", "Komedi", "Cinta Sesama Laki-laki",
+                "Menikah Sebelum Cinta", "Mafia", "Influencer", "Cinta Terlarang", "Cerita Inspiratif", "Tokoh Perempuan Kuat", "Romansa", "CEO",
+                "Harem", "Fantasi", "Kesenjangan Informasi", "Belahan Jiwa", "Sedang Tren", "Identitas Tersembunyi", "Serangan Balik", "Penyamaran",
+                "Cinta Manis", "Ketegangan", "Pengkhianatan", "Kehidupan Urban", "Penyamaran Gender", "Harem Penjelajah Waktu", "Manusia Serigala",
+                "Dominasi & Submisi", "Dari Musuh Jadi Cinta", "Misteri", "Kekuatan Super", "Miliarder", "Dibenci", "Dominan", "Sejarah Alternatif",
+                "Anak Nakal", "Reinkarnasi", "Si Kecil yang Diremehkan", "Pasangan Kontrak", "Keluarga Kaya", "Humor", "Kesalahpahaman", "Cinta Sejati",
+                "Comeback", "Hubungan Beracun", "Pernikahan Kontrak", "Keluarga", "Perjalanan Waktu", "Cinta yang Menyakitkan", "Cerita Panas", "Takdir",
+            ]), // Pastikan kategori valid dalam bahasa Indonesia
+            'poster_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:20048',
+            'episodes.*' => 'nullable|file|mimes:mp4,mov,avi|max:1002400',
+        ]);
 
-    // Simpan file gambar poster
-    $posterImagePath = null;
-    if ($request->hasFile('poster_image')) {
-        $posterImage = $request->file('poster_image');
-        $posterFileName = time() . '_poster.' . $posterImage->extension();
-        $posterImagePath = $posterImage->storeAs('posters', $posterFileName, 'public');
-    }
+        // Simpan file gambar poster
+        $posterImagePath = null;
+        if ($request->hasFile('poster_image')) {
+            $posterImage = $request->file('poster_image');
+            $posterFileName = time() . '_poster.' . $posterImage->extension();
+            $posterImagePath = $posterImage->storeAs('posters', $posterFileName, 'public');
+        }
 
-    // Simpan file episode
-    $episodes = [];
-    if ($request->hasFile('episodes')) {
-        foreach ($request->file('episodes') as $index => $episode) {
-            if ($episode) {
-                $episodeFileName = time() . '_episode_' . $index . '.' . $episode->extension();
-                $episodes[] = $episode->storeAs('episodes', $episodeFileName, 'public');
+        // Simpan file episode
+        $episodes = [];
+        if ($request->hasFile('episodes')) {
+            foreach ($request->file('episodes') as $index => $episode) {
+                if ($episode) {
+                    $episodeFileName = time() . '_episode_' . $index . '.' . $episode->extension();
+                    $episodes[] = $episode->storeAs('episodes', $episodeFileName, 'public');
+                }
             }
         }
+
+        Video::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'rating' => $request->rating,
+            'category' => $request->category, // Simpan sebagai array, model akan cast ke JSON
+            'is_popular' => $request->has('is_popular'),
+            'poster_image' => $posterImagePath,
+            'episodes' => $episodes,
+        ]);
+
+        return redirect()->route('videos.index')->with('success', 'Video added successfully!');
     }
-
-    Video::create([
-        'name' => $request->name,
-        'description' => $request->description,
-        'rating' => $request->rating,
-        'category' => $request->category, // Simpan sebagai array, model akan cast ke JSON
-        'is_popular' => $request->has('is_popular'),
-        'poster_image' => $posterImagePath,
-        'episodes' => $episodes,
-    ]);
-
-    return redirect()->route('videos.index')->with('success', 'Video added successfully!');
-}
 
     public function edit(Video $video)
     {
-       $categories = [
-    "Kekayaan Mendadak", "Manusia Serigala", "Populer", "Biasa Saja", "Konglomerat Ilahi", "Cinta Segitiga", "Balas Dendam", "Paranormal",
-    "Pernikahan", "Cinderella", "Bangkit dari Keterpurukan", "Menantu Lelaki", "Identitas Rahasia", "Cinta Kesempatan Kedua", "Komedi", "Cinta Sesama Laki-laki",
-    "Menikah Sebelum Cinta", "Mafia", "Influencer", "Cinta Terlarang", "Cerita Inspiratif", "Tokoh Perempuan Kuat", "Romansa", "CEO",
-    "Harem", "Fantasi", "Kesenjangan Informasi", "Belahan Jiwa", "Sedang Tren", "Identitas Tersembunyi", "Serangan Balik", "Penyamaran",
-    "Cinta Manis", "Ketegangan", "Pengkhianatan", "Kehidupan Urban", "Penyamaran Gender", "Harem Penjelajah Waktu", "Manusia Serigala",
-    "Dominasi & Submisi", "Dari Musuh Jadi Cinta", "Misteri", "Kekuatan Super", "Miliarder", "Dibenci", "Dominan", "Sejarah Alternatif",
-    "Anak Nakal", "Reinkarnasi", "Si Kecil yang Diremehkan", "Pasangan Kontrak", "Keluarga Kaya", "Humor", "Kesalahpahaman", "Cinta Sejati",
-    "Comeback", "Hubungan Beracun", "Pernikahan Kontrak", "Keluarga", "Perjalanan Waktu", "Cinta yang Menyakitkan", "Cerita Panas", "Takdir",
-];
+        $categories = [
+            "Kekayaan Mendadak", "Manusia Serigala", "Populer", "Biasa Saja", "Konglomerat Ilahi", "Cinta Segitiga", "Balas Dendam", "Paranormal",
+            "Pernikahan", "Cinderella", "Bangkit dari Keterpurukan", "Menantu Lelaki", "Identitas Rahasia", "Cinta Kesempatan Kedua", "Komedi", "Cinta Sesama Laki-laki",
+            "Menikah Sebelum Cinta", "Mafia", "Influencer", "Cinta Terlarang", "Cerita Inspiratif", "Tokoh Perempuan Kuat", "Romansa", "CEO",
+            "Harem", "Fantasi", "Kesenjangan Informasi", "Belahan Jiwa", "Sedang Tren", "Identitas Tersembunyi", "Serangan Balik", "Penyamaran",
+            "Cinta Manis", "Ketegangan", "Pengkhianatan", "Kehidupan Urban", "Penyamaran Gender", "Harem Penjelajah Waktu", "Manusia Serigala",
+            "Dominasi & Submisi", "Dari Musuh Jadi Cinta", "Misteri", "Kekuatan Super", "Miliarder", "Dibenci", "Dominan", "Sejarah Alternatif",
+            "Anak Nakal", "Reinkarnasi", "Si Kecil yang Diremehkan", "Pasangan Kontrak", "Keluarga Kaya", "Humor", "Kesalahpahaman", "Cinta Sejati",
+            "Comeback", "Hubungan Beracun", "Pernikahan Kontrak", "Keluarga", "Perjalanan Waktu", "Cinta yang Menyakitkan", "Cerita Panas", "Takdir",
+        ];
 
         return view('dramabox.videos.edit', compact('video', 'categories'));
     }
 
     public function update(Request $request, Video $video)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'description' => 'required',
-        'rating' => 'required|integer|min:1|max:5',
-        'category' => 'required|array', // Validasi sebagai array
-        'category.*' => 'string|in:' . implode(',', [
-            "Sudden Wealth", "Werewolves", "Popular", "Average", "Divine Tycoon", "Love Triangle", "Revenge", "Paranormal",
-            "Marriage", "Cinderella", "Underdog Rise", "Son-in-Law", "Secret Identity", "Second-chance Love", "Comedy", "Boy's Love",
-            "Marriage Before Love", "Mafia", "Influencer", "Forbidden Love", "Uplifting Series", "Strong Female Lead", "Romance", "CEO",
-            "Harem", "Fantasy", "Information Gaps", "Soulmate", "Trending", "Concealed Identity", "Counterattack", "Disguise",
-            "Sweet Love", "Suspense", "Betrayal", "Urban", "Cross-dressing", "Time Travel Harem", "Werewolf",
-            "SM", "Enemies to Lovers", "Mystery", "Super Power", "Billionaire", "Hated", "Dominant", "Alternative History",
-            "Badboy", "Rebirth", "Small Potato", "Contract Lover", "Wealthy", "Humor", "Misunderstanding", "True Love",
-            "Comeback", "Toxic Relationship", "Contract Marriage", "Family", "Time Travel", "Bitter Love", "Steamy", "Destiny"
-        ]), // Pastikan kategori valid
-        'poster_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:20048',
-        'episodes.*' => 'nullable|file|mimes:mp4,mov,avi|max:102400',
-        'existing_episodes.*' => 'nullable|string',
-    ]);
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required',
+            'rating' => 'required|integer|min:1|max:5',
+            'category' => 'required|array', // Validasi sebagai array
+            'category.*' => 'string|in:' . implode(',', [
+                "Kekayaan Mendadak", "Manusia Serigala", "Populer", "Biasa Saja", "Konglomerat Ilahi", "Cinta Segitiga", "Balas Dendam", "Paranormal",
+                "Pernikahan", "Cinderella", "Bangkit dari Keterpurukan", "Menantu Lelaki", "Identitas Rahasia", "Cinta Kesempatan Kedua", "Komedi", "Cinta Sesama Laki-laki",
+                "Menikah Sebelum Cinta", "Mafia", "Influencer", "Cinta Terlarang", "Cerita Inspiratif", "Tokoh Perempuan Kuat", "Romansa", "CEO",
+                "Harem", "Fantasi", "Kesenjangan Informasi", "Belahan Jiwa", "Sedang Tren", "Identitas Tersembunyi", "Serangan Balik", "Penyamaran",
+                "Cinta Manis", "Ketegangan", "Pengkhianatan", "Kehidupan Urban", "Penyamaran Gender", "Harem Penjelajah Waktu", "Manusia Serigala",
+                "Dominasi & Submisi", "Dari Musuh Jadi Cinta", "Misteri", "Kekuatan Super", "Miliarder", "Dibenci", "Dominan", "Sejarah Alternatif",
+                "Anak Nakal", "Reinkarnasi", "Si Kecil yang Diremehkan", "Pasangan Kontrak", "Keluarga Kaya", "Humor", "Kesalahpahaman", "Cinta Sejati",
+                "Comeback", "Hubungan Beracun", "Pernikahan Kontrak", "Keluarga", "Perjalanan Waktu", "Cinta yang Menyakitkan", "Cerita Panas", "Takdir",
+            ]), // Pastikan kategori valid dalam bahasa Indonesia
+            'poster_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:20048',
+            'episodes.*' => 'nullable|file|mimes:mp4,mov,avi|max:102400',
+            'existing_episodes.*' => 'nullable|string',
+        ]);
 
-    // Update poster image jika di-upload ulang
-    $posterImagePath = $video->poster_image;
-    if ($request->hasFile('poster_image')) {
-        if ($video->poster_image) {
-            Storage::disk('public')->delete($video->poster_image);
+        // Update poster image jika di-upload ulang
+        $posterImagePath = $video->poster_image;
+        if ($request->hasFile('poster_image')) {
+            if ($video->poster_image) {
+                Storage::disk('public')->delete($video->poster_image);
+            }
+            $posterImage = $request->file('poster_image');
+            $posterFileName = time() . '_poster.' . $posterImage->extension();
+            $posterImagePath = $posterImage->storeAs('posters', $posterFileName, 'public');
         }
-        $posterImage = $request->file('poster_image');
-        $posterFileName = time() . '_poster.' . $posterImage->extension();
-        $posterImagePath = $posterImage->storeAs('posters', $posterFileName, 'public');
-    }
 
-    // Ambil episode yang dipertahankan dari input hidden
-    $retainedEpisodes = $request->input('existing_episodes', []);
+        // Ambil episode yang dipertahankan dari input hidden
+        $retainedEpisodes = $request->input('existing_episodes', []);
 
-    // Ambil episode baru yang diunggah
-    $newlyUploadedEpisodePaths = [];
-    if ($request->hasFile('episodes')) {
-        foreach ($request->file('episodes') as $episodeFile) {
-            if ($episodeFile) {
-                $newlyUploadedEpisodePaths[] = $episodeFile->storeAs('episodes', time() . '_' . $episodeFile->getClientOriginalName(), 'public');
+        // Ambil episode baru yang diunggah
+        $newlyUploadedEpisodePaths = [];
+        if ($request->hasFile('episodes')) {
+            foreach ($request->file('episodes') as $episodeFile) {
+                if ($episodeFile) {
+                    $newlyUploadedEpisodePaths[] = $episodeFile->storeAs('episodes', time() . '_' . $episodeFile->getClientOriginalName(), 'public');
+                }
             }
         }
+
+        // Gabungkan episode yang dipertahankan dengan yang baru diunggah
+        $updatedEpisodesList = array_merge($retainedEpisodes, $newlyUploadedEpisodePaths);
+
+        // Identifikasi episode lama yang tidak lagi ada di daftar baru (untuk dihapus dari storage)
+        $oldEpisodes = $video->episodes ?? [];
+        $episodesToDelete = array_diff($oldEpisodes, $updatedEpisodesList);
+
+        foreach ($episodesToDelete as $pathToDelete) {
+            Storage::disk('public')->delete($pathToDelete);
+        }
+
+        // Simpan perubahan
+        $video->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'rating' => $request->rating,
+            'category' => $request->category, // Simpan sebagai array, model akan cast ke JSON
+            'is_popular' => $request->has('is_popular'),
+            'poster_image' => $posterImagePath,
+            'episodes' => $updatedEpisodesList,
+        ]);
+
+        return redirect()->route('videos.index')->with('success', 'Video updated successfully!');
     }
-
-    // Gabungkan episode yang dipertahankan dengan yang baru diunggah
-    $updatedEpisodesList = array_merge($retainedEpisodes, $newlyUploadedEpisodePaths);
-
-    // Identifikasi episode lama yang tidak lagi ada di daftar baru (untuk dihapus dari storage)
-    $oldEpisodes = $video->episodes ?? [];
-    $episodesToDelete = array_diff($oldEpisodes, $updatedEpisodesList);
-
-    foreach ($episodesToDelete as $pathToDelete) {
-        Storage::disk('public')->delete($pathToDelete);
-    }
-
-    // Simpan perubahan
-    $video->update([
-        'name' => $request->name,
-        'description' => $request->description,
-        'rating' => $request->rating,
-        'category' => $request->category, // Simpan sebagai array, model akan cast ke JSON
-        'is_popular' => $request->has('is_popular'),
-        'poster_image' => $posterImagePath,
-        'episodes' => $updatedEpisodesList,
-    ]);
-
-    return redirect()->route('videos.index')->with('success', 'Video updated successfully!');
-}
 
     public function destroy(Video $video)
     {
@@ -217,7 +217,7 @@ class VideoController extends Controller
             $videos->where('name', 'like', '%' . $query . '%');
         }
         if ($category && $category !== 'all') {
-            $videos->where('category', $category);
+            $videos->whereJsonContains('category', $category); // Gunakan whereJsonContains untuk array JSON
         }
         // Gunakan paginate() dan appends()
         $videos = $videos->latest()->paginate($perPage)->appends(request()->query());
@@ -228,12 +228,10 @@ class VideoController extends Controller
             $upcomings->where('title', 'like', '%' . $query . '%');
         }
         if ($category && $category !== 'all') {
-            // PASTIKAN nama kolom di tabel 'upcomings' adalah 'category'
-            $upcomings->where('category', $category);
+            $upcomings->whereJsonContains('category', $category); // Gunakan whereJsonContains untuk array JSON
         }
         // Gunakan paginate() dan appends()
         $upcomings = $upcomings->latest()->paginate($perPage)->appends(request()->query());
-
 
         // --- Filter untuk Model Popular ---
         $populars = Popular::query();
@@ -241,25 +239,22 @@ class VideoController extends Controller
             $populars->where('title', 'like', '%' . $query . '%');
         }
         if ($category && $category !== 'all') {
-            // PASTIKAN nama kolom di tabel 'populars' adalah 'category'
-            $populars->where('category', $category);
+            $populars->whereJsonContains('category', $category); // Gunakan whereJsonContains untuk array JSON
         }
         // Gunakan paginate() dan appends()
         $populars = $populars->latest()->paginate($perPage)->appends(request()->query());
 
-
         // --- Daftar Kategori ---
-       $categories = [
-    "Kekayaan Mendadak", "Manusia Serigala", "Populer", "Biasa Saja", "Konglomerat Ilahi", "Cinta Segitiga", "Balas Dendam", "Paranormal",
-    "Pernikahan", "Cinderella", "Bangkit dari Keterpurukan", "Menantu Lelaki", "Identitas Rahasia", "Cinta Kesempatan Kedua", "Komedi", "Cinta Sesama Laki-laki",
-    "Menikah Sebelum Cinta", "Mafia", "Influencer", "Cinta Terlarang", "Cerita Inspiratif", "Tokoh Perempuan Kuat", "Romansa", "CEO",
-    "Harem", "Fantasi", "Kesenjangan Informasi", "Belahan Jiwa", "Sedang Tren", "Identitas Tersembunyi", "Serangan Balik", "Penyamaran",
-    "Cinta Manis", "Ketegangan", "Pengkhianatan", "Kehidupan Urban", "Penyamaran Gender", "Harem Penjelajah Waktu", "Manusia Serigala",
-    "Dominasi & Submisi", "Dari Musuh Jadi Cinta", "Misteri", "Kekuatan Super", "Miliarder", "Dibenci", "Dominan", "Sejarah Alternatif",
-    "Anak Nakal", "Reinkarnasi", "Si Kecil yang Diremehkan", "Pasangan Kontrak", "Keluarga Kaya", "Humor", "Kesalahpahaman", "Cinta Sejati",
-    "Comeback", "Hubungan Beracun", "Pernikahan Kontrak", "Keluarga", "Perjalanan Waktu", "Cinta yang Menyakitkan", "Cerita Panas", "Takdir",
-];
-
+        $categories = [
+            "Kekayaan Mendadak", "Manusia Serigala", "Populer", "Biasa Saja", "Konglomerat Ilahi", "Cinta Segitiga", "Balas Dendam", "Paranormal",
+            "Pernikahan", "Cinderella", "Bangkit dari Keterpurukan", "Menantu Lelaki", "Identitas Rahasia", "Cinta Kesempatan Kedua", "Komedi", "Cinta Sesama Laki-laki",
+            "Menikah Sebelum Cinta", "Mafia", "Influencer", "Cinta Terlarang", "Cerita Inspiratif", "Tokoh Perempuan Kuat", "Romansa", "CEO",
+            "Harem", "Fantasi", "Kesenjangan Informasi", "Belahan Jiwa", "Sedang Tren", "Identitas Tersembunyi", "Serangan Balik", "Penyamaran",
+            "Cinta Manis", "Ketegangan", "Pengkhianatan", "Kehidupan Urban", "Penyamaran Gender", "Harem Penjelajah Waktu", "Manusia Serigala",
+            "Dominasi & Submisi", "Dari Musuh Jadi Cinta", "Misteri", "Kekuatan Super", "Miliarder", "Dibenci", "Dominan", "Sejarah Alternatif",
+            "Anak Nakal", "Reinkarnasi", "Si Kecil yang Diremehkan", "Pasangan Kontrak", "Keluarga Kaya", "Humor", "Kesalahpahaman", "Cinta Sejati",
+            "Comeback", "Hubungan Beracun", "Pernikahan Kontrak", "Keluarga", "Perjalanan Waktu", "Cinta yang Menyakitkan", "Cerita Panas", "Takdir",
+        ];
 
         // Pastikan 'all' ada di daftar kategori untuk opsi filter
         if (!in_array('all', $categories)) {
@@ -267,7 +262,6 @@ class VideoController extends Controller
         }
 
         // --- Mengirim Data ke View ---
-        
         $allCategories = $categories;
         return view('welcome', compact('videos', 'upcomings', 'populars', 'allCategories', 'category'));
     }

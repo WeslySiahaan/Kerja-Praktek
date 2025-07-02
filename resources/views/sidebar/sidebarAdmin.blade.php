@@ -105,7 +105,7 @@
                 </li>
                 <li class="nav-item mb-2">
                     <a href="{{ route('recommendations.index') }}" class="nav-link text-white d-flex align-items-center">
-                        <i class="bi bi-clock-fill me-2"></i> Akan Tayang
+                        <i class="bi bi-bookmark-star-fill me-2"></i> Rekomendasi
                     </a>
                 </li>
                 <li class="nav-item mb-2">
