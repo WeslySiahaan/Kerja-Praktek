@@ -91,64 +91,58 @@ class PopularController extends Controller
     {
         $query = $request->input('query');
         $category = $request->input('category');
-        $perPage = 12; // Jumlah item per halaman, Anda bisa sesuaikan
-
+        $perPage = 15; // Jumlah item per halaman, bisa Anda sesuaikan
+    
         // --- Filter untuk Model Video ---
         $videos = Video::query();
         if ($query) {
             $videos->where('name', 'like', '%' . $query . '%');
         }
         if ($category && $category !== 'all') {
-            $videos->where('category', $category);
+            $videos->whereJsonContains('category', $category); // Filter untuk array JSON di Video
         }
-        // Gunakan paginate() dan appends()
         $videos = $videos->latest()->paginate($perPage)->appends(request()->query());
-
+    
         // --- Filter untuk Model Upcoming ---
         $upcomings = Upcoming::query();
         if ($query) {
             $upcomings->where('title', 'like', '%' . $query . '%');
         }
         if ($category && $category !== 'all') {
-            // PASTIKAN nama kolom di tabel 'upcomings' adalah 'category'
-            $upcomings->where('category', $category);
+            // Asumsi Upcoming menggunakan string untuk category, gunakan like jika bukan array
+            $upcomings->where('category', 'like', '%' . $category . '%');
         }
-        // Gunakan paginate() dan appends()
         $upcomings = $upcomings->latest()->paginate($perPage)->appends(request()->query());
-
-
+    
         // --- Filter untuk Model Popular ---
         $populars = Popular::query();
         if ($query) {
             $populars->where('title', 'like', '%' . $query . '%');
         }
         if ($category && $category !== 'all') {
-            // PASTIKAN nama kolom di tabel 'populars' adalah 'category'
-            $populars->where('category', $category);
+            // Asumsi Popular menggunakan string untuk category, gunakan like jika bukan array
+            $populars->where('category', 'like', '%' . $category . '%');
         }
-        // Gunakan paginate() dan appends()
         $populars = $populars->latest()->paginate($perPage)->appends(request()->query());
-
-
+    
         // --- Daftar Kategori ---
         $allCategories = [
-    "Kekayaan Mendadak", "Manusia Serigala", "Populer", "Biasa Saja", "Konglomerat Ilahi", "Cinta Segitiga", "Balas Dendam", "Paranormal",
-    "Pernikahan", "Cinderella", "Bangkit dari Keterpurukan", "Menantu Lelaki", "Identitas Rahasia", "Cinta Kesempatan Kedua", "Komedi", "Cinta Sesama Laki-laki",
-    "Menikah Sebelum Cinta", "Mafia", "Influencer", "Cinta Terlarang", "Cerita Inspiratif", "Tokoh Perempuan Kuat", "Romansa", "CEO",
-    "Harem", "Fantasi", "Kesenjangan Informasi", "Belahan Jiwa", "Sedang Tren", "Identitas Tersembunyi", "Serangan Balik", "Penyamaran",
-    "Cinta Manis", "Ketegangan", "Pengkhianatan", "Kehidupan Urban", "Penyamaran Gender", "Harem Penjelajah Waktu", "Manusia Serigala",
-    "Dominasi & Submisi", "Dari Musuh Jadi Cinta", "Misteri", "Kekuatan Super", "Miliarder", "Dibenci", "Dominan", "Sejarah Alternatif",
-    "Anak Nakal", "Reinkarnasi", "Si Kecil yang Diremehkan", "Pasangan Kontrak", "Keluarga Kaya", "Humor", "Kesalahpahaman", "Cinta Sejati",
-    "Comeback", "Hubungan Beracun", "Pernikahan Kontrak", "Keluarga", "Perjalanan Waktu", "Cinta yang Menyakitkan", "Cerita Panas", "Takdir",
-];
-
-
+            "Kekayaan Mendadak", "Manusia Serigala", "Populer", "Biasa Saja", "Konglomerat Ilahi", "Cinta Segitiga", "Balas Dendam", "Paranormal",
+            "Pernikahan", "Cinderella", "Bangkit dari Keterpurukan", "Menantu Lelaki", "Identitas Rahasia", "Cinta Kesempatan Kedua", "Komedi", "Cinta Sesama Laki-laki",
+            "Menikah Sebelum Cinta", "Mafia", "Influencer", "Cinta Terlarang", "Cerita Inspiratif", "Tokoh Perempuan Kuat", "Romansa", "CEO",
+            "Harem", "Fantasi", "Kesenjangan Informasi", "Belahan Jiwa", "Sedang Tren", "Identitas Tersembunyi", "Serangan Balik", "Penyamaran",
+            "Cinta Manis", "Ketegangan", "Pengkhianatan", "Kehidupan Urban", "Penyamaran Gender", "Harem Penjelajah Waktu", "Manusia Serigala",
+            "Dominasi & Submisi", "Dari Musuh Jadi Cinta", "Misteri", "Kekuatan Super", "Miliarder", "Dibenci", "Dominan", "Sejarah Alternatif",
+            "Anak Nakal", "Reinkarnasi", "Si Kecil yang Diremehkan", "Pasangan Kontrak", "Keluarga Kaya", "Humor", "Kesalahpahaman", "Cinta Sejati",
+            "Comeback", "Hubungan Beracun", "Pernikahan Kontrak", "Keluarga", "Perjalanan Waktu", "Cinta yang Menyakitkan", "Cerita Panas", "Takdir",
+        ];
+    
         // Pastikan 'all' ada di daftar kategori untuk opsi filter
         if (!in_array('all', $allCategories)) {
             $allCategories[] = 'all';
         }
-
+    
         // --- Mengirim Data ke View ---
-        return view('dramabox.browse', compact('videos', 'upcomings', 'populars', 'allCategories', 'category'));
+        return view('dramabox.browse', compact('videos', 'upcomings', 'populars', 'allCategories', 'category', 'query'));
     }
 }

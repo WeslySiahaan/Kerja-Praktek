@@ -87,7 +87,7 @@
             @foreach ($videos as $video)
                 <div class="col">
                     <div class="card bg-dark text-white h-100 d-flex flex-column">
-                        <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
+                        <a href="{{ route('video.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
                             <img src="{{ $video->poster_image ? asset('storage/' . $video->poster_image) : asset('Drama__box.png') }}"
                                  class="card-img-top" 
                                  alt="{{ $video->name }} poster"
@@ -103,7 +103,16 @@
                                 @endif
                             </p>
                             <p class="card-title text-truncate">Total {{ count($video->episodes ?? []) }} Episode</p>
-                                    <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+                            <div class="mt-auto d-flex gap-2">
+                                    @if (Auth::check())
+                            
+                                      <!-- Tombol Menonton -->
+                                        <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+                                    @else
+
+                                        <!-- Tombol Menonton dengan redirect ke login -->
+                                        <a href="{{ route('login') }}" class="btn btn-primary btn-sm bi bi-play-fill" title="Login untuk Menonton">Menonton</a>
+                                    @endif
                                 </div>
                         </div>
                     </div>

@@ -30,35 +30,10 @@
               <p class="card-title text-truncate">Total {{ count($video->episodes ?? []) }} Episode</p>
               <div class="mt-auto d-flex gap-2">
                                     @if (Auth::check())
-                                        <!-- Tombol Like -->
-                                        <form action="{{ route('videos.like', $video) }}" method="POST">
-                                            @csrf
-                                            <button type="submit" class="btn btn-link p-0 like-btn" title="{{ $video->likedByUsers->contains(Auth::id()) ? 'Batal Suka' : 'Suka' }}">
-                                                <i class="bi {{ $video->likedByUsers->contains(Auth::id()) ? 'bi-heart-fill text-danger' : 'bi-heart text-white' }} fs-5"></i>
-                                            </button>
-                                        </form>
-
-                                        <!-- Tombol Simpan -->
-                                        <form action="{{ route('videos.save', $video) }}" method="POST">
-                                            @csrf
-                                            <button type="submit" class="btn btn-link p-0" title="{{ $video->collectedByUsers->contains(Auth::id()) ? 'Sudah Disimpan' : 'Simpan' }}"
-                                                    {{ $video->collectedByUsers->contains(Auth::id()) ? 'disabled' : '' }}>
-                                                <i class="bi {{ $video->collectedByUsers->contains(Auth::id()) ? 'bi-bookmark-fill text-success' : 'bi-bookmark text-white' }} fs-5"></i>
-                                            </button>
-                                        </form>
-
-                                        <!-- Tombol Menonton -->
+                            
+                                      <!-- Tombol Menonton -->
                                         <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
                                     @else
-                                        <!-- Tombol Like dengan redirect ke login -->
-                                        <a href="{{ route('login') }}" class="btn btn-link p-0" title="Login untuk Suka">
-                                            <i class="bi bi-heart text-white fs-5"></i>
-                                        </a>
-
-                                        <!-- Tombol Simpan dengan redirect ke login -->
-                                        <a href="{{ route('login') }}" class="btn btn-link p-0" title="Login untuk Simpan">
-                                            <i class="bi bi-bookmark text-white fs-5"></i>
-                                        </a>
 
                                         <!-- Tombol Menonton dengan redirect ke login -->
                                         <a href="{{ route('login') }}" class="btn btn-primary btn-sm bi bi-play-fill" title="Login untuk Menonton">Menonton</a>
