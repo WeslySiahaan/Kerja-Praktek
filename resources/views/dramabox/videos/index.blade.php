@@ -42,12 +42,18 @@
                   <td>{{ $loop->iteration }}</td>
                   <td>{{ $video->name }}</td>
                   <td>{{ Str::limit($video->description, 50) }}</td>
-                  <td>{{ $video->category }}</td>
+                  <td>
+                    @if(is_array($video->category))
+                      {{ implode(', ', $video->category) }}
+                    @else
+                      {{ $video->category ?? 'Tidak ada kategori' }}
+                    @endif
+                  </td>
                   <td>{{ $video->rating }}</td>
                   <td>{{ $video->is_popular ? 'Ya' : 'Tidak' }}</td>
                   <td>{{ count($video->episodes ?? []) }}</td>
-                  <td>{{ $video->liked_by_users_count }}</td> <!-- Menggunakan withCount -->
-                  <td>{{ $video->collected_by_users_count }}</td> <!-- Menggunakan withCount -->
+                  <td>{{ $video->liked_by_users_count }}</td>
+                  <td>{{ $video->collected_by_users_count }}</td>
                   <td>
                     @if ($video->poster_image)
                       <img src="{{ asset('storage/' . $video->poster_image) }}" alt="{{ $video->name }} Poster" style="width: 100px; height: auto; object-fit: cover;">

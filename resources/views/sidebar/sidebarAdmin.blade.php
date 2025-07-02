@@ -93,6 +93,11 @@
                     </a>
                 </li>
                 <li class="nav-item mb-2">
+                    <a href="{{ route('recommendations.index') }}" class="nav-link text-white d-flex align-items-center">
+                        <i class="bi bi-clock-fill me-2"></i> Akan Tayang
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
                     <a href="{{ route('populars.index') }}" class="nav-link text-white d-flex align-items-center">
                         <i class="bi bi-fire me-2"></i> Popular
                     </a>

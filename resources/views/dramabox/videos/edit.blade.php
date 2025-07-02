@@ -41,11 +41,11 @@
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Category</label>
-            <select name="category" class="form-select" required>
-              <option value="">Select a category</option>
+            <label class="form-label">Categories (Hold Ctrl to select multiple)</label>
+            <select name="category[]" id="category" class="form-select" multiple size="5" required>
+              <option value="">Select categories</option>
               @foreach($categories as $category)
-                <option value="{{ $category }}" {{ old('category', $video->category) == $category ? 'selected' : '' }}>
+                <option value="{{ $category }}" {{ in_array($category, old('category', $video->category ?? [])) ? 'selected' : '' }}>
                   {{ $category }}
                 </option>
               @endforeach

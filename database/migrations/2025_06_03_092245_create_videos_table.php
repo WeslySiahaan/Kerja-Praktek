@@ -17,7 +17,7 @@ class CreateVideosTable extends Migration
             $table->string('name');
             $table->text('description');
             $table->integer('rating');
-            $table->string('category');
+            $table->json('category')->nullable(); // Ubah dari string ke json untuk multiple categories
             $table->boolean('is_popular')->default(false);
             $table->string('poster_image')->nullable();
             $table->json('episodes')->nullable();

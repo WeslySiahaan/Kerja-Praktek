@@ -72,7 +72,7 @@
     </div>
 </section>
 
-<section class="container-fluid" style="margin-top: 5px;position: relative; z-index: 10; margin-bottom: 20px;">  
+<section class="container-fluid" style="margin-top: 5px; position: relative; z-index: 10; margin-bottom: 20px;">  
     <h2 class="display-6 fw-bold mb-4 px-3">Popular</h2>
 
     @if (session('error'))
@@ -89,7 +89,7 @@
             @foreach ($videos as $video)
                 <div class="col">
                     <div class="card bg-dark text-white h-100 d-flex flex-column">
-                        <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
+                        <a href="{{ route('video.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
                             <img src="{{ $video->poster_image ? asset('storage/' . $video->poster_image) : asset('Drama__box.png') }}"
                                  class="card-img-top" 
                                  alt="{{ $video->name }} poster"
@@ -97,7 +97,13 @@
                         </a>
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title text-truncate">{{ $video->name }}</h5>
-                            <p class="card-text">{{ Str::limit($video->description, 100) }}</p>
+                            <p class="card-text">Category: 
+                                @if(is_array($video->category))
+                                    {{ implode(', ', $video->category) }}
+                                @else
+                                    {{ $video->category ?? 'No Category' }}
+                                @endif
+                            </p>
                             <p class="card-title text-truncate">Total {{ count($video->episodes ?? []) }} Episode</p>
                             <div class="mt-auto d-flex gap-2">
                                 @if (Auth::check())
@@ -130,9 +136,9 @@
             @endforeach
         </div>
          <!-- Pagination -->
-<div style="margin-top: 20px;" class="d-flex justify-content-center">
-  {{ $videos->appends(request()->query())->links('pagination::bootstrap-4') }}
-</div>
+        <div style="margin-top: 20px;" class="d-flex justify-content-center">
+            {{ $videos->appends(request()->query())->links('pagination::bootstrap-4') }}
+        </div>
     @endif
 </section>
 

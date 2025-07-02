@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\WatchHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User; // <-- Tambahkan ini untuk type hinting
+use App\Models\User;
 
 class WatchHistoryController extends Controller
 {
@@ -18,12 +18,11 @@ class WatchHistoryController extends Controller
             return redirect()->route('login')->with('error', 'Anda harus login untuk melihat riwayat tontonan.');
         }
 
-        /** @var \App\Models\User $user */ // DocBlock untuk membantu Intelephense
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         $watchHistoryItems = $user->watchHistories()->orderBy('created_at', 'desc')->get();
 
-        // Pastikan nama view sesuai dengan lokasi file Anda
         return view('profile.riwayat-tontonan', compact('watchHistoryItems'));
     }
 
@@ -50,20 +49,22 @@ class WatchHistoryController extends Controller
             return redirect()->route('login')->with('error', 'Anda harus login untuk membersihkan riwayat tontonan.');
         }
 
-        /** @var \App\Models\User $user */ // DocBlock untuk membantu Intelephense
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         $user->watchHistories()->delete();
 
         return back()->with('success', 'Semua riwayat tontonan berhasil dihapus.');
     }
 
-    // Metode ini bisa Anda gunakan jika ingin menambahkan riwayat dari tempat lain (opsional)
+    /**
+     * Menambahkan riwayat tontonan dari permintaan.
+     */
     public function addHistory(Request $request)
     {
         $request->validate([
             'video_id' => 'required|exists:videos,id',
             'title' => 'required|string|max:255',
-            'category' => 'nullable|string|max:255',
+            'category' => 'nullable|array', // Izinkan category sebagai array
             'description' => 'nullable|string',
             'image' => 'nullable|string',
             'progress' => 'nullable|integer|min:0|max:100',
@@ -77,10 +78,18 @@ class WatchHistoryController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
+        // Proses category: jika array, gunakan langsung; jika string, ubah menjadi array
+        $category = $request->input('category', []);
+        if (is_string($category)) {
+            $category = array_map('trim', explode(',', $category));
+        } elseif (!is_array($category)) {
+            $category = []; // Fallback jika data tidak valid
+        }
+
         $history = $user->watchHistories()->create([
             'video_id' => $request->video_id,
             'title' => $request->title,
-            'category' => $request->category,
+            'category' => $category, // Disimpan sebagai array, akan di-cast ke JSON oleh model
             'description' => $request->description,
             'image' => $request->image,
             'progress' => $request->progress ?? 0,

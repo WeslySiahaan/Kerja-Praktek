@@ -10,6 +10,7 @@ class Video extends Model
     protected $fillable = ['name', 'description', 'rating', 'category', 'is_popular', 'poster_image', 'episodes'];
 
     protected $casts = [
+        'category' => 'array',
         'episodes' => 'array',
         'is_popular' => 'boolean',
     ];

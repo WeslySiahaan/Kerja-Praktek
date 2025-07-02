@@ -35,11 +35,10 @@
                     @enderror
                 </div>
                 <div class="mb-3">
-                    <label for="category" class="form-label">Category</label>
-                    <select name="category" id="category" class="form-select">
-                        <option value="">Select a category</option>
+                    <label for="category" class="form-label">Select Categories (Hold Ctrl to select multiple)</label>
+                    <select name="category[]" id="category" class="form-select" multiple size="5">
                         @foreach($categories as $category)
-                            <option value="{{ $category }}" {{ old('category') == $category ? 'selected' : '' }}>{{ $category }}</option>
+                            <option value="{{ $category }}" {{ in_array($category, old('category', [])) ? 'selected' : '' }}>{{ $category }}</option>
                         @endforeach
                     </select>
                     @error('category')

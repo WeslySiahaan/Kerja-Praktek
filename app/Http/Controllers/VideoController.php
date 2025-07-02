@@ -46,47 +46,57 @@ class VideoController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required',
-            'rating' => 'required|integer|min:1|max:5',
-            'category' => 'required',
-            'poster_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:20048',
-            'episodes.*' => 'nullable|file|mimes:mp4,mov,avi|max:102400', // Validasi untuk setiap episode
-        ]);
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'required',
+        'rating' => 'required|integer|min:1|max:5',
+        'category' => 'required|array', // Validasi sebagai array
+        'category.*' => 'string|in:' . implode(',', [
+            "Sudden Wealth", "Werewolves", "Popular", "Average", "Divine Tycoon", "Love Triangle", "Revenge", "Paranormal",
+            "Marriage", "Cinderella", "Underdog Rise", "Son-in-Law", "Secret Identity", "Second-chance Love", "Comedy", "Boy's Love",
+            "Marriage Before Love", "Mafia", "Influencer", "Forbidden Love", "Uplifting Series", "Strong Female Lead", "Romance", "CEO",
+            "Harem", "Fantasy", "Information Gaps", "Soulmate", "Trending", "Concealed Identity", "Counterattack", "Disguise",
+            "Sweet Love", "Suspense", "Betrayal", "Urban", "Cross-dressing", "Time Travel Harem", "Werewolf",
+            "SM", "Enemies to Lovers", "Mystery", "Super Power", "Billionaire", "Hated", "Dominant", "Alternative History",
+            "Badboy", "Rebirth", "Small Potato", "Contract Lover", "Wealthy", "Humor", "Misunderstanding", "True Love",
+            "Comeback", "Toxic Relationship", "Contract Marriage", "Family", "Time Travel", "Bitter Love", "Steamy", "Destiny"
+        ]), // Pastikan kategori valid
+        'poster_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:20048',
+        'episodes.*' => 'nullable|file|mimes:mp4,mov,avi|max:1002400',
+    ]);
 
-        // Simpan file gambar poster
-        $posterImagePath = null;
-        if ($request->hasFile('poster_image')) {
-            $posterImage = $request->file('poster_image');
-            $posterFileName = time() . '_poster.' . $posterImage->extension();
-            $posterImagePath = $posterImage->storeAs('posters', $posterFileName, 'public');
-        }
+    // Simpan file gambar poster
+    $posterImagePath = null;
+    if ($request->hasFile('poster_image')) {
+        $posterImage = $request->file('poster_image');
+        $posterFileName = time() . '_poster.' . $posterImage->extension();
+        $posterImagePath = $posterImage->storeAs('posters', $posterFileName, 'public');
+    }
 
-        // Simpan file episode
-        $episodes = [];
-        if ($request->hasFile('episodes')) {
-            foreach ($request->file('episodes') as $index => $episode) {
-                if ($episode) {
-                    $episodeFileName = time() . '_episode_' . $index . '.' . $episode->extension();
-                    $episodes[] = $episode->storeAs('episodes', $episodeFileName, 'public');
-                }
+    // Simpan file episode
+    $episodes = [];
+    if ($request->hasFile('episodes')) {
+        foreach ($request->file('episodes') as $index => $episode) {
+            if ($episode) {
+                $episodeFileName = time() . '_episode_' . $index . '.' . $episode->extension();
+                $episodes[] = $episode->storeAs('episodes', $episodeFileName, 'public');
             }
         }
-
-        Video::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'rating' => $request->rating,
-            'category' => $request->category,
-            'is_popular' => $request->has('is_popular'),
-            'poster_image' => $posterImagePath,
-            'episodes' => $episodes, // JANGAN gunakan json_encode() karena model akan mengurusnya
-        ]);
-
-        return redirect()->route('videos.index')->with('success', 'Video added successfully!');
     }
+
+    Video::create([
+        'name' => $request->name,
+        'description' => $request->description,
+        'rating' => $request->rating,
+        'category' => $request->category, // Simpan sebagai array, model akan cast ke JSON
+        'is_popular' => $request->has('is_popular'),
+        'poster_image' => $posterImagePath,
+        'episodes' => $episodes,
+    ]);
+
+    return redirect()->route('videos.index')->with('success', 'Video added successfully!');
+}
 
     public function edit(Video $video)
     {
@@ -104,65 +114,75 @@ class VideoController extends Controller
     }
 
     public function update(Request $request, Video $video)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required',
-            'rating' => 'required|integer|min:1|max:5',
-            'category' => 'required',
-            'poster_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:20048',
-            'episodes.*' => 'nullable|file|mimes:mp4,mov,avi|max:102400',
-            'existing_episodes.*' => 'nullable|string', // Untuk menangani episode yang dipertahankan
-        ]);
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'required',
+        'rating' => 'required|integer|min:1|max:5',
+        'category' => 'required|array', // Validasi sebagai array
+        'category.*' => 'string|in:' . implode(',', [
+            "Sudden Wealth", "Werewolves", "Popular", "Average", "Divine Tycoon", "Love Triangle", "Revenge", "Paranormal",
+            "Marriage", "Cinderella", "Underdog Rise", "Son-in-Law", "Secret Identity", "Second-chance Love", "Comedy", "Boy's Love",
+            "Marriage Before Love", "Mafia", "Influencer", "Forbidden Love", "Uplifting Series", "Strong Female Lead", "Romance", "CEO",
+            "Harem", "Fantasy", "Information Gaps", "Soulmate", "Trending", "Concealed Identity", "Counterattack", "Disguise",
+            "Sweet Love", "Suspense", "Betrayal", "Urban", "Cross-dressing", "Time Travel Harem", "Werewolf",
+            "SM", "Enemies to Lovers", "Mystery", "Super Power", "Billionaire", "Hated", "Dominant", "Alternative History",
+            "Badboy", "Rebirth", "Small Potato", "Contract Lover", "Wealthy", "Humor", "Misunderstanding", "True Love",
+            "Comeback", "Toxic Relationship", "Contract Marriage", "Family", "Time Travel", "Bitter Love", "Steamy", "Destiny"
+        ]), // Pastikan kategori valid
+        'poster_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:20048',
+        'episodes.*' => 'nullable|file|mimes:mp4,mov,avi|max:102400',
+        'existing_episodes.*' => 'nullable|string',
+    ]);
 
-        // Update poster image jika di-upload ulang
-        $posterImagePath = $video->poster_image;
-        if ($request->hasFile('poster_image')) {
-            if ($video->poster_image) {
-                Storage::disk('public')->delete($video->poster_image);
-            }
-            $posterImage = $request->file('poster_image');
-            $posterFileName = time() . '_poster.' . $posterImage->extension();
-            $posterImagePath = $posterImage->storeAs('posters', $posterFileName, 'public');
+    // Update poster image jika di-upload ulang
+    $posterImagePath = $video->poster_image;
+    if ($request->hasFile('poster_image')) {
+        if ($video->poster_image) {
+            Storage::disk('public')->delete($video->poster_image);
         }
-
-        // Ambil episode yang dipertahankan dari input hidden
-        $retainedEpisodes = $request->input('existing_episodes', []);
-
-        // Ambil episode baru yang diunggah
-        $newlyUploadedEpisodePaths = [];
-        if ($request->hasFile('episodes')) {
-            foreach ($request->file('episodes') as $episodeFile) {
-                if ($episodeFile) {
-                    $newlyUploadedEpisodePaths[] = $episodeFile->storeAs('episodes', time() . '_' . $episodeFile->getClientOriginalName(), 'public');
-                }
-            }
-        }
-
-        // Gabungkan episode yang dipertahankan dengan yang baru diunggah
-        $updatedEpisodesList = array_merge($retainedEpisodes, $newlyUploadedEpisodePaths);
-
-        // Identifikasi episode lama yang tidak lagi ada di daftar baru (untuk dihapus dari storage)
-        $oldEpisodes = $video->episodes ?? []; // Ambil versi asli dari DB
-        $episodesToDelete = array_diff($oldEpisodes, $updatedEpisodesList);
-
-        foreach ($episodesToDelete as $pathToDelete) {
-            Storage::disk('public')->delete($pathToDelete);
-        }
-
-        // Simpan perubahan
-        $video->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'rating' => $request->rating,
-            'category' => $request->category,
-            'is_popular' => $request->has('is_popular'),
-            'poster_image' => $posterImagePath,
-            'episodes' => $updatedEpisodesList, // Laravel akan meng-cast otomatis ke JSON
-        ]);
-
-        return redirect()->route('videos.index')->with('success', 'Video updated successfully!');
+        $posterImage = $request->file('poster_image');
+        $posterFileName = time() . '_poster.' . $posterImage->extension();
+        $posterImagePath = $posterImage->storeAs('posters', $posterFileName, 'public');
     }
+
+    // Ambil episode yang dipertahankan dari input hidden
+    $retainedEpisodes = $request->input('existing_episodes', []);
+
+    // Ambil episode baru yang diunggah
+    $newlyUploadedEpisodePaths = [];
+    if ($request->hasFile('episodes')) {
+        foreach ($request->file('episodes') as $episodeFile) {
+            if ($episodeFile) {
+                $newlyUploadedEpisodePaths[] = $episodeFile->storeAs('episodes', time() . '_' . $episodeFile->getClientOriginalName(), 'public');
+            }
+        }
+    }
+
+    // Gabungkan episode yang dipertahankan dengan yang baru diunggah
+    $updatedEpisodesList = array_merge($retainedEpisodes, $newlyUploadedEpisodePaths);
+
+    // Identifikasi episode lama yang tidak lagi ada di daftar baru (untuk dihapus dari storage)
+    $oldEpisodes = $video->episodes ?? [];
+    $episodesToDelete = array_diff($oldEpisodes, $updatedEpisodesList);
+
+    foreach ($episodesToDelete as $pathToDelete) {
+        Storage::disk('public')->delete($pathToDelete);
+    }
+
+    // Simpan perubahan
+    $video->update([
+        'name' => $request->name,
+        'description' => $request->description,
+        'rating' => $request->rating,
+        'category' => $request->category, // Simpan sebagai array, model akan cast ke JSON
+        'is_popular' => $request->has('is_popular'),
+        'poster_image' => $posterImagePath,
+        'episodes' => $updatedEpisodesList,
+    ]);
+
+    return redirect()->route('videos.index')->with('success', 'Video updated successfully!');
+}
 
     public function destroy(Video $video)
     {
