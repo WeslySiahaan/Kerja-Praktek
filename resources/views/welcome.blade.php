@@ -13,10 +13,16 @@
 
                         @if ($upcoming->trailer_url)
                             <video class="w-100 h-100" style="object-fit: cover; object-position: center;"
-                                   autoplay muted loop playsinline>
+                                   autoplay loop playsinline>
                                 <source src="{{ $upcoming->trailer_url }}" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
+                            {{-- Tombol Kontrol Volume --}}
+                            {{-- Pastikan tombol ini di posisi yang terlihat dan tidak tertutup overlay --}}
+                            <button class="btn btn-dark btn-sm position-absolute rounded-circle volume-toggle-btn"
+                                    style="bottom: 80px; right: 20px; z-index: 4; width: 40px; height: 40px;">
+                                <i class="bi bi-volume-mute-fill fs-5"></i>
+                            </button>
                         @else
                             <img src="{{ $upcoming->poster_url ?? asset('Drama__box.png') }}"
                                  alt="{{ $upcoming->title ?? 'Upcoming Film' }}"
@@ -89,9 +95,9 @@
                     <div class="card bg-dark text-white h-100 d-flex flex-column">
                         <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
                             <img src="{{ $video->poster_image ? asset('storage/' . $video->poster_image) : asset('Drama__box.png') }}"
-                                 class="card-img-top"
-                                 alt="{{ htmlspecialchars($video->name) }} poster"
-                                 style="height: 300px; object-fit: cover;">
+                                   class="card-img-top"
+                                   alt="{{ htmlspecialchars($video->name) }} poster"
+                                   style="height: 300px; object-fit: cover;">
                         </a>
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title text-truncate">{{ htmlspecialchars($video->name) }}</h5>
@@ -104,7 +110,6 @@
                             </p>
                             <p class="card-title text-truncate text-white">Total Episodes: {{ count($video->episodes ?? []) }}</p>
                             <div class="mt-auto d-flex gap-2">
-                                <!-- Tombol Menonton (tanpa login) -->
                                 <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
                             </div>
                         </div>
@@ -112,7 +117,6 @@
                 </div>
             @endforeach
         </div>
-        <!-- Pagination -->
         <div style="margin-top: 20px;" class="d-flex justify-content-center">
             {{ $videos->appends(request()->query())->links('pagination::bootstrap-4') }}
         </div>
@@ -173,17 +177,16 @@
 
     .swiper {
         width: 100%;
-        overflow-x: auto;
+        overflow-x: auto; /* Ini untuk Swiper yang bukan main hero */
     }
 
     .swiper-slide {
         flex-shrink: 0;
-        width: 250px;
-        height: auto;
+        /* Hapus width: 250px; height: auto; jika ini untuk main hero slider */
     }
 
     .netflixSwiper .swiper-slide {
-        width: 100%;
+        width: 100%; /* Pastikan ini untuk Swiper utama agar mengisi penuh */
     }
 
     .card {
@@ -195,7 +198,7 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        new Swiper('.netflixSwiper', {
+        const netflixSwiper = new Swiper('.netflixSwiper', {
             slidesPerView: 1,
             loop: true,
             autoplay: {
@@ -206,36 +209,78 @@
             fadeEffect: { crossFade: true },
             grabCursor: true,
             navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
+                nextEl: '.swiper-button-next', // Pastikan tombol navigasi ini ada di HTML Anda
+                prevEl: '.swiper-button-prev', // Pastikan tombol navigasi ini ada di HTML Anda
             },
             on: {
-                slideChangeTransitionEnd: function() {
-                    this.slides.forEach(slide => {
-                        const video = slide.querySelector('video');
-                        if (video) video.pause();
-                    });
-                    const activeVideo = this.slides[this.activeIndex].querySelector('video');
-                    if (activeVideo) activeVideo.play();
-                },
+                // Event saat Swiper diinisialisasi
                 init: function() {
-                    const firstVideo = this.slides[this.activeIndex].querySelector('video');
-                    if (firstVideo) firstVideo.play();
+                    const activeVideo = this.slides[this.activeIndex].querySelector('video');
+                    if (activeVideo) {
+                        activeVideo.muted = true; // Mulai dengan muted
+                        activeVideo.play().catch(error => {
+                            console.log("Autoplay diblokir:", error);
+                        });
+                        // Atur ikon volume sesuai status awal
+                        const volumeBtn = this.slides[this.activeIndex].querySelector('.volume-toggle-btn');
+                        if (volumeBtn) {
+                            volumeBtn.innerHTML = activeVideo.muted ? '<i class="bi bi-volume-mute-fill fs-5"></i>' : '<i class="bi bi-volume-up-fill fs-5"></i>';
+                        }
+                    }
                 },
+                // Event sebelum transisi slide dimulai
                 beforeTransitionStart: function() {
+                    const prevVideo = this.slides[this.previousIndex].querySelector('video');
+                    if (prevVideo) prevVideo.pause(); // Pause video sebelumnya
+                },
+                // Event setelah transisi slide berakhir
+                slideChangeTransitionEnd: function() {
+                    const activeVideo = this.slides[this.activeIndex].querySelector('video');
+                    if (activeVideo) {
+                        // Hanya putar jika tidak ada modal yang terbuka
+                        const anyModalOpen = document.querySelector('.modal.show');
+                        if (!anyModalOpen) {
+                            activeVideo.play().catch(error => {
+                                console.log("Autoplay diblokir:", error);
+                            });
+                        }
+                    }
+                },
+                // Event saat Swiper dihentikan (misalnya saat klik tombol navigasi atau drag)
+                autoplayStop: function() {
+                    // Ketika autoplay berhenti, pastikan video yang sedang aktif juga di-pause
                     const activeVideo = this.slides[this.activeIndex].querySelector('video');
                     if (activeVideo) activeVideo.pause();
                 },
-                afterTransitionEnd: function() {
-                    const anyModalOpen = document.querySelector('.modal.show');
-                    if (!anyModalOpen) {
-                        const activeVideo = this.slides[this.activeIndex].querySelector('video');
-                        if (activeVideo) activeVideo.play();
+                // Event saat Swiper dimulai kembali (misalnya setelah autoplay berhenti dan kemudian dimulai manual)
+                autoplayStart: function() {
+                    const activeVideo = this.slides[this.activeIndex].querySelector('video');
+                    if (activeVideo) {
+                         activeVideo.play().catch(error => {
+                            console.log("Autoplay diblokir:", error);
+                        });
                     }
                 }
             }
         });
 
+        // Event listener untuk tombol volume di Swiper (harus di luar inisialisasi Swiper)
+        document.querySelectorAll('.volume-toggle-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const video = this.closest('.swiper-slide').querySelector('video');
+                if (video) {
+                    if (video.muted) {
+                        video.muted = false; // Unmute
+                        this.innerHTML = '<i class="bi bi-volume-up-fill fs-5"></i>';
+                    } else {
+                        video.muted = true; // Mute
+                        this.innerHTML = '<i class="bi bi-volume-mute-fill fs-5"></i>';
+                    }
+                }
+            });
+        });
+
+        // Inisialisasi Swiper lainnya (Movie Popular Swiper)
         new Swiper('.moviePopularSwiper', {
             slidesPerView: 'auto',
             spaceBetween: 15,
@@ -256,24 +301,23 @@
             }
         });
 
+        // Logic untuk Global Detail Modal
         const globalDetailModalElement = document.getElementById('globalDetailModal');
         if (globalDetailModalElement) {
             globalDetailModalElement.addEventListener('show.bs.modal', function (event) {
                 const button = event.relatedTarget;
-
-                const id = button.getAttribute('data-id');
-                const title = button.getAttribute('data-title');
-                const description = button.getAttribute('data-description');
-                const posterUrl = button.getAttribute('data-poster-url');
                 const trailerUrl = button.getAttribute('data-trailer-url');
-                const category = button.getAttribute('data-category');
-                const year = button.getAttribute('data-year');
-                const duration = button.getAttribute('data-duration');
-                const rating = button.getAttribute('data-rating');
-                const synopsis = button.getAttribute('data-synopsis');
-                const cast = button.getAttribute('data-cast');
-                const genre = button.getAttribute('data-genre');
+                const modalTrailerVideo = globalDetailModalElement.querySelector('#modalTrailerVideo');
+                const modalTrailerSource = modalTrailerVideo ? modalTrailerVideo.querySelector('source') : null;
 
+                // Pause the active video in netflixSwiper when modal opens
+                if (netflixSwiper && netflixSwiper.autoplay.running) {
+                    netflixSwiper.autoplay.stop();
+                    const activeVideoInSwiper = netflixSwiper.slides[netflixSwiper.activeIndex].querySelector('video');
+                    if (activeVideoInSwiper) activeVideoInSwiper.pause();
+                }
+
+                // Populate modal details
                 const modalTitle = globalDetailModalElement.querySelector('.modal-title');
                 const modalPoster = globalDetailModalElement.querySelector('#modalPoster');
                 const modalDescription = globalDetailModalElement.querySelector('#modalDescription');
@@ -285,25 +329,24 @@
                 const modalCast = globalDetailModalElement.querySelector('#modalCast');
                 const modalGenre = globalDetailModalElement.querySelector('#modalGenre');
                 const modalTrailerContainer = globalDetailModalElement.querySelector('#modalTrailerContainer');
-                const modalTrailerVideo = modalTrailerContainer ? modalTrailerContainer.querySelector('#modalTrailerVideo') : null;
-                const modalTrailerSource = modalTrailerVideo ? modalTrailerVideo.querySelector('source') : null;
 
-                if (modalTitle) modalTitle.textContent = title;
-                if (modalPoster) modalPoster.src = posterUrl;
-                if (modalDescription) modalDescription.textContent = description;
-                if (modalCategory) modalCategory.textContent = category;
-                if (modalYear) modalYear.textContent = year;
-                if (modalDuration) modalDuration.textContent = duration;
-                if (modalRating) modalRating.textContent = rating;
-                if (modalSynopsis) modalSynopsis.textContent = synopsis;
-                if (modalCast) modalCast.textContent = cast;
-                if (modalGenre) modalGenre.textContent = genre;
+                // Set data to modal elements
+                if (modalTitle) modalTitle.textContent = button.getAttribute('data-title');
+                if (modalPoster) modalPoster.src = button.getAttribute('data-poster-url');
+                if (modalDescription) modalDescription.textContent = button.getAttribute('data-description');
+                if (modalCategory) modalCategory.textContent = button.getAttribute('data-category');
+                if (modalYear) modalYear.textContent = button.getAttribute('data-year');
+                if (modalDuration) modalDuration.textContent = button.getAttribute('data-duration');
+                if (modalRating) modalRating.textContent = button.getAttribute('data-rating');
+                if (modalSynopsis) modalSynopsis.textContent = button.getAttribute('data-synopsis');
+                if (modalCast) modalCast.textContent = button.getAttribute('data-cast');
+                if (modalGenre) modalGenre.textContent = button.getAttribute('data-genre');
 
                 if (trailerUrl && modalTrailerSource) {
                     modalTrailerSource.src = trailerUrl;
                     if (modalTrailerVideo) {
                         modalTrailerVideo.load();
-                        modalTrailerVideo.play();
+                        modalTrailerVideo.play().catch(e => console.error("Error playing modal trailer:", e)); // Tambahkan catch
                     }
                     if (modalTrailerContainer) {
                         modalTrailerContainer.style.display = 'block';
@@ -320,11 +363,6 @@
                         modalTrailerContainer.style.display = 'none';
                     }
                 }
-
-                const swiperInstance = document.querySelector('.netflixSwiper').swiper;
-                if (swiperInstance && swiperInstance.autoplay.running) {
-                    swiperInstance.autoplay.stop();
-                }
             });
 
             globalDetailModalElement.addEventListener('hide.bs.modal', function () {
@@ -334,9 +372,13 @@
                     modalVideo.currentTime = 0;
                 }
 
-                const swiperInstance = document.querySelector('.netflixSwiper').swiper;
-                if (swiperInstance && !swiperInstance.autoplay.running) {
-                    swiperInstance.autoplay.start();
+                // Resume autoplay of netflixSwiper when modal closes
+                if (netflixSwiper && !netflixSwiper.autoplay.running) {
+                    netflixSwiper.autoplay.start();
+                    const activeVideoInSwiper = netflixSwiper.slides[netflixSwiper.activeIndex].querySelector('video');
+                    if (activeVideoInSwiper) {
+                        activeVideoInSwiper.play().catch(e => console.error("Error playing swiper video on modal close:", e));
+                    }
                 }
             });
         }

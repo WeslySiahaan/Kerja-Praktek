@@ -98,19 +98,19 @@
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('users.dashboard') }}">Beranda</a>
+                        <a class="nav-link" id="nav-beranda" href="{{ route('users.dashboard') }}">Beranda</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('users.browse') }}">Kategori</a>
+                        <a class="nav-link" id="nav-kategori" href="{{ route('users.browse') }}">Kategori</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('users.rekomendasi') }}">Rekomendasi</a>
+                        <a class="nav-link" id="nav-rekomendasi" href="{{ route('users.rekomendasi') }}">Rekomendasi</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('users.koleksi') }}">Koleksi</a>
+                        <a class="nav-link" id="nav-koleksi" href="{{ route('users.koleksi') }}">Koleksi</a>
                     </li>
                 </ul>
-               
+                
                 <div class="d-flex align-items-center gap-3">
                     <form class="d-flex align-items-center ms-2 position-relative" id="searchForm" method="GET" action="{{ route('users.search') }}">
                         <button type="button" class="btn btn-outline-secondary" id="searchToggle" aria-label="Toggle Search">
@@ -198,7 +198,7 @@
     </footer>
 
     {{-- Bootstrap JS dimuat HANYA SEKALI di sini, di akhir body --}}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     {{-- Skrip khusus layout ini --}}
     <script>
@@ -237,6 +237,39 @@
                     }
                 });
             }
+
+            // --- Logic untuk Navbar Aktif (Diperbarui untuk app2.blade.php) ---
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+
+            navLinks.forEach(link => {
+                link.classList.remove('active'); // Hapus kelas 'active' dari semua link
+
+                const linkUrl = new URL(link.href);
+                const linkPath = linkUrl.pathname;
+
+                // Normalisasi path: pastikan '/' selalu menjadi '/'
+                const normalizedCurrentPath = (currentPath === '/' || currentPath === '/beranda') ? '/' : currentPath;
+                const normalizedLinkPath = (linkPath === '/' || linkPath === '{{ route('dramabox.beranda', [], false) }}') ? '/' : linkPath;
+
+
+                // Logika penentuan active class:
+                // 1. Kecocokan path persis
+                if (normalizedLinkPath === normalizedCurrentPath) {
+                    link.classList.add('active');
+                }
+                // 2. Penanganan khusus untuk "Beranda" (users.dashboard) ketika di /dashboard (setelah login)
+                // atau di root / (sebagai beranda utama untuk tamu)
+                else if (normalizedCurrentPath === '/dashboard' && linkPath === '{{ route('users.dashboard', [], false) }}') {
+                    link.classList.add('active');
+                }
+                // 3. Kecocokan awalan untuk rute dengan sub-path (misal: /users/browse/categoryX mengaktifkan /users/browse)
+                // Kecualikan root '/' dari pengecekan awalan ini agar tidak semua link aktif di home
+                else if (normalizedLinkPath !== '/' && normalizedCurrentPath.startsWith(normalizedLinkPath)) {
+                    link.classList.add('active');
+                }
+            });
+            // --- Akhir Logic untuk Navbar Aktif ---
 
             // Logic untuk like button (jika ada di layout utama ini)
             // Hati-hati: jika like button hanya ada di halaman konten, ini mungkin tidak diperlukan di layout
