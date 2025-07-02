@@ -20,9 +20,9 @@
                             {{-- Tombol Kontrol Volume --}}
                             {{-- Pastikan tombol ini di posisi yang terlihat dan tidak tertutup overlay --}}
                             <button class="btn btn-dark btn-sm position-absolute rounded-circle volume-toggle-btn"
-                                    style="bottom: 80px; right: 20px; z-index: 4; width: 40px; height: 40px;">
-                                <i class="bi bi-volume-mute-fill fs-5"></i>
-                            </button>
+                style="bottom: 20px; right: 20px; z-index: 4; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+            <i class="bi bi-volume-mute-fill fs-5"></i>
+        </button>
                         @else
                             <img src="{{ $upcoming->poster_url ?? asset('Drama__box.png') }}"
                                  alt="{{ $upcoming->title ?? 'Upcoming Film' }}"
@@ -185,6 +185,16 @@
         /* Hapus width: 250px; height: auto; jika ini untuk main hero slider */
     }
 
+    .volume-toggle-btn {
+    transition: all 0.3s ease-in-out; /* Animasi halus saat hover/klik */
+    border: 2px solid rgba(255, 255, 255, 0.5); /* Border agar lebih menonjol dari background gelap */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sedikit bayangan untuk kedalaman */
+}
+
+.volume-toggle-btn:hover {
+    transform: scale(1.1); /* Sedikit membesar saat di-hover */
+    border-color: rgba(255, 255, 255, 0.8);
+}
     .netflixSwiper .swiper-slide {
         width: 100%; /* Pastikan ini untuk Swiper utama agar mengisi penuh */
     }
