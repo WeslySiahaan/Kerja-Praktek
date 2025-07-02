@@ -198,6 +198,9 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // --- Tambahkan variabel global untuk melacak status mute ---
+        let isMutedGlobally = true; // Setel ke true secara default untuk mematuhi kebijakan autoplay
+
         const netflixSwiper = new Swiper('.netflixSwiper', {
             slidesPerView: 1,
             loop: true,
@@ -209,99 +212,102 @@
             fadeEffect: { crossFade: true },
             grabCursor: true,
             navigation: {
-                nextEl: '.swiper-button-next', // Pastikan tombol navigasi ini ada di HTML Anda
-                prevEl: '.swiper-button-prev', // Pastikan tombol navigasi ini ada di HTML Anda
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
             },
             on: {
-                // Event saat Swiper diinisialisasi
                 init: function() {
                     const activeVideo = this.slides[this.activeIndex].querySelector('video');
                     if (activeVideo) {
-                        activeVideo.muted = true; // Mulai dengan muted
+                        // Saat inisialisasi, setel video pertama sesuai status global
+                        activeVideo.muted = isMutedGlobally;
                         activeVideo.play().catch(error => {
-                            console.log("Autoplay diblokir:", error);
+                            console.log("Autoplay diblokir (init):", error);
+                            activeVideo.muted = true; // Jika diblokir, paksa muted
+                            isMutedGlobally = true; // Perbarui status global
                         });
-                        // Atur ikon volume sesuai status awal
-                        const volumeBtn = this.slides[this.activeIndex].querySelector('.volume-toggle-btn');
-                        if (volumeBtn) {
-                            volumeBtn.innerHTML = activeVideo.muted ? '<i class="bi bi-volume-mute-fill fs-5"></i>' : '<i class="bi bi-volume-up-fill fs-5"></i>';
-                        }
+                        updateVolumeButtonIcon(activeVideo, this.slides[this.activeIndex].querySelector('.volume-toggle-btn'));
                     }
                 },
-                // Event sebelum transisi slide dimulai
                 beforeTransitionStart: function() {
                     const prevVideo = this.slides[this.previousIndex].querySelector('video');
-                    if (prevVideo) prevVideo.pause(); // Pause video sebelumnya
+                    if (prevVideo) prevVideo.pause();
                 },
-                // Event setelah transisi slide berakhir
                 slideChangeTransitionEnd: function() {
                     const activeVideo = this.slides[this.activeIndex].querySelector('video');
                     if (activeVideo) {
-                        // Hanya putar jika tidak ada modal yang terbuka
                         const anyModalOpen = document.querySelector('.modal.show');
                         if (!anyModalOpen) {
+                            // Saat slide berubah, setel video baru sesuai status global
+                            activeVideo.muted = isMutedGlobally;
                             activeVideo.play().catch(error => {
-                                console.log("Autoplay diblokir:", error);
+                                console.log("Autoplay diblokir (slideChangeTransitionEnd):", error);
+                                activeVideo.muted = true; // Jika diblokir, paksa muted
+                                isMutedGlobally = true; // Perbarui status global
                             });
+                            updateVolumeButtonIcon(activeVideo, this.slides[this.activeIndex].querySelector('.volume-toggle-btn'));
                         }
                     }
                 },
-                // Event saat Swiper dihentikan (misalnya saat klik tombol navigasi atau drag)
                 autoplayStop: function() {
-                    // Ketika autoplay berhenti, pastikan video yang sedang aktif juga di-pause
                     const activeVideo = this.slides[this.activeIndex].querySelector('video');
                     if (activeVideo) activeVideo.pause();
                 },
-                // Event saat Swiper dimulai kembali (misalnya setelah autoplay berhenti dan kemudian dimulai manual)
                 autoplayStart: function() {
                     const activeVideo = this.slides[this.activeIndex].querySelector('video');
                     if (activeVideo) {
-                         activeVideo.play().catch(error => {
-                            console.log("Autoplay diblokir:", error);
+                        // Saat autoplay dimulai, setel video baru sesuai status global
+                        activeVideo.muted = isMutedGlobally;
+                        activeVideo.play().catch(error => {
+                            console.log("Autoplay diblokir (autoplayStart):", error);
+                            activeVideo.muted = true; // Jika diblokir, paksa muted
+                            isMutedGlobally = true; // Perbarui status global
                         });
+                        updateVolumeButtonIcon(activeVideo, this.slides[this.activeIndex].querySelector('.volume-toggle-btn'));
                     }
                 }
             }
         });
 
-        // Event listener untuk tombol volume di Swiper (harus di luar inisialisasi Swiper)
+        // Fungsi pembantu untuk memperbarui ikon tombol volume
+        function updateVolumeButtonIcon(videoElement, buttonElement) {
+            if (buttonElement) {
+                buttonElement.innerHTML = videoElement.muted ? '<i class="bi bi-volume-mute-fill fs-5"></i>' : '<i class="bi bi-volume-up-fill fs-5"></i>';
+            }
+        }
+
+        // Event listener untuk tombol volume di Swiper
         document.querySelectorAll('.volume-toggle-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const video = this.closest('.swiper-slide').querySelector('video');
                 if (video) {
-                    if (video.muted) {
-                        video.muted = false; // Unmute
-                        this.innerHTML = '<i class="bi bi-volume-up-fill fs-5"></i>';
-                    } else {
-                        video.muted = true; // Mute
-                        this.innerHTML = '<i class="bi bi-volume-mute-fill fs-5"></i>';
+                    video.muted = !video.muted; // Toggle mute status
+                    isMutedGlobally = video.muted; // Perbarui status global
+                    updateVolumeButtonIcon(video, this); // Perbarui ikon tombol ini
+                    
+                    // Pastikan semua video di Swiper (termasuk yang tidak aktif) mengikuti status global
+                    netflixSwiper.slides.forEach((slide, index) => {
+                        const slideVideo = slide.querySelector('video');
+                        if (slideVideo && slideVideo !== video) { // Jangan sentuh video yang sedang di-toggle
+                            slideVideo.muted = isMutedGlobally;
+                        }
+                    });
+
+                    if (!video.muted) { // Jika di-unmute, coba putar
+                        video.play().catch(e => {
+                            console.error("Error playing on unmute click:", e);
+                            // Jika play gagal setelah di-unmute, kemungkinan browser memblokir.
+                            // Anda bisa memutuskan untuk membiarkannya muted atau memberi tahu pengguna.
+                            video.muted = true;
+                            isMutedGlobally = true;
+                            updateVolumeButtonIcon(video, this);
+                        });
                     }
                 }
             });
         });
 
-        // Inisialisasi Swiper lainnya (Movie Popular Swiper)
-        new Swiper('.moviePopularSwiper', {
-            slidesPerView: 'auto',
-            spaceBetween: 15,
-            freeMode: true,
-            grabCursor: true,
-            navigation: {
-                nextEl: '.movie-swiper-next',
-                prevEl: '.movie-swiper-prev',
-            },
-            scrollbar: { el: '.swiper-scrollbar' },
-            breakpoints: {
-                320: { slidesPerView: 2.3, spaceBetween: 10 },
-                480: { slidesPerView: 3.3, spaceBetween: 15 },
-                640: { slidesPerView: 4.3, spaceBetween: 20 },
-                768: { slidesPerView: 5.3, spaceBetween: 20 },
-                1024: { slidesPerView: 6.3, spaceBetween: 25 },
-                1200: { slidesPerView: 7.3, spaceBetween: 25 }
-            }
-        });
-
-        // Logic untuk Global Detail Modal
+        // Logic untuk Global Detail Modal (tetap sama, namun perhatikan interaksi dengan Swiper)
         const globalDetailModalElement = document.getElementById('globalDetailModal');
         if (globalDetailModalElement) {
             globalDetailModalElement.addEventListener('show.bs.modal', function (event) {
@@ -317,7 +323,7 @@
                     if (activeVideoInSwiper) activeVideoInSwiper.pause();
                 }
 
-                // Populate modal details
+                // Populate modal details (kode ini sudah bagus)
                 const modalTitle = globalDetailModalElement.querySelector('.modal-title');
                 const modalPoster = globalDetailModalElement.querySelector('#modalPoster');
                 const modalDescription = globalDetailModalElement.querySelector('#modalDescription');
@@ -330,7 +336,6 @@
                 const modalGenre = globalDetailModalElement.querySelector('#modalGenre');
                 const modalTrailerContainer = globalDetailModalElement.querySelector('#modalTrailerContainer');
 
-                // Set data to modal elements
                 if (modalTitle) modalTitle.textContent = button.getAttribute('data-title');
                 if (modalPoster) modalPoster.src = button.getAttribute('data-poster-url');
                 if (modalDescription) modalDescription.textContent = button.getAttribute('data-description');
@@ -345,8 +350,9 @@
                 if (trailerUrl && modalTrailerSource) {
                     modalTrailerSource.src = trailerUrl;
                     if (modalTrailerVideo) {
+                        modalTrailerVideo.muted = false; // Video di modal bisa di-unmute secara default
                         modalTrailerVideo.load();
-                        modalTrailerVideo.play().catch(e => console.error("Error playing modal trailer:", e)); // Tambahkan catch
+                        modalTrailerVideo.play().catch(e => console.error("Error playing modal trailer:", e));
                     }
                     if (modalTrailerContainer) {
                         modalTrailerContainer.style.display = 'block';
@@ -377,7 +383,10 @@
                     netflixSwiper.autoplay.start();
                     const activeVideoInSwiper = netflixSwiper.slides[netflixSwiper.activeIndex].querySelector('video');
                     if (activeVideoInSwiper) {
+                        // Setel video Swiper kembali sesuai status mute global saat modal ditutup
+                        activeVideoInSwiper.muted = isMutedGlobally; 
                         activeVideoInSwiper.play().catch(e => console.error("Error playing swiper video on modal close:", e));
+                        updateVolumeButtonIcon(activeVideoInSwiper, netflixSwiper.slides[netflixSwiper.activeIndex].querySelector('.volume-toggle-btn'));
                     }
                 }
             });
