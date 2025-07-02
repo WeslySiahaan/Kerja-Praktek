@@ -6,19 +6,38 @@
 
 @section('content')
 <div class="container mt-4">
-    {{-- Optional: Tampilkan query pencarian atau kategori yang aktif --}}
-    @if(isset($query) && $query)
-        <h3 class="text-white">Hasil Pencarian untuk: "{{ $query }}"</h3>
-    @endif
+   {{-- Optional: Tampilkan query pencarian atau kategori yang aktif --}}
+@if(isset($query) && $query)
+    <h4 class="text-warning fw-semibold mb-2" style="font-size: 1.25rem;">
+        Hasil pencarian untuk: 
+        <span class="text-white">"{{ $query }}"</span>
+    </h4>
+@endif
+
+<section class="px-3 py-4">
+    {{-- Nama kategori --}}
     @if(isset($category) && $category && $category !== 'all')
-        <h3 class="text-white">Filter Kategori: "{{ $category }}"</h3>
+        <h5 class="text-warning fw-semibold mb-2">
+            Kategori: <span class="text-light">"{{ $category }}"</span>
+        </h5>
     @elseif(isset($category) && $category === 'all')
-        <h3 class="text-white">Menampilkan Semua Kategori</h3>
+        <h5 class="text-warning fw-semibold mb-2">Menampilkan Semua Kategori</h5>
     @endif
 
-    {{-- Tampilkan Video --}}
-    <section class="mb-5">
-        <h2 class="display-6 fw-bold mb-4 px-3 text-white">Browse Videos</h2>
+    {{-- Judul utama --}}
+    <h1 class="fw-bold text-white mb-2" style="font-size: 1.8rem;">
+        Pilihan Video Sesuai Kategori
+    </h1>
+
+    {{-- Subjudul --}}
+    <p class="text-secondary" style="font-size: 1rem;">
+        Temukan berbagai video menarik yang sesuai dengan kategori favoritmu.
+    </p>
+</section>
+
+
+
+
 
         @if (session('error'))
             <div class="alert alert-danger px-3">{{ session('error') }}</div>

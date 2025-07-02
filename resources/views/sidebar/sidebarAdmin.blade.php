@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,19 +39,20 @@
             padding: 20px;
             background-color: #f8f9fa;
         }
+
         .toggle-icon-profile,
         .toggle-icon-settings {
-          transition: transform 0.3s;
+            transition: transform 0.3s;
         }
 
         /* Rotate icon profile saat expanded */
         a[aria-expanded="true"] .toggle-icon-profile {
-          transform: rotate(90deg);
+            transform: rotate(90deg);
         }
 
         /* Rotate icon settings saat expanded */
         a[aria-expanded="true"] .toggle-icon-settings {
-          transform: rotate(90deg);
+            transform: rotate(90deg);
         }
 
 
@@ -61,13 +63,22 @@
                 height: auto;
                 position: relative;
             }
+
             .content {
                 margin-top: 10px;
             }
         }
     </style>
+
+
 </head>
+
 <body>
+
+    @php
+    $isAdmin = Auth::check() && Auth::user()->role === 'admin';
+    @endphp
+
     <div class="d-flex">
         <!-- Sidebar -->
         <div class="sidebar p-3">
@@ -103,73 +114,74 @@
                     </a>
                 </li>
                 <li class="nav-item mb-2">
-                <a href="#profileCollapse"
-                  class="nav-link text-white d-flex align-items-center justify-content-between collapsed"
-                  data-bs-toggle="collapse"
-                  role="button"
-                  aria-expanded="false"
-                  aria-controls="profileCollapse">
-                  <div>
-                    <i class="bi bi-person-fill me-2"></i> Profile
-                  </div>
-                  <i class="bi bi-chevron-right toggle-icon-profile"></i>
-                </a>
+                    <a href="#profileCollapse"
+                        class="nav-link text-white d-flex align-items-center justify-content-between collapsed"
+                        data-bs-toggle="collapse"
+                        role="button"
+                        aria-expanded="false"
+                        aria-controls="profileCollapse">
+                        <div>
+                            <i class="bi bi-person-fill me-2"></i> Profile
+                        </div>
+                        <i class="bi bi-chevron-right toggle-icon-profile"></i>
+                    </a>
 
-                <div class="collapse" id="profileCollapse">
-                  <ul class="nav flex-column ms-3">
-                    <li class="nav-item mb-2">
-                      <a href="{{ route('profile.pertanyaanUmum') }}" class="nav-link text-white d-flex align-items-center">
-                        <i class="bi bi-question-circle me-2"></i> Pertanyaan Umum
-                      </a>
-                    </li>
-                    <li class="nav-item mb-2">
-                      <a href="{{ route('profile.layananPelanggan') }}" class="nav-link text-white d-flex align-items-center">
-                        <i class="bi bi-headset me-2"></i> Layanan Pelanggan
-                      </a>
-                    </li>
-                    <li class="nav-item mb-2">
-                      <a href="{{ route('profile.pengaturan') }}" class="nav-link text-white d-flex align-items-center">
-                        <i class="bi bi-gear me-2"></i> Pengaturan
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+                  <div class="collapse" id="profileCollapse">
+                        <ul class="nav flex-column ms-3">
+                            <li class="nav-item mb-2">
+                                <a href="{{ $isAdmin ? route('faq.editAll') : route('profile.pertanyaanUmum') }}" class="nav-link text-white d-flex align-items-center">
+                                    <i class="bi bi-question-circle me-2"></i> Pertanyaan Umum
+                                </a>
+                            </li>
+                            <li class="nav-item mb-2">
+                                <a href="{{ route('layanan_pelanggan.edit') }}" class="nav-link text-white d-flex align-items-center">
+                                    <i class="bi bi-headset me-2"></i> Layanan Pelanggan
+                                </a>
+                            </li>
+                            <li class="nav-item mb-2">
+                                <a href="{{ route('profile.pengaturan') }}" class="nav-link text-white d-flex align-items-center">
+                                    <i class="bi bi-gear me-2"></i> Pengaturan
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
 
                 <li class="nav-item mb-2">
-                <a href="#settingsCollapse"
-                    class="nav-link text-white d-flex align-items-center justify-content-between collapsed"
-                    data-bs-toggle="collapse"
-                    role="button"
-                    aria-expanded="false"
-                    aria-controls="settingsCollapse">
-                    <div>
-                    <i class="bi bi-gear me-2"></i> Pengaturan
-                    </div>
-                    <i class="bi bi-chevron-right toggle-icon-settings"></i>
-                </a>
+                    <a href="#settingsCollapse"
+                        class="nav-link text-white d-flex align-items-center justify-content-between collapsed"
+                        data-bs-toggle="collapse"
+                        role="button"
+                        aria-expanded="false"
+                        aria-controls="settingsCollapse">
+                        <div>
+                            <i class="bi bi-gear me-2"></i> Pengaturan
+                        </div>
+                        <i class="bi bi-chevron-right toggle-icon-settings"></i>
+                    </a>
 
-                <div class="collapse" id="settingsCollapse">
-                    <ul class="nav flex-column ms-3">
-                    <li class="nav-item mb-2">
-                        <a href="{{ route('user_agreements.index') }}" class="nav-link text-white d-flex align-items-center">
-                        <i class="bi bi-question-circle me-2"></i> persetujuan Pengguna
-                        </a>
-                    </li>
-                    <li class="nav-item mb-2">
-                        <a href="{{ route('privacy_policies.index') }}" class="nav-link text-white d-flex align-items-center">
-                        <i class="bi bi-headset me-2"></i> Kebijakan Privasi
-                        </a>
-                    </li>
-                    </ul>
-                </div>
+                    <div class="collapse" id="settingsCollapse">
+                        <ul class="nav flex-column ms-3">
+                            <li class="nav-item mb-2">
+                                <a href="{{ route('user_agreements.index') }}" class="nav-link text-white d-flex align-items-center">
+                                    <i class="bi bi-question-circle me-2"></i> persetujuan Pengguna
+                                </a>
+                            </li>
+                            <li class="nav-item mb-2">
+                                <a href="{{ route('privacy_policies.index') }}" class="nav-link text-white d-flex align-items-center">
+                                    <i class="bi bi-headset me-2"></i> Kebijakan Privasi
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
             </ul>
         </div>
     </div>
 
-    
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

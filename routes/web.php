@@ -15,9 +15,10 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\WatchHistoryController;
 use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\PrivacyPolicyController;
-use App\Http\Controllers\FaqController;
 use App\Http\Controllers\RecommendationLandingController;
 use App\Http\Controllers\PersetujuanPenggunaController;
+use App\Http\Controllers\LayananPelangganController;
+use App\Http\Controllers\FaqController;
 
 
 // Route untuk halaman utama
@@ -35,7 +36,7 @@ Route::middleware('auth')->group(function () {
   Route::patch('/profile/edit', [ProfileController::class, 'update'])->name('profile.update');
   Route::delete('/profile/edit', [ProfileController::class, 'destroy'])->name('profile.destroy');
   Route::get('/profile/pertanyaanUmum', [ProfileController::class, 'pertanyaanUmum'])->name('profile.pertanyaanUmum');
-  Route::get('/profile/layananPelanggan', [ProfileController::class, 'layananPelanggan'])->name('profile.layananPelanggan');
+  Route::get('/profile/layananPelanggan', [LayananPelangganController::class, 'index'])->name('profile.layananPelanggan');
   Route::get('/profile/pengaturan', [ProfileController::class, 'pengaturan'])->name('profile.pengaturan');
   Route::get('/profile/persetujuan', [ProfileController::class, 'persetujuan'])->name('profile.persetujuan');
   Route::get('/profile/kebijakan', [ProfileController::class, 'kebijakan'])->name('profile.kebijakan');
@@ -46,20 +47,28 @@ Route::middleware('auth')->group(function () {
   Route::put('/privacy-policies/{id}', [PrivacyPolicyController::class, 'update'])->name('privacy_policies.update');
   Route::delete('/privacy-policies/{id}', [PrivacyPolicyController::class, 'destroy'])->name('privacy_policies.destroy');
 
+  Route::get('/admin/layanan-pelanggan', [LayananPelangganController::class, 'edit'])->name('layanan_pelanggan.edit');
+  Route::put('/admin/layanan-pelanggan/{id}', [LayananPelangganController::class, 'update'])->name('layanan_pelanggan.update');
+
   Route::get('profile/nonaktifAkun', [ProfileController::class, 'nonaktifAkun'])->name('profile.nonaktifAkun');
   Route::get('/profile/riwayat-tontonan', [ProfileController::class, 'riwayatTontonan'])->name('profile.riwayatTontonan');
   Route::get('/profile/riwayat-tontonan', [WatchHistoryController::class, 'index'])->name('profile.riwayatTontonan');
   Route::delete('/profile/riwayat-tontonan/{watchHistory}', [WatchHistoryController::class, 'destroy'])->name('profile.riwayatTontonan.destroy');
   Route::post('/profile/riwayat-tontonan/clear-all', [WatchHistoryController::class, 'clearAll'])->name('profile.riwayatTontonan.clearAll');
 
-  // Tidak pakai middleware admin jika tidak perlu
+  //admin faq
   Route::get('/admin/pertanyaan-umum/edit', [FaqController::class, 'editAll'])->name('faq.editAll');
   Route::put('/admin/pertanyaan-umum/update', [FaqController::class, 'updateAll'])->name('faq.updateAll');
-  Route::get('/admin/pertanyaan-umum/edit', [FaqController::class, 'editAll'])->name('faq.editAll');
   Route::get('/admin/pertanyaan-umum/create', [FaqController::class, 'create'])->name('faq.create');
   Route::post('/admin/pertanyaan-umum/store', [FaqController::class, 'store'])->name('faq.store');
-  Route::get('/profil/faq', [FaqController::class, 'showToUser'])->name('user.faq');
+  Route::delete('/admin/pertanyaan-umum/{id}', [FaqController::class, 'destroy'])->name('faq.destroy');
+  Route::delete('/admin/pertanyaan-umum/kategori/{kategori}', [FaqController::class, 'destroyKategori'])->name('faq.destroyKategori');
+  Route::delete('/admin/pertanyaan-umum/delete-kategori/{kategori}', [FaqController::class, 'deleteKategori'])->name('faq.deleteKategori');
 
+
+
+  //user faq
+  Route::get('/profil/faq', [FaqController::class, 'showToUser'])->name('user.faq');
 
   // Route untuk logout
   Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
