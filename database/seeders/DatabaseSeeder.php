@@ -38,5 +38,23 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('wesly123'), // default admin password
             'role' => 'users'
         ]);
+        User::factory()->create([
+            'name' => 'lusiana',
+            'email' => 'lusiana@gmail.com',
+            'password' => Hash::make('lusiana123'), // default admin password
+            'role' => 'users'
+        ]);
+        User::factory()->create([
+            'name' => 'lusiana',
+            'email' => 'angel@gmail.com',
+            'password' => Hash::make('angel123'), // default admin password
+            'role' => 'users'
+        ]);
+        User::factory()->create([
+            'name' => 'sunanda',
+            'email' => 'sunanda@gmail.com',
+            'password' => Hash::make('sunanda123'), // default admin password
+            'role' => 'users'
+        ]);
     }
 }
