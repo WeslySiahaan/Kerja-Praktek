@@ -70,8 +70,8 @@
     </div>
 </section>
 
-<section class="container-fluid" style="margin-top: 5px; position: relative; z-index: 10; margin-bottom: 20px;">  
-    <h2 class="display-6 fw-bold mb-4 px-3">Popular</h2>
+<section class="container-fluid" style="margin-top: 5px; position: relative; z-index: 10; margin-bottom: 20px;">
+    <h2 class="display-6 fw-bold mb-4 px-3 text-white">Popular</h2>
 
     @if (session('error'))
         <div class="alert alert-danger px-3">{{ session('error') }}</div>
@@ -87,39 +87,32 @@
             @foreach ($videos as $video)
                 <div class="col">
                     <div class="card bg-dark text-white h-100 d-flex flex-column">
-                        <a href="{{ route('video.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
+                        <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
                             <img src="{{ $video->poster_image ? asset('storage/' . $video->poster_image) : asset('Drama__box.png') }}"
-                                 class="card-img-top" 
-                                 alt="{{ $video->name }} poster"
+                                 class="card-img-top"
+                                 alt="{{ htmlspecialchars($video->name) }} poster"
                                  style="height: 300px; object-fit: cover;">
                         </a>
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title text-truncate">{{ $video->name }}</h5>
+                            <h5 class="card-title text-truncate">{{ htmlspecialchars($video->name) }}</h5>
                             <p class="card-text">Category: 
                                 @if(is_array($video->category))
-                                    {{ implode(', ', $video->category) }}
+                                    {{ implode(', ', array_map('htmlspecialchars', $video->category)) }}
                                 @else
-                                    {{ $video->category ?? 'No Category' }}
+                                    {{ htmlspecialchars($video->category ?? 'No Category') }}
                                 @endif
                             </p>
-                            <p class="card-title text-truncate">Total {{ count($video->episodes ?? []) }} Episode</p>
+                            <p class="card-title text-truncate text-white">Total Episodes: {{ count($video->episodes ?? []) }}</p>
                             <div class="mt-auto d-flex gap-2">
-                                    @if (Auth::check())
-                            
-                                      <!-- Tombol Menonton -->
-                                        <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
-                                    @else
-
-                                        <!-- Tombol Menonton dengan redirect ke login -->
-                                        <a href="{{ route('login') }}" class="btn btn-primary btn-sm bi bi-play-fill" title="Login untuk Menonton">Menonton</a>
-                                    @endif
-                                </div>
+                                <!-- Tombol Menonton (tanpa login) -->
+                                <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             @endforeach
         </div>
-         <!-- Pagination -->
+        <!-- Pagination -->
         <div style="margin-top: 20px;" class="d-flex justify-content-center">
             {{ $videos->appends(request()->query())->links('pagination::bootstrap-4') }}
         </div>

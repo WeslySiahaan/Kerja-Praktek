@@ -397,6 +397,6 @@ class VideoController extends Controller
                 $query->latest();
             }
         ]);
-        return view('dramabox.detail', compact('video'));
+        return view('users.detail', compact('video'));
     }
 }

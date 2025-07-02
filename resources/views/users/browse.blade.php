@@ -53,14 +53,10 @@
                             </a>
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title text-truncate">{{ $video->name }}</h5>
-                                {{-- Menambahkan deskripsi singkat dari referensi Popular --}}
-                                <p class="card-text">{{ Str::limit($video->description, 100) }}</p>
 
-                                {{-- Baris Kategori (tetap ada sesuai permintaan Anda) --}}
                                 <p class="card-text text-white"><small>Kategori: {{ is_array($video->category) ? implode(', ', $video->category) : $video->category }}</small></p>
 
-                                {{-- Baris Jumlah Episode (sesuai referensi Popular, berwarna putih) --}}
-                                <p class="card-title text-truncate text-white"><small>Ep {{ count($video->episodes ?? []) }}</small></p>
+                                <p class="card-title text-truncate text-white"><small>Total {{ count($video->episodes ?? []) }} Episode</small></p>
                                 
                                 <div class="mt-auto d-flex gap-2">
                                     {{-- Tombol Like/Save dari referensi Popular --}}
