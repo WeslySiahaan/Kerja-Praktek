@@ -147,9 +147,9 @@
     {{-- Ini adalah tempat di mana @section('category_navbar') dari halaman anak akan di-render --}}
     @yield('category_navbar')
 
-    {{-- Tag <main> harus ada di dalam <body> --}}
     <main>
-        @yield('content') {{-- SLOT UNTUK KONTEN UTAMA DARI HALAMAN ANAK --}}
+        @yield('breadcrumb')
+        @yield('content')
     </main>
 
     <footer class="bg-dark text-white py-4 mt-auto"> {{-- Menambah py-4 dan mt-auto --}}

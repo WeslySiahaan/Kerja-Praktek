@@ -1,9 +1,55 @@
 @extends('layouts.app2')
 
+@section('breadcrumb')
+<nav aria-label="breadcrumb" class="container my-3">
+  <style>
+    .breadcrumb-item + .breadcrumb-item::before {
+      content: none !important; 
+    }
+  </style>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ route('users.dashboard') }}" class="text-white text-decoration-none fw-normal">
+        <i class="bi bi-house-fill"></i> {{-- Icon home --}}
+      </a>
+    </li>
+
+    <li class="breadcrumb-item">
+      <i class="bi bi-chevron-right mx-1"></i> {{-- Icon > --}}
+      <a href="{{ route('users.browse') }}?category={{ is_array($video->category) ? urlencode(implode(',', $video->category)) : urlencode($video->category ?? 'Kategori') }}" class="text-white text-decoration-none fw-normal">
+        {!! is_array($video->category) ? implode('<span class="separator"> / </span>', array_map('htmlspecialchars', $video->category)) : htmlspecialchars($video->category ?? 'Kategori') !!}
+      </a>
+    </li>
+
+    <li class="breadcrumb-item">
+      <i class="bi bi-chevron-right mx-1"></i> {{-- Icon > --}}
+      <a href="{{ route('video.detail', $video) }}" class="text-white text-decoration-none fw-normal">
+        {{ htmlspecialchars($video->name ?? 'Menonton') }}
+      </a>
+    </li>
+
+    <li class="breadcrumb-item active text-white fw-bold" aria-current="page" id="episode-breadcrumb">
+  <i class="bi bi-chevron-right mx-1"></i> {{-- Icon > --}}
+  <span id="episode-text">Episode {{ !empty($episodes) ? (request()->query('episode', 1)) : '1' }}</span>
+</li>
+
+  </ol>
+</nav>
+
+
+
+<style>
+        nav[aria-label="breadcrumb"] {
+            border-bottom: 0.5px solid; 
+            padding-bottom: 10px; 
+            margin-bottom: 20px; 
+        }
+    </style>
+@endsection
+
+
 @section('content')
 <section class="container my-4">
-    <h5 class="display-5 fw-bold mb-4">Menonton</h5>
-
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -41,26 +87,26 @@
                 <div class="bg-dark p-3 rounded h-100 overflow-auto" style="max-height: 485px;">
                     <h6 class="text-white">Daftar Episode</h6>
                     @guest
-                        <h6 class="text-danger mb-3">Anda harus login untuk mengakses semua Episode</h6>
+                    <h6 class="text-danger mb-3">Anda harus login untuk mengakses semua Episode</h6>
                     @endguest
 
                     @if (!empty($episodes))
-                        <div class="mb-2 text-white" id="episode-info">Episode 1 dari {{ count($episodes) }} episode</div>
-                        <div class="row row-cols-3 g-2">
-                            @foreach ($episodes as $index => $episodePath)
-                                <div class="col">
-                                    <button class="btn btn-sm btn-episode w-100 {{ $index === 0 ? 'active' : '' }}"
-                                            onclick="changeEpisode('{{ asset('storage/' . rawurlencode($episodePath)) }}', {{ $index + 1 }}, {{ count($episodes) }})"
-                                            data-episode-path="{{ asset('storage/' . rawurlencode($episodePath)) }}"
-                                            data-episode-index="{{ $index + 1 }}"
-                                            {{ $index > 0 && !Auth::check() ? 'disabled' : '' }}>
-                                        Ep {{ $index + 1 }}
-                                    </button>
-                                </div>
-                            @endforeach
+                    <div class="mb-2 text-white" id="episode-info">Episode 1 dari {{ count($episodes) }} episode</div>
+                    <div class="row row-cols-3 g-2">
+                        @foreach ($episodes as $index => $episodePath)
+                        <div class="col">
+                            <button class="btn btn-sm btn-episode w-100 {{ $index === 0 ? 'active' : '' }}"
+                                    onclick="handleEpisodeClick('{{ asset('storage/' . rawurlencode($episodePath)) }}', {{ $index + 1 }}, {{ count($episodes) }}, {{ $index }})"
+                                    data-episode-path="{{ asset('storage/' . rawurlencode($episodePath)) }}"
+                                    data-episode-index="{{ $index + 1 }}"
+                                    {{ $index > 0 && !Auth::check() ? 'disabled' : '' }}>
+                                Ep {{ $index + 1 }}
+                            </button>
                         </div>
+                        @endforeach
+                    </div>
                     @else
-                        <small class="text-muted">Tidak ada episode yang tersedia.</small>
+                    <small class="text-muted">Tidak ada episode yang tersedia.</small>
                     @endif
                 </div>
             </div>
@@ -161,7 +207,7 @@
                                                                 <button type="submit" class="btn btn-primary" title="Simpan">
                                                                     <i class="bi bi-check"></i>
                                                                 </button>
-                                                                <button type="type" class="btn btn-secondary cancel-edit" data-comment-id="{{ $comment->id }}" title="Batal">
+                                                                <button type="button" class="btn btn-secondary cancel-edit" data-comment-id="{{ $comment->id }}" title="Batal">
                                                                     <i class="bi bi-x"></i>
                                                                 </button>
                                                             </div>
@@ -235,26 +281,18 @@
     document.addEventListener('DOMContentLoaded', () => {
         const videoPlayer = document.getElementById('videoPlayer');
         const episodeButtons = document.querySelectorAll('.btn-episode');
-        const episodeInfo = document.getElementById('episode-info');
+        const episodeBreadcrumb = document.getElementById('episode-breadcrumb');
 
         if (videoPlayer && {{ !empty($episodes) ? 'true' : 'false' }}) {
-            const firstEpisodePath = '{{ asset('storage/' . rawurlencode($firstEpisodePath ?? '')) }}';
-            const sourceElement = videoPlayer.querySelector('source');
-            if (sourceElement) {
-                sourceElement.setAttribute('src', firstEpisodePath);
-                videoPlayer.load();
-                videoPlayer.play().catch(error => console.error('Initial play error:', error));
-            }
+            videoPlayer.innerHTML = `<source src="{{ asset('storage/' . rawurlencode($firstEpisodePath ?? '')) }}" type="video/mp4">`;
+            videoPlayer.load();
 
             if (episodeButtons.length > 0) {
                 episodeButtons[0].classList.add('active');
-                if (episodeInfo) {
-                    episodeInfo.textContent = `Episode 1 dari ${{{ count($episodes) }}} episode`;
-                }
             }
         }
 
-        window.changeEpisode = function(episodePath, episodeNumber, totalEpisodes) {
+        window.handleEpisodeClick = function(episodePath, episodeNumber, totalEpisodes, index) {
             if (videoPlayer && episodePath) {
                 try {
                     if (episodeNumber > 1 && !{{ Auth::check() ? 'true' : 'false' }}) {
@@ -262,41 +300,24 @@
                         window.location.href = '{{ route('login') }}';
                         return;
                     }
-
-                    const sourceElement = videoPlayer.querySelector('source');
-                    if (sourceElement) {
-                        sourceElement.setAttribute('src', episodePath);
-                        videoPlayer.load();
-                        videoPlayer.oncanplay = () => {
-                            videoPlayer.play().catch(error => {
-                                console.error('Play error:', error);
-                                if (error.name === 'NotAllowedError' || error.name === 'NotSupportedError') {
-                                    alert('Gagal memutar video. Pastikan Anda mengizinkan pemutaran atau coba lagi.');
-                                } else {
-                                    alert('Gagal memutar video. Periksa koneksi atau file.');
-                                }
-                            });
-                        };
-                    } else {
-                        console.warn('Source element not found, recreating video source.');
-                        videoPlayer.innerHTML = `<source src="${episodePath}" type="video/mp4">`;
-                        videoPlayer.load();
-                        videoPlayer.oncanplay = () => {
-                            videoPlayer.play().catch(error => {
-                                console.error('Play error (new source):', error);
-                                alert('Gagal memutar video. Silakan coba lagi.');
-                            });
-                        };
-                    }
-
-                    if (episodeInfo) {
-                        episodeInfo.textContent = `Episode ${episodeNumber} dari ${totalEpisodes} episode`;
-                    }
+                    videoPlayer.innerHTML = `<source src="${episodePath.replace(/'/g, "\\'")}" type="video/mp4">`;
+                    videoPlayer.load();
+                    videoPlayer.play().catch(error => {
+                        console.error('Error playing video:', error);
+                        alert('Gagal memutar video. Silakan coba lagi.');
+                    });
 
                     episodeButtons.forEach(btn => btn.classList.remove('active'));
-                    const activeButton = document.querySelector(`.btn-episode[data-episode-index="${episodeNumber}"]`);
-                    if (activeButton) {
-                        activeButton.classList.add('active');
+                    document.querySelector(`.btn-episode[data-episode-index="${episodeNumber}"]`).classList.add('active');
+                    document.getElementById('episode-info').textContent = `Episode ${episodeNumber} dari ${totalEpisodes} episode`;
+
+                    // Update breadcrumb with episode number
+                    if (episodeBreadcrumb) {
+                        const episodeText = document.getElementById('episode-text');
+if (episodeText) {
+  episodeText.textContent = `Episode ${episodeNumber}`;
+}
+
                     }
                 } catch (e) {
                     console.error('Error changing episode:', e);
@@ -307,17 +328,6 @@
             }
         };
 
-        episodeButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const episodePath = this.getAttribute('data-episode-path');
-                const episodeNumber = parseInt(this.getAttribute('data-episode-index'));
-                const totalEpisodes = {{ count($episodes) }};
-                changeEpisode(episodePath, episodeNumber, totalEpisodes);
-            });
-        });
-
-        // Handle Edit Comment Toggle
         document.querySelectorAll('.edit-comment').forEach(button => {
             button.addEventListener('click', function () {
                 const commentId = this.getAttribute('data-comment-id');
@@ -330,7 +340,6 @@
             });
         });
 
-        // Handle Cancel Edit
         document.querySelectorAll('.cancel-edit').forEach(button => {
             button.addEventListener('click', function () {
                 const commentItem = this.closest('.comment-item');
@@ -341,41 +350,40 @@
                 editForm.style.display = 'none';
             });
         });
-    });
 
-    // Handle Delete Comment
-    document.querySelectorAll('form[action^="/comments/"]').forEach(form => {
-        form.querySelector('button[type="submit"]').addEventListener('click', function (e) {
-            e.preventDefault();
-            if (!confirm('Apakah Anda yakin ingin menghapus komentar ini?')) {
-                return;
-            }
-
-            const commentId = form.getAttribute('action').split('/').pop();
-            fetch(`/comments/${commentId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error);
+        document.querySelectorAll('form[action^="/comments/"]').forEach(form => {
+            form.querySelector('button[type="submit"]').addEventListener('click', function (e) {
+                e.preventDefault();
+                if (!confirm('Apakah Anda yakin ingin menghapus komentar ini?')) {
                     return;
                 }
-                const commentElement = document.getElementById(`comment-${commentId}`);
-                if (commentElement) {
-                    commentElement.remove();
-                    if (document.querySelectorAll('.comment-item').length === 0) {
-                        document.getElementById('comments-list').innerHTML = '<p class="text-muted">Belum ada komentar.</p>';
+
+                const commentId = form.getAttribute('action').split('/').pop();
+                fetch(`/comments/${commentId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
                     }
-                }
-            })
-            .catch(error => {
-                console.error('Error deleting comment:', error);
-                alert('Terjadi kesalahan saat menghapus komentar.');
+                    const commentElement = document.getElementById(`comment-${commentId}`);
+                    if (commentElement) {
+                        commentElement.remove();
+                        if (document.querySelectorAll('.comment-item').length === 0) {
+                            document.getElementById('comments-list').innerHTML = '<p class="text-muted">Belum ada komentar.</p>';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting comment:', error);
+                    alert('Terjadi kesalahan saat menghapus komentar.');
+                });
             });
         });
     });

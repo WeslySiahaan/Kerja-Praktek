@@ -71,13 +71,13 @@
             flex: 1 0 auto;
         }
         .like-btn i.bi-heart-fill {
-        animation: heart-pulse 0.3s ease-in-out;
-    }
-    @keyframes heart-pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.2); }
-        100% { transform: scale(1); }
-    }
+            animation: heart-pulse 0.3s ease-in-out;
+        }
+        @keyframes heart-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body>
@@ -119,10 +119,10 @@
         </div>
     </nav>
 
-    {{-- SLOT UNTUK NAVBAR KATEGORI --}}
     @yield('category_navbar')
 
     <main>
+        @yield('breadcrumb')
         @yield('content')
     </main>
 
@@ -171,9 +171,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Logic untuk toggle kategori sudah dihapus karena tidak lagi diperlukan.
-
-            // Logic untuk pencarian
             const searchToggle = document.getElementById('searchToggle');
             const searchInput = document.getElementById('searchInput');
             const searchForm = document.getElementById('searchForm');
@@ -205,6 +202,6 @@
             });
         });
     </script>
-    @stack('scripts') {{-- SLOT UNTUK SCRIPT TAMBAHAN DARI HALAMAN KONTEN --}}
+    @stack('scripts')
 </body>
 </html>

@@ -71,7 +71,7 @@
                             <p class="card-text text-white"><small>Kategori: {{ is_array($video->category) ? implode(', ', $video->category) : $video->category }}</small></p>
                             <p class="card-title text-truncate text-white"><small>Total {{ count($video->episodes ?? []) }} episode</small></p>
                             <div class="mt-auto">
-                                <a href="{{ route('dramabox.detail', $video) }}"  class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+                                <a href="{{ route('video.detail', $video) }}"  class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
                             </div>
                         </div>
                     </div>
