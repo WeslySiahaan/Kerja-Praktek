@@ -60,7 +60,7 @@
                         </form>
                         @endif
                         @endauth
-                        <a href="{{ route('dramabox.detail', $video) }}" class="text-decoration-none text-white">
+                        <a href="{{ route('video.detail', $video) }}" class="text-decoration-none text-white">
                             <img src="{{ $video->poster_image ? asset('storage/' . $video->poster_image) : asset('Drama__box.png') }}"
                                  class="card-img-top movie-poster"
                                  alt="{{ $video->name }} poster"
