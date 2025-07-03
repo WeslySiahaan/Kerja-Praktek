@@ -1,5 +1,124 @@
 @extends('layouts.app1')
 
+@section('styles')
+<style>
+    /* Efek menonjol untuk kartu di bagian Popular */
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Efek menonjol untuk poster di Swiper */
+    .content-overlay img {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .content-overlay img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Overlay untuk video di Swiper */
+    .video-overlay::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 40%;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+        z-index: 2;
+    }
+
+    /* Gaya tombol volume */
+    .volume-toggle-btn {
+        transition: all 0.3s ease-in-out;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    .volume-toggle-btn:hover {
+        transform: scale(1.1);
+        border-color: rgba(255, 255, 255, 0.8);
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    /* Gaya Swiper */
+    .swiper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .netflixSwiper .swiper-slide {
+        width: 100%;
+        height: 90vh;
+    }
+
+    /* Responsivitas */
+    @media (max-width: 768px) {
+        .card {
+            margin-bottom: 15px;
+        }
+        .card-img-top {
+            height: 200px !important;
+        }
+        .card-title {
+            font-size: 1rem;
+        }
+        .card-text {
+            font-size: 0.85rem;
+        }
+        .content-overlay {
+            max-width: 80% !important;
+            top: 10% !important;
+            left: 5% !important;
+        }
+        .content-overlay img {
+            width: 150px !important;
+            height: 200px !important;
+        }
+        .content-overlay h1 {
+            font-size: 1.5rem;
+        }
+        .upcoming-meta p {
+            font-size: 0.9rem;
+        }
+        .upcoming-meta .btn {
+            font-size: 0.9rem;
+            padding: 8px 16px;
+        }
+        .volume-toggle-btn {
+            width: 35px;
+            height: 35px;
+            bottom: 15px;
+            right: 15px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .netflixSwiper .swiper-slide {
+            height: 60vh;
+        }
+        .content-overlay h1 {
+            font-size: 1.2rem;
+        }
+        .content-overlay img {
+            width: 120px !important;
+            height: 160px !important;
+        }
+    }
+</style>
+@endsection
+
 @section('content')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
@@ -17,12 +136,11 @@
                                 <source src="{{ $upcoming->trailer_url }}" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
-                            {{-- Tombol Kontrol Volume --}}
-                            {{-- Pastikan tombol ini di posisi yang terlihat dan tidak tertutup overlay --}}
                             <button class="btn btn-dark btn-sm position-absolute rounded-circle volume-toggle-btn"
-                style="bottom: 20px; right: 20px; z-index: 4; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
-            <i class="bi bi-volume-mute-fill fs-5"></i>
-        </button>
+                                    style="bottom: 20px; right: 20px; z-index: 4; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;"
+                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Toggle volume">
+                                <i class="bi bi-volume-mute-fill fs-5"></i>
+                            </button>
                         @else
                             <img src="{{ $upcoming->poster_url ?? asset('Drama__box.png') }}"
                                  alt="{{ $upcoming->title ?? 'Upcoming Film' }}"
@@ -41,7 +159,7 @@
                         <h1 class="fw-bold mb-2">{{ $upcoming->title }}</h1>
                         <div class="upcoming-meta" style="transition: margin-top 0.6s ease;">
                             <p class="text-white-50 mb-3">
-                                {{ $upcoming->category ? (is_array($upcoming->category) ? implode(', ', $upcoming->category) : $upcoming->category) : 'No category available' }}
+                                {{ $upcoming->category ? (is_array($upcoming->category) ? implode(', ', array_map('htmlspecialchars', $upcoming->category)) : htmlspecialchars($upcoming->category)) : 'No category available' }}
                             </p>
                             <div class="d-flex gap-3">
                                 <a href="{{ route('dramabox.detail', ['id' => $upcoming->id]) }}"
@@ -49,7 +167,11 @@
                                     <i class="bi bi-play-fill"></i> Play
                                 </a>
                                 <button type="button"
-                                        class="btn btn-secondary fw-semibold px-4 py-2 d-flex align-items-center gap-2 fs-5"
+                                        class="btn btn-secondary fw-semibold pxIron: 0 4px 12px rgba(0, 0, 0, 0.12);
+                                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+                                        border: none;
+                                        border-radius: 12px;
+                                        overflow: hidden;"
                                         data-bs-toggle="modal"
                                         data-bs-target="#globalDetailModal"
                                         data-id="{{ $upcoming->id }}"
@@ -57,14 +179,13 @@
                                         data-description="{{ $upcoming->description }}"
                                         data-poster-url="{{ $upcoming->poster_url ?? asset('Drama__box.png') }}"
                                         data-trailer-url="{{ $upcoming->trailer_url ?? '' }}"
-                                        data-category="{{ is_array($upcoming->category) ? implode(', ', $upcoming->category) : $upcoming->category }}"
+                                        data-category="{{ is_array($upcoming->category) ? implode(', ', array_map('htmlspecialchars', $upcoming->category)) : htmlspecialchars($upcoming->category) }}"
                                         data-year="{{ $upcoming->year ?? 'N/A' }}"
                                         data-duration="{{ $upcoming->duration ?? 'N/A' }}"
                                         data-rating="{{ $upcoming->rating ?? 'N/A' }}"
                                         data-synopsis="{{ $upcoming->synopsis ?? 'No synopsis available' }}"
                                         data-cast="{{ $upcoming->cast ?? 'N/A' }}"
-                                        data-genre="{{ $upcoming->genre ?? 'N/A' }}"
-                                        >
+                                        data-genre="{{ $upcoming->genre ?? 'N/A' }}">
                                     <i class="bi bi-info-circle"></i> More Info
                                 </button>
                             </div>
@@ -95,9 +216,9 @@
                     <div class="card bg-dark text-white h-100 d-flex flex-column">
                         <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
                             <img src="{{ $video->poster_image ? asset('storage/' . $video->poster_image) : asset('Drama__box.png') }}"
-                                   class="card-img-top"
-                                   alt="{{ htmlspecialchars($video->name) }} poster"
-                                   style="height: 300px; object-fit: cover;">
+                                 class="card-img-top"
+                                 alt="{{ htmlspecialchars($video->name) }} poster"
+                                 style="height: 300px; object-fit: cover;">
                         </a>
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title text-truncate">{{ htmlspecialchars($video->name) }}</h5>
@@ -123,8 +244,7 @@
     @endif
 </section>
 
-<div class="modal fade" id="globalDetailModal" tabindex="-1"
-     aria-labelledby="globalDetailModalLabel" aria-hidden="true">
+<div class="modal fade" id="globalDetailModal" tabindex="-1" aria-labelledby="globalDetailModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content bg-dark text-white">
             <div class="modal-header border-0">
@@ -162,54 +282,20 @@
         </div>
     </div>
 </div>
+@endsection
 
-<style>
-    .video-overlay::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 40%;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-        z-index: 2;
-    }
-
-    .swiper {
-        width: 100%;
-        overflow-x: auto; /* Ini untuk Swiper yang bukan main hero */
-    }
-
-    .swiper-slide {
-        flex-shrink: 0;
-        /* Hapus width: 250px; height: auto; jika ini untuk main hero slider */
-    }
-
-    .volume-toggle-btn {
-    transition: all 0.3s ease-in-out; /* Animasi halus saat hover/klik */
-    border: 2px solid rgba(255, 255, 255, 0.5); /* Border agar lebih menonjol dari background gelap */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sedikit bayangan untuk kedalaman */
-}
-
-.volume-toggle-btn:hover {
-    transform: scale(1.1); /* Sedikit membesar saat di-hover */
-    border-color: rgba(255, 255, 255, 0.8);
-}
-    .netflixSwiper .swiper-slide {
-        width: 100%; /* Pastikan ini untuk Swiper utama agar mengisi penuh */
-    }
-
-    .card {
-        height: 100%;
-        margin: 0;
-    }
-</style>
-
+@push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // --- Tambahkan variabel global untuk melacak status mute ---
-        let isMutedGlobally = true; // Setel ke true secara default untuk mematuhi kebijakan autoplay
+        // Inisialisasi tooltip untuk tombol volume
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // Variabel global untuk status mute
+        let isMutedGlobally = true;
 
         const netflixSwiper = new Swiper('.netflixSwiper', {
             slidesPerView: 1,
@@ -229,12 +315,12 @@
                 init: function() {
                     const activeVideo = this.slides[this.activeIndex].querySelector('video');
                     if (activeVideo) {
-                        // Saat inisialisasi, setel video pertama sesuai status global
                         activeVideo.muted = isMutedGlobally;
                         activeVideo.play().catch(error => {
                             console.log("Autoplay diblokir (init):", error);
-                            activeVideo.muted = true; // Jika diblokir, paksa muted
-                            isMutedGlobally = true; // Perbarui status global
+                            activeVideo.muted = true;
+                            isMutedGlobally = true;
+                            updateVolumeButtonIcon(activeVideo, this.slides[this.activeIndex].querySelector('.volume-toggle-btn'));
                         });
                         updateVolumeButtonIcon(activeVideo, this.slides[this.activeIndex].querySelector('.volume-toggle-btn'));
                     }
@@ -248,12 +334,12 @@
                     if (activeVideo) {
                         const anyModalOpen = document.querySelector('.modal.show');
                         if (!anyModalOpen) {
-                            // Saat slide berubah, setel video baru sesuai status global
                             activeVideo.muted = isMutedGlobally;
                             activeVideo.play().catch(error => {
                                 console.log("Autoplay diblokir (slideChangeTransitionEnd):", error);
-                                activeVideo.muted = true; // Jika diblokir, paksa muted
-                                isMutedGlobally = true; // Perbarui status global
+                                activeVideo.muted = true;
+                                isMutedGlobally = true;
+                                updateVolumeButtonIcon(activeVideo, this.slides[this.activeIndex].querySelector('.volume-toggle-btn'));
                             });
                             updateVolumeButtonIcon(activeVideo, this.slides[this.activeIndex].querySelector('.volume-toggle-btn'));
                         }
@@ -266,12 +352,12 @@
                 autoplayStart: function() {
                     const activeVideo = this.slides[this.activeIndex].querySelector('video');
                     if (activeVideo) {
-                        // Saat autoplay dimulai, setel video baru sesuai status global
                         activeVideo.muted = isMutedGlobally;
                         activeVideo.play().catch(error => {
                             console.log("Autoplay diblokir (autoplayStart):", error);
-                            activeVideo.muted = true; // Jika diblokir, paksa muted
-                            isMutedGlobally = true; // Perbarui status global
+                            activeVideo.muted = true;
+                            isMutedGlobally = true;
+                            updateVolumeButtonIcon(activeVideo, this.slides[this.activeIndex].querySelector('.volume-toggle-btn'));
                         });
                         updateVolumeButtonIcon(activeVideo, this.slides[this.activeIndex].querySelector('.volume-toggle-btn'));
                     }
@@ -279,35 +365,30 @@
             }
         });
 
-        // Fungsi pembantu untuk memperbarui ikon tombol volume
         function updateVolumeButtonIcon(videoElement, buttonElement) {
             if (buttonElement) {
                 buttonElement.innerHTML = videoElement.muted ? '<i class="bi bi-volume-mute-fill fs-5"></i>' : '<i class="bi bi-volume-up-fill fs-5"></i>';
             }
         }
 
-        // Event listener untuk tombol volume di Swiper
         document.querySelectorAll('.volume-toggle-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const video = this.closest('.swiper-slide').querySelector('video');
                 if (video) {
-                    video.muted = !video.muted; // Toggle mute status
-                    isMutedGlobally = video.muted; // Perbarui status global
-                    updateVolumeButtonIcon(video, this); // Perbarui ikon tombol ini
-                    
-                    // Pastikan semua video di Swiper (termasuk yang tidak aktif) mengikuti status global
+                    video.muted = !video.muted;
+                    isMutedGlobally = video.muted;
+                    updateVolumeButtonIcon(video, this);
+
                     netflixSwiper.slides.forEach((slide, index) => {
                         const slideVideo = slide.querySelector('video');
-                        if (slideVideo && slideVideo !== video) { // Jangan sentuh video yang sedang di-toggle
+                        if (slideVideo && slideVideo !== video) {
                             slideVideo.muted = isMutedGlobally;
                         }
                     });
 
-                    if (!video.muted) { // Jika di-unmute, coba putar
+                    if (!video.muted) {
                         video.play().catch(e => {
                             console.error("Error playing on unmute click:", e);
-                            // Jika play gagal setelah di-unmute, kemungkinan browser memblokir.
-                            // Anda bisa memutuskan untuk membiarkannya muted atau memberi tahu pengguna.
                             video.muted = true;
                             isMutedGlobally = true;
                             updateVolumeButtonIcon(video, this);
@@ -317,7 +398,6 @@
             });
         });
 
-        // Logic untuk Global Detail Modal (tetap sama, namun perhatikan interaksi dengan Swiper)
         const globalDetailModalElement = document.getElementById('globalDetailModal');
         if (globalDetailModalElement) {
             globalDetailModalElement.addEventListener('show.bs.modal', function (event) {
@@ -326,14 +406,12 @@
                 const modalTrailerVideo = globalDetailModalElement.querySelector('#modalTrailerVideo');
                 const modalTrailerSource = modalTrailerVideo ? modalTrailerVideo.querySelector('source') : null;
 
-                // Pause the active video in netflixSwiper when modal opens
                 if (netflixSwiper && netflixSwiper.autoplay.running) {
                     netflixSwiper.autoplay.stop();
                     const activeVideoInSwiper = netflixSwiper.slides[netflixSwiper.activeIndex].querySelector('video');
                     if (activeVideoInSwiper) activeVideoInSwiper.pause();
                 }
 
-                // Populate modal details (kode ini sudah bagus)
                 const modalTitle = globalDetailModalElement.querySelector('.modal-title');
                 const modalPoster = globalDetailModalElement.querySelector('#modalPoster');
                 const modalDescription = globalDetailModalElement.querySelector('#modalDescription');
@@ -360,7 +438,7 @@
                 if (trailerUrl && modalTrailerSource) {
                     modalTrailerSource.src = trailerUrl;
                     if (modalTrailerVideo) {
-                        modalTrailerVideo.muted = false; // Video di modal bisa di-unmute secara default
+                        modalTrailerVideo.muted = false;
                         modalTrailerVideo.load();
                         modalTrailerVideo.play().catch(e => console.error("Error playing modal trailer:", e));
                     }
@@ -376,7 +454,7 @@
                         }
                     }
                     if (modalTrailerContainer) {
-                        modalTrailerContainer.style.display = 'none';
+                        modalTrailerContainer.display = 'none';
                     }
                 }
             });
@@ -388,13 +466,11 @@
                     modalVideo.currentTime = 0;
                 }
 
-                // Resume autoplay of netflixSwiper when modal closes
                 if (netflixSwiper && !netflixSwiper.autoplay.running) {
                     netflixSwiper.autoplay.start();
                     const activeVideoInSwiper = netflixSwiper.slides[netflixSwiper.activeIndex].querySelector('video');
                     if (activeVideoInSwiper) {
-                        // Setel video Swiper kembali sesuai status mute global saat modal ditutup
-                        activeVideoInSwiper.muted = isMutedGlobally; 
+                        activeVideoInSwiper.muted = isMutedGlobally;
                         activeVideoInSwiper.play().catch(e => console.error("Error playing swiper video on modal close:", e));
                         updateVolumeButtonIcon(activeVideoInSwiper, netflixSwiper.slides[netflixSwiper.activeIndex].querySelector('.volume-toggle-btn'));
                     }
@@ -403,4 +479,4 @@
         }
     });
 </script>
-@endsection
+@endpush
