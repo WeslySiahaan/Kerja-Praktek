@@ -150,7 +150,6 @@
         <div class="swiper-wrapper">
             @foreach ($upcomings as $upcoming)
                 <div class="swiper-slide position-relative" style="height: 90vh;">
-<<<<<<< HEAD
                    <div class="video-container position-relative w-100 h-100" style="overflow: hidden;">
                     <div class="video-overlay position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;"></div>
 
@@ -173,7 +172,6 @@
                         class="w-100 h-100" style="object-fit: cover; object-position: center;">
                 @endif
                 </div>
-=======
                     <div class="video-container position-relative w-100 h-100" style="overflow: hidden;">
                         <div class="video-overlay position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;"></div>
 
@@ -194,7 +192,6 @@
                                  class="w-100 h-100" style="object-fit: cover; object-position: center;">
                         @endif
                     </div>
->>>>>>> 451c1fdc8ab371fad46eafb72abebeff01c9386c
 
                     <div class="content-overlay position-absolute text-white" style="top: 13%; left: 3%; z-index: 3; max-width: 30%;">
                         @if ($upcoming->poster_url)
@@ -245,7 +242,6 @@
     </div>
 </section>
 
-<<<<<<< HEAD
 <section class="container-fluid" style="margin-top: 5px; position: relative; z-index: 10; margin-bottom: 20px;">
   @if (session('error'))
     <div class="alert alert-danger px-3">{{ session('error') }}</div>
@@ -253,12 +249,9 @@
   @if (session('success'))
     <div class="alert alert-success px-3">{{ session('success') }}</div>
   @endif
-=======
 <!-- Popular Section -->
 <section class="container-fluid popular-section" style="margin-top: 5px; position: relative; z-index: 10; margin-bottom: 20px;">
     <h2 class="display-6 fw-bold mb-4 px-3 text-white">Popular</h2>
->>>>>>> 451c1fdc8ab371fad46eafb72abebeff01c9386c
-
   <!-- Videos Section -->
   <h3 class="text-white px-3 mt-4">Videos</h3>
   @if ($videos->isEmpty())
@@ -319,7 +312,6 @@
     </div>
   @endif
 
-<<<<<<< HEAD
   <!-- Recommendations Section -->
   <h3 class="text-white px-3 mt-4">Recommendations</h3>
   @if ($recommendations->isEmpty())
