@@ -1,5 +1,73 @@
 @extends('layouts.app2')
 
+@section('styles')
+<style>
+    /* Efek menonjol untuk kartu */
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        border: 1px solid transparent;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #2c2c2c;
+    }
+
+    .card:hover {
+        transform: translateY(-10px) scale(1.03);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2), 0 0 10px rgba(0, 123, 255, 0.5);
+        border: 1px solid #007bff;
+    }
+
+    /* Efek zoom pada gambar poster saat hover */
+    .card-img-top {
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover .card-img-top {
+        transform: scale(1.05);
+    }
+
+    /* Gaya tombol Like dan Save */
+    .like-btn, .save-btn {
+        transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .like-btn:hover, .save-btn:hover {
+        transform: scale(1.2);
+        color: #007bff;
+    }
+
+    /* Responsivitas */
+    @media (max-width: 768px) {
+        .card {
+            margin-bottom: 15px;
+        }
+        .card-img-top {
+            height: 200px !important;
+        }
+        .card-title {
+            font-size: 1rem;
+        }
+        .card-text {
+            font-size: 0.85rem;
+        }
+        .btn-sm {
+            font-size: 0.8rem;
+            padding: 6px 12px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .card-title {
+            font-size: 0.9rem;
+        }
+        .card-text {
+            font-size: 0.8rem;
+        }
+    }
+</style>
+@endsection
+
 @section('content')
     <section class="container-fluid" style="margin-top: 20px; position: relative; z-index: 10; margin-bottom: 20px;">
         <div class="d-flex justify-content-between align-items-center mb-4 px-3">

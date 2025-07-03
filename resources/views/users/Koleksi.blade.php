@@ -1,5 +1,76 @@
 @extends('layouts.app2')
 
+@section('styles')
+<style>
+    /* Efek menonjol untuk kartu */
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        border: 1px solid transparent;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #2c2c2c;
+    }
+
+    .card:hover {
+        transform: translateY(-10px) scale(1.03);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2), 0 0 10px rgba(0, 123, 255, 0.5);
+        border: 1px solid #007bff;
+    }
+
+    /* Efek zoom pada gambar poster saat hover */
+    .card-img-top {
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover .card-img-top {
+        transform: scale(1.05);
+    }
+
+    /* Gaya tombol */
+    .btn-primary, .btn-secondary, .btn-danger {
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-primary:hover, .btn-secondary:hover, .btn-danger:hover {
+        transform: scale(1.1);
+    }
+
+    /* Responsivitas */
+    @media (max-width: 768px) {
+        .card {
+            margin-bottom: 15px;
+        }
+        .card-img-top {
+            height: 200px !important;
+        }
+        .card-title {
+            font-size: 1rem;
+        }
+        .card-text {
+            font-size: 0.85rem;
+        }
+        .btn-sm {
+            font-size: 0.8rem;
+            padding: 6px 12px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .card-title {
+            font-size: 0.9rem;
+        }
+        .card-text {
+            font-size: 0.8rem;
+        }
+        .btn-sm {
+            font-size: 0.75rem;
+            padding: 5px 10px;
+        }
+    }
+</style>
+@endsection
+
 @section('content')
 <section class="container-fluid" style="margin-top: 20px; position: relative; z-index: 10; margin-bottom: 20px;">
   <div class="d-flex justify-content-between align-items-center mb-4 px-3">
@@ -67,9 +138,9 @@
 
   {{-- =================== Recommendations =================== --}}
   <h4 class="text-white px-3 mt-5">Koleksi Rekomendasi</h4>
-@if ($recommendations->isEmpty())
+  @if ($recommendations->isEmpty())
   <p class="text-center text-muted py-4 px-3">Belum ada rekomendasi dalam koleksi Anda.</p>
-@else
+  @else
   <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3 px-3">
     @foreach ($recommendations as $recommendation)
     <div class="col">
@@ -94,8 +165,6 @@
     {{ $recommendations->links() }}
   </div>
   @endif
-@endif
-
-
+  @endif
 </section>
 @endsection
