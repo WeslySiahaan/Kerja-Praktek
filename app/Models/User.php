@@ -62,5 +62,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(WatchHistory::class);
     }
+    public function collectedRecommendations()
+{
+    return $this->belongsToMany(Recommendation::class, 'recommendation_user')
+                ->withTimestamps();
+}
+
 }
 

@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\LengthAwarePaginator;
 use App\Models\WatchHistory;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -18,21 +19,42 @@ class HomeController extends Controller
         return view('admin.dashboard');
     }
 
-    public function index1()
+    private function getPaginatedVideos($perPage = 12)
     {
-        $upcomings = Upcoming::all(); // Fetch all upcoming releases for "Up Coming"
-        $videos = Video::latest()->paginate(12); 
-        $populars = Popular::all();
-        return view('users.dashboard', compact('upcomings', 'videos', 'populars'));
+      $videos = Video::latest()->paginate($perPage);
+      return $videos;
     }
+    
+    private function getPaginatedRecommendations($perPage = 12)
+    {
+      $recommendations = Recommendation::latest()->paginate($perPage);
+      return $recommendations;
+    }
+
 
     public function dashboard()
     {
-        $upcomings = Upcoming::all(); // Fetch all upcoming releases for "Up Coming"
-        $videos = Video::latest()->paginate(12); 
-        $populars = Popular::all();
-        return view('users.dashboard', compact('upcomings', 'videos', 'populars'));
+      $upcomings = Upcoming::all();
+      $populars = Popular::all();
+      $videos = $this->getPaginatedVideos(12);
+      $recommendations = $this->getPaginatedRecommendations(12);
+    
+      return view('users.dashboard', compact('upcomings', 'populars', 'videos', 'recommendations'));
     }
+    
+
+
+    public function index1()
+    {
+      $upcomings = Upcoming::all();
+      $populars = Popular::all();
+      $videos = $this->getPaginatedVideos(12);
+      $recommendations = $this->getPaginatedRecommendations(12);
+    
+      return view('users.dashboard', compact('upcomings', 'populars', 'videos', 'recommendations'));
+    }
+    
+
 
     public function koleksi(){
         return view('users.Koleksi');

@@ -20,4 +20,8 @@ class Comment extends Model
     {
         return $this->belongsTo(Video::class);
     }
+    public function recommendation()
+    {
+        return $this->belongsTo(Recommendation::class);
+    }
 }

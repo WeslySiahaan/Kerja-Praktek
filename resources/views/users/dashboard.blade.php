@@ -11,27 +11,27 @@
             @foreach ($upcomings as $upcoming)
                 <div class="swiper-slide position-relative" style="height: 90vh;">
                    <div class="video-container position-relative w-100 h-100" style="overflow: hidden;">
-    <div class="video-overlay position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;"></div>
+                    <div class="video-overlay position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;"></div>
 
-    @if ($upcoming->trailer_url)
-        {{-- Hapus 'muted' dari baris ini --}}
-        <video class="w-100 h-100" style="object-fit: cover; object-position: center;"
-               autoplay loop playsinline>
-            <source src="{{ $upcoming->trailer_url }}" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        
-        {{-- Tambahkan tombol kontrol volume --}}
-       <button class="btn btn-dark btn-sm position-absolute rounded-circle volume-toggle-btn"
-                style="bottom: 20px; right: 20px; z-index: 4; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
-            <i class="bi bi-volume-mute-fill fs-5"></i>
-        </button>
-    @else
-        <img src="{{ $upcoming->poster_url ?? asset('Drama__box.png') }}"
-             alt="{{ $upcoming->title ?? 'Upcoming Film' }}"
-             class="w-100 h-100" style="object-fit: cover; object-position: center;">
-    @endif
-</div>
+                @if ($upcoming->trailer_url)
+                    {{-- Hapus 'muted' dari baris ini --}}
+                    <video class="w-100 h-100" style="object-fit: cover; object-position: center;"
+                        autoplay loop playsinline>
+                        <source src="{{ $upcoming->trailer_url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    
+                    {{-- Tambahkan tombol kontrol volume --}}
+                <button class="btn btn-dark btn-sm position-absolute rounded-circle volume-toggle-btn"
+                            style="bottom: 20px; right: 20px; z-index: 4; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-volume-mute-fill fs-5"></i>
+                    </button>
+                @else
+                    <img src="{{ $upcoming->poster_url ?? asset('Drama__box.png') }}"
+                        alt="{{ $upcoming->title ?? 'Upcoming Film' }}"
+                        class="w-100 h-100" style="object-fit: cover; object-position: center;">
+                @endif
+                </div>
 
                     <div class="content-overlay position-absolute text-white" style="top: 13%; left: 3%; z-index: 3; max-width: 30%;">
                         @if ($upcoming->poster_url)
@@ -79,79 +79,138 @@
     </div>
 </section>
 
-<section class="container-fluid popular-section" style="margin-top: 5px; position: relative; z-index: 10; margin-bottom: 20px;">
-    <h2 class="display-6 fw-bold mb-4 px-3 text-white">Popular</h2>
+<section class="container-fluid" style="margin-top: 5px; position: relative; z-index: 10; margin-bottom: 20px;">
+  @if (session('error'))
+    <div class="alert alert-danger px-3">{{ session('error') }}</div>
+  @endif
+  @if (session('success'))
+    <div class="alert alert-success px-3">{{ session('success') }}</div>
+  @endif
 
-    @if (session('error'))
-        <div class="alert alert-danger px-3">{{ session('error') }}</div>
-    @endif
-    @if (session('success'))
-        <div class="alert alert-success px-3">{{ session('success') }}</div>
-    @endif
+  <!-- Videos Section -->
+  <h3 class="text-white px-3 mt-4">Videos</h3>
+  @if ($videos->isEmpty())
+    <p class="text-center text-muted py-4 px-3">No videos available at the moment.</p>
+  @else
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3 px-3">
+      @foreach ($videos as $video)
+        <div class="col">
+          <div class="card bg-dark text-white h-100 d-flex flex-column">
+            <a href="{{ route('video.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
+              <img src="{{ $video->poster_image ? asset('storage/' . $video->poster_image) : asset('Drama__box.png') }}"
+                   class="card-img-top"
+                   alt="{{ htmlspecialchars($video->name) }} poster"
+                   style="height: 300px; object-fit: cover;">
+            </a>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title text-truncate">{{ htmlspecialchars($video->name) }}</h5>
+              <p class="card-text">Category: 
+                @if(is_array($video->category))
+                  {{ implode(', ', array_map('htmlspecialchars', $video->category)) }}
+                @else
+                  {{ htmlspecialchars($video->category ?? 'No Category') }}
+                @endif
+              </p>
+              <p class="card-title text-truncate text-white">Total Episodes: {{ count($video->episodes ?? []) }}</p>
+              <div class="mt-auto d-flex gap-2">
+                @if (Auth::check())
+                  <form action="{{ route('videos.like', $video) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-link p-0 like-btn" title="{{ $video->likedByUsers->contains(Auth::id()) ? 'Batal Suka' : 'Suka' }}">
+                      <i class="bi {{ $video->likedByUsers->contains(Auth::id()) ? 'bi-heart-fill text-danger' : 'bi-heart text-white' }} fs-5"></i>
+                    </button>
+                  </form>
+                  <form action="{{ route('videos.save', $video) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-link p-0" title="{{ $video->collectedByUsers->contains(Auth::id()) ? 'Sudah Disimpan' : 'Simpan' }}"
+                            {{ $video->collectedByUsers->contains(Auth::id()) ? 'disabled' : '' }}>
+                      <i class="bi {{ $video->collectedByUsers->contains(Auth::id()) ? 'bi-bookmark-fill text-success' : 'bi-bookmark text-white' }} fs-5"></i>
+                    </button>
+                  </form>
+                @else
+                  <button class="btn btn-link p-0" title="Login untuk Suka" disabled>
+                    <i class="bi bi-heart text-white fs-5"></i>
+                  </button>
+                  <button class="btn btn-link p-0" title="Login untuk Simpan" disabled>
+                    <i class="bi bi-bookmark text-white fs-5"></i>
+                  </button>
+                @endif
+                <a href="{{ route('video.detail', ['id' => $video->id]) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      @endforeach
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+      {{ $videos->links('pagination::bootstrap-4') }}
+    </div>
+  @endif
 
-    @if ($videos->isEmpty())
-        <p class="text-center text-muted py-4 px-3">No popular videos available at the moment.</p>
-    @else
-        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 row-cols-xl-8 g-3 px-3">
-            @foreach ($videos as $video)
-                <div class="col">
-                    <div class="card bg-dark text-white h-100 d-flex flex-column">
-                        <a href="{{ route('video.detail', ['id' => $video->id]) }}" class="text-decoration-none text-white">
-                            <img src="{{ $video->poster_image ? asset('storage/' . $video->poster_image) : asset('Drama__box.png') }}"
-                                 class="card-img-top"
-                                 alt="{{ htmlspecialchars($video->name) }} poster"
-                                 style="height: 300px; object-fit: cover;">
-                        </a>
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title text-truncate">{{ htmlspecialchars($video->name) }}</h5>
-                            <p class="card-text">Category: 
-                                @if(is_array($video->category))
-                                    {{ implode(', ', array_map('htmlspecialchars', $video->category)) }}
-                                @else
-                                    {{ htmlspecialchars($video->category ?? 'No Category') }}
-                                @endif
-                            </p>
-                            <p class="card-title text-truncate text-white">Total Episodes: {{ count($video->episodes ?? []) }}</p>
-                            <div class="mt-auto d-flex gap-2">
-                                @if (Auth::check())
-                                    <!-- Tombol Like -->
-                                    <form action="{{ route('videos.like', $video) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-link p-0 like-btn" title="{{ $video->likedByUsers->contains(Auth::id()) ? 'Batal Suka' : 'Suka' }}">
-                                            <i class="bi {{ $video->likedByUsers->contains(Auth::id()) ? 'bi-heart-fill text-danger' : 'bi-heart text-white' }} fs-5"></i>
-                                        </button>
-                                    </form>
-                                    <!-- Tombol Simpan -->
-                                    <form action="{{ route('videos.save', $video) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-link p-0" title="{{ $video->collectedByUsers->contains(Auth::id()) ? 'Sudah Disimpan' : 'Simpan' }}"
-                                                {{ $video->collectedByUsers->contains(Auth::id()) ? 'disabled' : '' }}>
-                                            <i class="bi {{ $video->collectedByUsers->contains(Auth::id()) ? 'bi-bookmark-fill text-success' : 'bi-bookmark text-white' }} fs-5"></i>
-                                        </button>
-                                    </form>
-                                @else
-                                    <!-- Tombol Like dan Save non-aktif untuk pengguna tidak login -->
-                                    <button class="btn btn-link p-0" title="Login untuk Suka" disabled>
-                                        <i class="bi bi-heart text-white fs-5"></i>
-                                    </button>
-                                    <button class="btn btn-link p-0" title="Login untuk Simpan" disabled>
-                                        <i class="bi bi-bookmark text-white fs-5"></i>
-                                    </button>
-                                @endif
-                                <!-- Tombol Menonton (tanpa login) -->
-                                <a href="{{ route('video.detail', ['id' => $video->id]) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
+  <!-- Recommendations Section -->
+  <h3 class="text-white px-3 mt-4">Recommendations</h3>
+  @if ($recommendations->isEmpty())
+    <p class="text-center text-muted py-4 px-3">No recommendations available at the moment.</p>
+  @else
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3 px-3">
+      @foreach ($recommendations as $recommendation)
+        <div class="col">
+          <div class="card bg-dark text-white h-100 d-flex flex-column">
+            <a href="{{ route('recommendations.detail', ['id' => $recommendation->id]) }}" class="text-decoration-none text-white">
+              <img src="{{ $recommendation->poster_image ? asset('storage/' . $recommendation->poster_image) : asset('Drama__box.png') }}"
+                   class="card-img-top"
+                   alt="{{ htmlspecialchars($recommendation->name) }} poster"
+                   style="height: 300px; object-fit: cover;">
+            </a>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title text-truncate">{{ htmlspecialchars($recommendation->name) }}</h5>
+              <p class="card-text">Category: 
+                @if(is_array($recommendation->category))
+                  {{ implode(', ', array_map('htmlspecialchars', $recommendation->category)) }}
+                @else
+                  {{ htmlspecialchars($recommendation->category ?? 'No Category') }}
+                @endif
+              </p>
+              <p class="card-title text-truncate text-white">Total Episodes: {{ count($recommendation->episodes ?? []) }}</p>
+              <div class="mt-auto d-flex gap-2">
+                @if (Auth::check())
+                  <form action="{{ route('recommendations.like', $recommendation) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-link p-0 like-btn" title="{{ $recommendation->likedByUsers->contains(Auth::id()) ? 'Batal Suka' : 'Suka' }}">
+                      <i class="bi {{ $recommendation->likedByUsers->contains(Auth::id()) ? 'bi-heart-fill text-danger' : 'bi-heart text-white' }} fs-5"></i>
+                    </button>
+                  </form>
+                  <form action="{{ route('recommendations.save', $recommendation) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-link p-0" title="{{ $recommendation->collectedByUsers->contains(Auth::id()) ? 'Sudah Disimpan' : 'Simpan' }}"
+                            {{ $recommendation->collectedByUsers->contains(Auth::id()) ? 'disabled' : '' }}>
+                      <i class="bi {{ $recommendation->collectedByUsers->contains(Auth::id()) ? 'bi-bookmark-fill text-success' : 'bi-bookmark text-white' }} fs-5"></i>
+                    </button>
+                  </form>
+                @else
+                  <button class="btn btn-link p-0" title="Login untuk Suka" disabled>
+                    <i class="bi bi-heart text-white fs-5"></i>
+                  </button>
+                  <button class="btn btn-link p-0" title="Login untuk Simpan" disabled>
+                    <i class="bi bi-bookmark text-white fs-5"></i>
+                  </button>
+                @endif
+                <a href="{{ route('recommendations.detail', ['id' => $recommendation->id]) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+              </div>
+            </div>
+          </div>
         </div>
-        <!-- Pagination -->
-        <div style="margin-top: 20px;" class="d-flex justify-content-center">
-            {{ $videos->appends(request()->query())->links('pagination::bootstrap-4') }}
-        </div>
-    @endif
+      @endforeach
+    </div>
+    <div class="d-flex justify-content-center mt-3">
+      {{ $recommendations->links('pagination::bootstrap-4') }}
+    </div>
+  @endif
 </section>
+
+
+
+
 
 <style>
     .popular-section {

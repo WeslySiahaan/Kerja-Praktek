@@ -25,8 +25,10 @@ use App\Http\Controllers\FaqController;
 Route::get('/', [HomeController::class, 'index4'])->name('dramabox.beranda');
 Route::get('/beranda', [HomeController::class, 'index4']);
 Route::get('/video/detail/{id}', [VideoController::class, 'detail1'])->name('dramabox.detail');
+Route::get('/recommendations/{id}/detail', [RecommendationLandingController::class, 'detail'])->name('recommendations.detail');
+
 Route::get('/browse', [HomeController::class, 'index5'])->name('dramabox.browse');
-// Route untuk dashboard pengguna
+// Route untuk dashboard penggun
 Route::get('/dashboard', [HomeController::class, 'index1'])->middleware(['auth', 'verified'])->name('dashboard');
 
 // Grup route yang memerlukan autentikasi
@@ -87,8 +89,12 @@ Route::middleware('auth')->group(function () {
   Route::get('/users/dashboard', [HomeController::class, 'dashboard'])->middleware('auth')->name('users.dashboard');
   Route::get('/users/browse', [HomeController::class, 'browse'])->middleware('auth')->name('users.browse');
   Route::get('/users/koleksi', [KoleksiController::class, 'index'])->middleware('auth')->name('users.koleksi');
+  
   Route::delete('/collections/destroy-multiple', [KoleksiController::class, 'destroyMultiple'])->name('collections.destroy_multiple');
   Route::get('/users/recommendations', [RecommendationController::class, 'index'])->name('users.rekomendasi')->middleware('auth');
+  Route::post('/recommendations/{recommendation}/like', [RecommendationLandingController::class, 'like'])->name('recommendations.like');
+Route::post('/recommendations/{recommendation}/save', [RecommendationLandingController::class, 'save'])->name('recommendations.save');
+
   Route::get('/users/search', [HomeController::class, 'search'])->middleware('auth')->name('users.search');
   Route::get('/users/video/detail/{id}', [HomeController::class, 'detailuser'])->name('video.detail');
 

@@ -84,7 +84,7 @@
 <body>
    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #141414;">
         <div class="container-fluid">
-            <img src="{{ asset('CapekLaLogo.png') }}" alt="Logo" style="height: 75px;">
+            <img src="{{ asset('BaruLogo.png') }}" alt="Logo" style="height: 75px;">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
