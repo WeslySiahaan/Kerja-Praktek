@@ -292,7 +292,7 @@
         <div class="history-list">
             @forelse ($watchHistoryItems as $item)
                 <div class="history-item-card">
-                    <a href="{{ route('dramabox.detail', ['id' => $item->video_id]) }}">
+                    <a href="{{ route('video.detail', ['id' => $item->video_id]) }}">
                         <img src="{{ $item->image ?: 'https://placehold.co/150x225/cccccc/ffffff?text=No+Image' }}" alt="{{ $item->title }}">
                     </a>
                     <div class="history-item-details">
@@ -310,11 +310,11 @@
                         </div>
                         <div class="history-item-progress-actions">
                             @if ($item->progress >= 95)
-                                <a href="{{ route('dramabox.detail', ['id' => $item->video_id]) }}" class="watch-action-button watched">
+                                <a href="{{ route('video.detail', ['id' => $item->video_id]) }}" class="watch-action-button watched">
                                     <i class="bi bi-check-circle-fill"></i> Sudah Ditonton
                                 </a>
                             @else
-                                <a href="{{ route('dramabox.detail', ['id' => $item->video_id]) }}" class="watch-action-button continue">
+                                <a href="{{ route('video.detail', ['id' => $item->video_id]) }}" class="watch-action-button continue">
                                     <i class="bi bi-play-circle-fill"></i> Lanjutkan Menonton
                                 </a>
                             @endif

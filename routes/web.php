@@ -90,7 +90,7 @@ Route::middleware('auth')->group(function () {
   Route::delete('/collections/destroy-multiple', [KoleksiController::class, 'destroyMultiple'])->name('collections.destroy_multiple');
   Route::get('/users/recommendations', [RecommendationController::class, 'index'])->name('users.rekomendasi')->middleware('auth');
   Route::get('/users/search', [HomeController::class, 'search'])->middleware('auth')->name('users.search');
-  Route::get('/users/video/detail/{id}', [HomeController::class, 'detail1'])->name('video.detail');
+  Route::get('/users/video/detail/{id}', [HomeController::class, 'detailuser'])->name('video.detail');
 
   Route::post('/videos/{video}/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
   Route::get('/videos/{video}', [VideoController::class, 'show'])->name('videos.show');

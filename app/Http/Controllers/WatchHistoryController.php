@@ -21,7 +21,7 @@ class WatchHistoryController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        $watchHistoryItems = $user->watchHistories()->orderBy('created_at', 'desc')->get();
+        $watchHistoryItems = $user->watchHistories()->orderBy('created_at', 'asc')->get();
 
         return view('profile.riwayat-tontonan', compact('watchHistoryItems'));
     }

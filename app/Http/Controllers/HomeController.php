@@ -1,6 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use App\Models\WatchHistory;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Models\Video;
@@ -80,7 +83,7 @@ class HomeController extends Controller
         return view('dramabox.browse', compact('upcomings', 'videos', 'populars'));
     }
 
-    public function detail($id): View
+    public function detailuser($id): View
     {
       $videos = Video::findOrFail($id);
       return view('dramabox.detail', compact('videos'));
@@ -88,8 +91,48 @@ class HomeController extends Controller
     
     public function detail1($id): View
     {
-      $video = Video::findOrFail($id);
-      return view('users.detail', compact('video'));
+        $video = Video::with(['likedByUsers', 'collectedByUsers', 'comments' => function ($query) {
+            $query->with('user')->latest();
+        }])->findOrFail($id);
+
+        $isLiked = false;
+        $isCollected = false;
+        $watchHistory = null;
+
+        if (Auth::check()) {
+            $user = Auth::user();
+            $isLiked = $video->likedByUsers()->where('user_id', $user->id)->exists();
+            $isCollected = $video->collectedByUsers()->where('user_id', $user->id)->exists();
+
+            $watchHistory = WatchHistory::firstOrNew([
+                'user_id' => $user->id,
+                'video_id' => $video->id,
+            ]);
+
+            if (!$watchHistory->exists) {
+                $watchHistory->title = $video->name;
+                $watchHistory->category = $video->category;
+                $watchHistory->description = $video->description;
+                $watchHistory->image = $video->poster_image ? Storage::url($video->poster_image) : 'https://placehold.co/80x120/cccccc/ffffff?text=No+Image';
+                $watchHistory->watched_seconds = 0;
+                $watchHistory->progress = 0;
+            }
+
+            $totalDuration = $video->duration ?? 0;
+            if ($totalDuration > 0) {
+                $watchHistory->progress = min(100, round(($watchHistory->watched_seconds / $totalDuration) * 100));
+            } else {
+                $watchHistory->progress = 0;
+            }
+
+            $watchedTimeFormatted = gmdate("H:i:s", $watchHistory->watched_seconds);
+            $totalDurationFormatted = gmdate("H:i:s", $totalDuration);
+            $watchHistory->watched_time = $watchedTimeFormatted . ' / ' . $totalDurationFormatted;
+
+            $watchHistory->save();
+        }
+
+        return view('users.detail', compact('video', 'isLiked', 'isCollected', 'watchHistory'));
     }
 
     public function search(Request $request)
