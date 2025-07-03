@@ -16,11 +16,12 @@
 
     <style>
         body {
-            background: linear-gradient(180deg, #000000 0%, #4a3c00 100%);
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+        background: linear-gradient(180deg, #000000 0%, #4a3c00 100%);
+        color: #fff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        padding-top: 80px; /* Menambahkan ini */
         }
         .navbar {
             background-color: #000;
@@ -89,7 +90,7 @@
 </head>
 <body>
     {{-- Navbar Utama Aplikasi --}}
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-top"> {{-- Tambahkan kelas navbar-top untuk styling lebih spesifik --}}
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #141414;">
         <div class="container-fluid">
             <img src="{{ asset('CapekLaLogo.png') }}" alt="Logo" style="height: 75px;">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
