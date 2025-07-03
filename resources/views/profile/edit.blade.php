@@ -256,39 +256,6 @@
     </div>
 </div>
 
-{{-- DIHAPUS: Modal Email --}}
-{{-- <div class="modal fade" id="editEmailModal" tabindex="-1" aria-labelledby="editEmailModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="border-radius: 0.75rem;">
-            <form action="{{ route('profile.update') }}" method="POST">
-                @csrf @method('patch')
-                <input type="hidden" name="name" value="{{ $user->name }}">
-
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editEmailModalLabel">Ubah Email Anda</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group-modal">
-                        <label class="form-label-modal">Email saat ini</label>
-                        <input type="email" class="form-control-modal" value="{{ $user->email }}" readonly>
-                    </div>
-                    <div class="form-group-modal">
-                        <label for="email" class="form-label-modal">Email Baru</label>
-                        <input type="email" id="email" name="email" class="form-control-modal @error('email', 'updateProfileInformation') is-invalid @enderror" required>
-                        @error('email', 'updateProfileInformation')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-submit">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div> --}}
-
-{{-- Modal Password tidak berubah, strukturnya sudah benar dan aman --}}
 <div class="modal fade" id="editPasswordModal" tabindex="-1" aria-labelledby="editPasswordModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="border-radius: 0.75rem;">
@@ -300,8 +267,17 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    {{-- DIHAPUS: Kolom "Password Saat Ini" dihapus dari sini --}}
+                    {{-- Ini adalah input untuk password lama (password saat ini) --}}
+                    <div class="form-group-modal">
+                        <label for="current_password" class="form-label-modal">Password Saat Ini</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="current_password" name="current_password" class="form-control-modal @error('current_password', 'updatePassword') is-invalid @enderror" required>
+                            <i class="bi bi-eye-slash toggle-password"></i>
+                        </div>
+                        @error('current_password', 'updatePassword')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                    </div>
 
+                    {{-- Ini adalah input untuk password baru --}}
                     <div class="form-group-modal">
                         <label for="password" class="form-label-modal">Password Baru</label>
                         <div class="password-wrapper">
@@ -310,6 +286,8 @@
                         </div>
                         @error('password', 'updatePassword')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                     </div>
+
+                    {{-- Ini adalah input untuk konfirmasi password baru --}}
                     <div class="form-group-modal">
                         <label for="password_confirmation" class="form-label-modal">Konfirmasi Password Baru</label>
                         <div class="password-wrapper">
@@ -371,23 +349,40 @@
         }
 
         // --- Skrip untuk validasi konfirmasi (hanya untuk password sekarang) ---
-        function addConfirmationValidation(formId, fieldName, fieldLabel) {
-            const form = document.getElementById(formId);
-            if (form) {
-                form.addEventListener('submit', function(event) {
-                    const newField = form.querySelector(`[name="${fieldName}"]`);
-                    const confirmationField = form.querySelector(`[name="${fieldName}_confirmation"]`);
-                    
-                    if (newField && confirmationField && newField.value !== confirmationField.value) {
-                        event.preventDefault(); // Hentikan pengiriman form
-                        alert(`Error: Konfirmasi ${fieldLabel} tidak cocok!`);
-                        confirmationField.focus();
-                    }
-                });
-            }
-        }
+        // (Anda bisa hapus ini jika validasi `confirmed` di Laravel sudah cukup)
+        // function addConfirmationValidation(formId, fieldName, fieldLabel) {
+        //     const form = document.getElementById(formId);
+        //     if (form) {
+        //         form.addEventListener('submit', function(event) {
+        //             const newField = form.querySelector(`[name="${fieldName}"]`);
+        //             const confirmationField = form.querySelector(`[name="${fieldName}_confirmation"]`);
 
-        addConfirmationValidation('form-edit-password', 'password', 'Password Baru');
+        //             if (newField && confirmationField && newField.value !== confirmationField.value) {
+        //                 event.preventDefault(); // Hentikan pengiriman form
+        //                 alert(`Error: Konfirmasi ${fieldLabel} tidak cocok!`);
+        //                 confirmationField.focus();
+        //             }
+        //         });
+        //     }
+        // }
+        // addConfirmationValidation('form-edit-password', 'password', 'Password Baru');
+
+
+        // --- SCRIPT BARU UNTUK MEMBUKA KEMBALI MODAL JIKA ADA ERROR VALIDASI ---
+        const editPasswordModal = new bootstrap.Modal(document.getElementById('editPasswordModal'));
+        
+        // Cek apakah ada error validasi khusus untuk form updatePassword
+        // Error Bag 'updatePassword' digunakan di ProfileController
+        @if ($errors->updatePassword->any())
+            editPasswordModal.show(); // Tampilkan modal password
+            
+            // Opsional: Gulirkan ke input pertama yang ada errornya di dalam modal
+            const firstInvalidInput = document.querySelector('#editPasswordModal .is-invalid');
+            if (firstInvalidInput) {
+                firstInvalidInput.focus();
+            }
+        @endif
+        // --- AKHIR SCRIPT BARU ---
     });
 </script>
 @endsection

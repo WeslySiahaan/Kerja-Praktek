@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use App\Models\WatchHistory;
 use Carbon\Carbon; 
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use App\Models\Faq;
 
 
@@ -87,19 +89,35 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    public function updatePassword(Request $request): RedirectResponse
-    {
-        $validated = $request->validateWithBag('updatePassword', [
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+   public function updatePassword(Request $request): RedirectResponse
+{
+    // Validasi dengan named error bag
+    $validated = $request->validateWithBag('updatePassword', [
+        'current_password' => ['required', 'string'],
+        'password' => ['required', 'string', 'min:8', 'confirmed'],
+    ], [
+        'current_password.required' => 'Password saat ini wajib diisi.',
+        'password.required' => 'Password baru wajib diisi.',
+        'password.min' => 'Password baru minimal harus 8 karakter.',
+        'password.confirmed' => 'Konfirmasi password baru tidak cocok.',
+    ]);
 
-        $request->user()->update([
-            'password' => \Illuminate\Support\Facades\Hash::make($validated['password']),
-        ]);
-
-        return back()->with('status', 'password-updated');
+    // Cek apakah password lama cocok
+    if (! Hash::check($validated['current_password'], $request->user()->password)) {
+        return back()
+            ->withErrors([
+                'current_password' => 'Password yang Anda masukkan tidak cocok dengan password saat ini.',
+            ], 'updatePassword')
+            ->withInput();
     }
 
+    // Update password
+    $request->user()->update([
+        'password' => Hash::make($validated['password']),
+    ]);
+
+    return back()->with('status', 'password-updated');
+}
      public function pertanyaanUmum()
     {
         $faqs = Faq::all()->groupBy('kategori');
