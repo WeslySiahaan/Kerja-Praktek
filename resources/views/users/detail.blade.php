@@ -17,11 +17,9 @@
     @else
         @php
             $episodes = $video->episodes ?? [];
-            // Pastikan episodes adalah array
             if (is_string($episodes)) {
                 $episodes = json_decode($episodes, true) ?? [];
             }
-            // Ambil episode pertama jika ada
             $firstEpisodePath = !empty($episodes) ? $episodes[0] : null;
         @endphp
 
@@ -40,31 +38,31 @@
             </div>
 
             <div class="col-md-4">
-            <div class="bg-dark p-3 rounded h-100 overflow-auto" style="max-height: 485px;">
-                <h6 class="text-white">Daftar Episode</h6>
-                @guest
-                <h6 class="text-danger mb-3">Anda harus login untuk mengakses semua Episode</h6>
-                @endguest
+                <div class="bg-dark p-3 rounded h-100 overflow-auto" style="max-height: 485px;">
+                    <h6 class="text-white">Daftar Episode</h6>
+                    @guest
+                        <h6 class="text-danger mb-3">Anda harus login untuk mengakses semua Episode</h6>
+                    @endguest
 
-                @if (!empty($episodes))
-                <div class="mb-2 text-white" id="episode-info">Episode 1 dari {{ count($episodes) }} episode</div>
-                <div class="row row-cols-3 g-2">
-                    @foreach ($episodes as $index => $episodePath)
-                    <div class="col">
-                        <button class="btn btn-sm btn-episode w-100 {{ $index === 0 ? 'active' : '' }}"
-                        onclick="handleEpisodeClick('{{ asset('storage/' . rawurlencode($episodePath)) }}', {{ $index + 1 }}, {{ count($episodes) }}, {{ $index }})"
-                        data-episode-path="{{ asset('storage/' . rawurlencode($episodePath)) }}"
-                        data-episode-index="{{ $index + 1 }}"
-                        {{ $index > 0 && !Auth::check() ? 'disabled' : '' }}>
-                        Ep {{ $index + 1 }}
-                        </button>
-                    </div>
-                    @endforeach
+                    @if (!empty($episodes))
+                        <div class="mb-2 text-white" id="episode-info">Episode 1 dari {{ count($episodes) }} episode</div>
+                        <div class="row row-cols-3 g-2">
+                            @foreach ($episodes as $index => $episodePath)
+                                <div class="col">
+                                    <button class="btn btn-sm btn-episode w-100 {{ $index === 0 ? 'active' : '' }}"
+                                            onclick="changeEpisode('{{ asset('storage/' . rawurlencode($episodePath)) }}', {{ $index + 1 }}, {{ count($episodes) }})"
+                                            data-episode-path="{{ asset('storage/' . rawurlencode($episodePath)) }}"
+                                            data-episode-index="{{ $index + 1 }}"
+                                            {{ $index > 0 && !Auth::check() ? 'disabled' : '' }}>
+                                        Ep {{ $index + 1 }}
+                                    </button>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <small class="text-muted">Tidak ada episode yang tersedia.</small>
+                    @endif
                 </div>
-                @else
-                <small class="text-muted">Tidak ada episode yang tersedia.</small>
-                @endif
-            </div>
             </div>
             <div class="col-12 mt-4">
                 <div class="card bg-dark text-white">
@@ -199,7 +197,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Bagian lain dari watch.blade.php tetap sama -->
         </div>
     @endif
 </section>
@@ -238,18 +235,26 @@
     document.addEventListener('DOMContentLoaded', () => {
         const videoPlayer = document.getElementById('videoPlayer');
         const episodeButtons = document.querySelectorAll('.btn-episode');
+        const episodeInfo = document.getElementById('episode-info');
 
         if (videoPlayer && {{ !empty($episodes) ? 'true' : 'false' }}) {
-            // Load episode pertama secara default
-            videoPlayer.innerHTML = `<source src="{{ asset('storage/' . rawurlencode($firstEpisodePath ?? '')) }}" type="video/mp4">`;
-            videoPlayer.load();
+            const firstEpisodePath = '{{ asset('storage/' . rawurlencode($firstEpisodePath ?? '')) }}';
+            const sourceElement = videoPlayer.querySelector('source');
+            if (sourceElement) {
+                sourceElement.setAttribute('src', firstEpisodePath);
+                videoPlayer.load();
+                videoPlayer.play().catch(error => console.error('Initial play error:', error));
+            }
 
             if (episodeButtons.length > 0) {
                 episodeButtons[0].classList.add('active');
+                if (episodeInfo) {
+                    episodeInfo.textContent = `Episode 1 dari ${{{ count($episodes) }}} episode`;
+                }
             }
         }
 
-        window.changeEpisode = function(episodePath, episodeNumber) {
+        window.changeEpisode = function(episodePath, episodeNumber, totalEpisodes) {
             if (videoPlayer && episodePath) {
                 try {
                     if (episodeNumber > 1 && !{{ Auth::check() ? 'true' : 'false' }}) {
@@ -257,15 +262,42 @@
                         window.location.href = '{{ route('login') }}';
                         return;
                     }
-                    videoPlayer.innerHTML = `<source src="${episodePath.replace(/'/g, "\\'")}" type="video/mp4">`;
-                    videoPlayer.load();
-                    videoPlayer.play().catch(error => {
-                        console.error('Error playing video:', error);
-                        alert('Gagal memutar video. Silakan coba lagi.');
-                    });
+
+                    const sourceElement = videoPlayer.querySelector('source');
+                    if (sourceElement) {
+                        sourceElement.setAttribute('src', episodePath);
+                        videoPlayer.load();
+                        videoPlayer.oncanplay = () => {
+                            videoPlayer.play().catch(error => {
+                                console.error('Play error:', error);
+                                if (error.name === 'NotAllowedError' || error.name === 'NotSupportedError') {
+                                    alert('Gagal memutar video. Pastikan Anda mengizinkan pemutaran atau coba lagi.');
+                                } else {
+                                    alert('Gagal memutar video. Periksa koneksi atau file.');
+                                }
+                            });
+                        };
+                    } else {
+                        console.warn('Source element not found, recreating video source.');
+                        videoPlayer.innerHTML = `<source src="${episodePath}" type="video/mp4">`;
+                        videoPlayer.load();
+                        videoPlayer.oncanplay = () => {
+                            videoPlayer.play().catch(error => {
+                                console.error('Play error (new source):', error);
+                                alert('Gagal memutar video. Silakan coba lagi.');
+                            });
+                        };
+                    }
+
+                    if (episodeInfo) {
+                        episodeInfo.textContent = `Episode ${episodeNumber} dari ${totalEpisodes} episode`;
+                    }
 
                     episodeButtons.forEach(btn => btn.classList.remove('active'));
-                    document.querySelector(`.btn-episode[data-episode-index="${episodeNumber}"]`).classList.add('active');
+                    const activeButton = document.querySelector(`.btn-episode[data-episode-index="${episodeNumber}"]`);
+                    if (activeButton) {
+                        activeButton.classList.add('active');
+                    }
                 } catch (e) {
                     console.error('Error changing episode:', e);
                     alert('Terjadi kesalahan saat mengganti episode.');
@@ -274,6 +306,16 @@
                 console.log('Error: Invalid episode path or video player not found.');
             }
         };
+
+        episodeButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const episodePath = this.getAttribute('data-episode-path');
+                const episodeNumber = parseInt(this.getAttribute('data-episode-index'));
+                const totalEpisodes = {{ count($episodes) }};
+                changeEpisode(episodePath, episodeNumber, totalEpisodes);
+            });
+        });
 
         // Handle Edit Comment Toggle
         document.querySelectorAll('.edit-comment').forEach(button => {
