@@ -166,7 +166,7 @@
                             </button>
                         @else
                             <img src="{{ $upcoming->poster_url ?? asset('Drama__box.png') }}"
-                                 alt="{{ htmlspecialchars($upcoming->title ?? 'Upcoming Film') }}"
+                                 alt="{{ $upcoming->title ?? 'Upcoming Film' }}"
                                  class="w-100 h-100" style="object-fit: cover; object-position: center;">
                         @endif
                     </div>
@@ -174,12 +174,12 @@
                     <div class="content-overlay position-absolute text-white" style="top: 13%; left: 3%; z-index: 3; max-width: 30%;">
                         @if ($upcoming->poster_url)
                             <img src="{{ $upcoming->poster_url }}"
-                                 alt="{{ htmlspecialchars($upcoming->title) }}"
+                                 alt="{{ $upcoming->title }}"
                                  class="mb-4 rounded"
                                  style="width: 200px; height: 250px; box-shadow: 0 0 10px #000; object-fit: cover;">
                         @endif
 
-                        <h1 class="fw-bold mb-2">{{ htmlspecialchars($upcoming->title) }}</h1>
+                        <h1 class="fw-bold mb-2">{{ $upcoming->title }}</h1>
                         <div class="upcoming-meta" style="transition: margin-top 0.6s ease;">
                             <p class="text-white-50 mb-3">
                                 {{ $upcoming->category ? (is_array($upcoming->category) ? implode(', ', array_map('htmlspecialchars', $upcoming->category)) : htmlspecialchars($upcoming->category)) : 'No category available' }}
@@ -190,21 +190,25 @@
                                     <i class="bi bi-play-fill"></i> Play
                                 </a>
                                 <button type="button"
-                                        class="btn btn-secondary fw-semibold px-4 py-2 d-flex align-items-center gap-2 fs-5"
+                                        class="btn btn-secondary fw-semibold pxIron: 0 4px 12px rgba(0, 0, 0, 0.12);
+                                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+                                        border: none;
+                                        border-radius: 12px;
+                                        overflow: hidden;"
                                         data-bs-toggle="modal"
                                         data-bs-target="#globalDetailModal"
                                         data-id="{{ $upcoming->id }}"
-                                        data-title="{{ htmlspecialchars($upcoming->title) }}"
-                                        data-description="{{ htmlspecialchars($upcoming->description) }}"
+                                        data-title="{{ $upcoming->title }}"
+                                        data-description="{{ $upcoming->description }}"
                                         data-poster-url="{{ $upcoming->poster_url ?? asset('Drama__box.png') }}"
                                         data-trailer-url="{{ $upcoming->trailer_url ?? '' }}"
                                         data-category="{{ is_array($upcoming->category) ? implode(', ', array_map('htmlspecialchars', $upcoming->category)) : htmlspecialchars($upcoming->category) }}"
                                         data-year="{{ $upcoming->year ?? 'N/A' }}"
                                         data-duration="{{ $upcoming->duration ?? 'N/A' }}"
                                         data-rating="{{ $upcoming->rating ?? 'N/A' }}"
-                                        data-synopsis="{{ htmlspecialchars($upcoming->synopsis ?? 'No synopsis available') }}"
-                                        data-cast="{{ htmlspecialchars($upcoming->cast ?? 'N/A') }}"
-                                        data-genre="{{ htmlspecialchars($upcoming->genre ?? 'N/A') }}">
+                                        data-synopsis="{{ $upcoming->synopsis ?? 'No synopsis available' }}"
+                                        data-cast="{{ $upcoming->cast ?? 'N/A' }}"
+                                        data-genre="{{ $upcoming->genre ?? 'N/A' }}">
                                     <i class="bi bi-info-circle"></i> More Info
                                 </button>
                             </div>
@@ -335,16 +339,15 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize tooltips for volume, like, and save buttons
+        // Inisialisasi tooltip untuk tombol volume
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
 
-        // Global mute state
+        // Variabel global untuk status mute
         let isMutedGlobally = true;
 
-        // Swiper initialization
         const netflixSwiper = new Swiper('.netflixSwiper', {
             slidesPerView: 1,
             loop: true,
@@ -365,7 +368,7 @@
                     if (activeVideo) {
                         activeVideo.muted = isMutedGlobally;
                         activeVideo.play().catch(error => {
-                            console.log("Autoplay blocked (init):", error);
+                            console.log("Autoplay diblokir (init):", error);
                             activeVideo.muted = true;
                             isMutedGlobally = true;
                             updateVolumeButtonIcon(activeVideo, this.slides[this.activeIndex].querySelector('.volume-toggle-btn'));
@@ -384,7 +387,7 @@
                         if (!anyModalOpen) {
                             activeVideo.muted = isMutedGlobally;
                             activeVideo.play().catch(error => {
-                                console.log("Autoplay blocked (slideChangeTransitionEnd):", error);
+                                console.log("Autoplay diblokir (slideChangeTransitionEnd):", error);
                                 activeVideo.muted = true;
                                 isMutedGlobally = true;
                                 updateVolumeButtonIcon(activeVideo, this.slides[this.activeIndex].querySelector('.volume-toggle-btn'));
@@ -402,19 +405,17 @@
                     if (activeVideo) {
                         activeVideo.muted = isMutedGlobally;
                         activeVideo.play().catch(error => {
-                            console.log("Autoplay blocked (autoplayStart):", error);
+                            console.log("Autoplay diblokir (autoplayStart):", error);
                             activeVideo.muted = true;
                             isMutedGlobally = true;
                             updateVolumeButtonIcon(activeVideo, this.slides[this.activeIndex].querySelector('.volume-toggle-btn'));
                         });
                         updateVolumeButtonIcon(activeVideo, this.slides[this.activeIndex].querySelector('.volume-toggle-btn'));
- node's
                     }
                 }
             }
         });
 
-        // Volume button toggle
         function updateVolumeButtonIcon(videoElement, buttonElement) {
             if (buttonElement) {
                 buttonElement.innerHTML = videoElement.muted ? '<i class="bi bi-volume-mute-fill fs-5"></i>' : '<i class="bi bi-volume-up-fill fs-5"></i>';
@@ -448,7 +449,6 @@
             });
         });
 
-        // Modal logic
         const globalDetailModalElement = document.getElementById('globalDetailModal');
         if (globalDetailModalElement) {
             globalDetailModalElement.addEventListener('show.bs.modal', function (event) {
@@ -505,7 +505,7 @@
                         }
                     }
                     if (modalTrailerContainer) {
-                        modalTrailerContainer.style.display = 'none';
+                        modalTrailerContainer.display = 'none';
                     }
                 }
             });
