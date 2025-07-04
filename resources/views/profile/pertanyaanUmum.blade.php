@@ -53,8 +53,9 @@
     <div class="faq-item">
       <div class="faq-question">
         {{ $faq->pertanyaan }}
-        <span>+</span>
+        <span class="faq-icon"><i class="fas fa-chevron-down"></i></span>
       </div>
+
       <div class="faq-answer">{!! $faq->jawaban !!}</div>
     </div>
     @endforeach
@@ -68,12 +69,23 @@
 @push('scripts')
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const items = document.querySelectorAll('.faq-question');
-    items.forEach(q => {
-      q.addEventListener('click', () => {
-        q.parentElement.classList.toggle('open');
-      });
+  const items = document.querySelectorAll('.faq-question');
+  items.forEach(q => {
+    q.addEventListener('click', () => {
+      const parent = q.parentElement;
+      parent.classList.toggle('open');
+
+      // Ambil elemen ikon
+      const icon = q.querySelector('.faq-icon i');
+      if (parent.classList.contains('open')) {
+        icon.classList.remove('fa-chevron-down');
+        icon.classList.add('fa-chevron-up');
+      } else {
+        icon.classList.remove('fa-chevron-up');
+        icon.classList.add('fa-chevron-down');
+      }
     });
   });
+});
 </script>
 @endpush
