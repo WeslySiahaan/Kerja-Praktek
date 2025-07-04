@@ -89,7 +89,7 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-   public function updatePassword(Request $request): RedirectResponse
+    public function updatePassword(Request $request): RedirectResponse
 {
     // Validasi dengan named error bag
     $validated = $request->validateWithBag('updatePassword', [
@@ -102,8 +102,10 @@ class ProfileController extends Controller
         'password.confirmed' => 'Konfirmasi password baru tidak cocok.',
     ]);
 
+    $user = $request->user();
+
     // Cek apakah password lama cocok
-    if (! Hash::check($validated['current_password'], $request->user()->password)) {
+    if (!Hash::check($validated['current_password'], $user->password)) {
         return back()
             ->withErrors([
                 'current_password' => 'Password yang Anda masukkan tidak cocok dengan password saat ini.',
@@ -111,13 +113,23 @@ class ProfileController extends Controller
             ->withInput();
     }
 
+    // Cek apakah password baru sama dengan password lama
+    if (Hash::check($validated['password'], $user->password)) {
+        return back()
+            ->withErrors([
+                'password' => 'Password baru tidak boleh sama dengan password lama.',
+            ], 'updatePassword')
+            ->withInput();
+    }
+
     // Update password
-    $request->user()->update([
+    $user->update([
         'password' => Hash::make($validated['password']),
     ]);
 
     return back()->with('status', 'password-updated');
 }
+
      public function pertanyaanUmum()
     {
         $faqs = Faq::all()->groupBy('kategori');
