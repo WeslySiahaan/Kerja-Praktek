@@ -1,3 +1,5 @@
+
+
 @extends('layouts.app1')
 
 @section('styles')
@@ -163,31 +165,29 @@
                             </p>
                             <div class="d-flex gap-3">
                                 <a href="{{ route('dramabox.detail', ['id' => $upcoming->id]) }}"
-                                   class="btn btn-light text-dark fw-semibold px-4 py-2 d-flex align-items-center gap-2 fs-5">
-                                    <i class="bi bi-play-fill"></i> Play
-                                </a>
+   class="btn text-dark fw-semibold px-4 py-2 d-flex align-items-center gap-2 fs-5"
+   style="background-color: rgba(245, 197, 24, 0.5);">
+    <i class="bi bi-play-fill"></i> Putar
+</a>
                                 <button type="button"
-                                        class="btn btn-secondary fw-semibold pxIron: 0 4px 12px rgba(0, 0, 0, 0.12);
-                                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-                                        border: none;
-                                        border-radius: 12px;
-                                        overflow: hidden;"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#globalDetailModal"
-                                        data-id="{{ $upcoming->id }}"
-                                        data-title="{{ $upcoming->title }}"
-                                        data-description="{{ $upcoming->description }}"
-                                        data-poster-url="{{ $upcoming->poster_url ?? asset('Drama__box.png') }}"
-                                        data-trailer-url="{{ $upcoming->trailer_url ?? '' }}"
-                                        data-category="{{ is_array($upcoming->category) ? implode(', ', array_map('htmlspecialchars', $upcoming->category)) : htmlspecialchars($upcoming->category) }}"
-                                        data-year="{{ $upcoming->year ?? 'N/A' }}"
-                                        data-duration="{{ $upcoming->duration ?? 'N/A' }}"
-                                        data-rating="{{ $upcoming->rating ?? 'N/A' }}"
-                                        data-synopsis="{{ $upcoming->synopsis ?? 'No synopsis available' }}"
-                                        data-cast="{{ $upcoming->cast ?? 'N/A' }}"
-                                        data-genre="{{ $upcoming->genre ?? 'N/A' }}">
-                                    <i class="bi bi-info-circle"></i> More Info
-                                </button>
+        class="btn btn-secondary fw-semibold px-4 py-2 d-flex align-items-center gap-2 fs-5"
+        style="background-color: rgba(128, 128, 128, 0.5); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06); border: none; border-radius: 12px; overflow: hidden;"
+        data-bs-toggle="modal"
+        data-bs-target="#globalDetailModal"
+        data-id="{{ $upcoming->id }}"
+        data-title="{{ $upcoming->title }}"
+        data-description="{{ $upcoming->description }}"
+        data-poster-url="{{ $upcoming->poster_url ?? asset('Drama__box.png') }}"
+        data-trailer-url="{{ $upcoming->trailer_url ?? '' }}"
+        data-category="{{ is_array($upcoming->category) ? implode(', ', array_map('htmlspecialchars', $upcoming->category)) : htmlspecialchars($upcoming->category) }}"
+        data-year="{{ $upcoming->year ?? 'N/A' }}"
+        data-duration="{{ $upcoming->duration ?? 'N/A' }}"
+        data-rating="{{ $upcoming->rating ?? 'N/A' }}"
+        data-synopsis="{{ $upcoming->synopsis ?? 'No synopsis available' }}"
+        data-cast="{{ $upcoming->cast ?? 'N/A' }}"
+        data-genre="{{ $upcoming->genre ?? 'N/A' }}">
+    <i class="bi bi-info-circle"></i> Info Selengkapnya
+</button>
                             </div>
                         </div>
                     </div>
@@ -222,16 +222,16 @@
                         </a>
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title text-truncate">{{ htmlspecialchars($video->name) }}</h5>
-                            <p class="card-text">Category: 
+                            <p class="card-text">Kategori: 
                                 @if(is_array($video->category))
                                     {{ implode(', ', array_map('htmlspecialchars', $video->category)) }}
                                 @else
                                     {{ htmlspecialchars($video->category ?? 'No Category') }}
                                 @endif
                             </p>
-                            <p class="card-title text-truncate text-white">Total Episodes: {{ count($video->episodes ?? []) }}</p>
+                            <p class="card-title text-truncate text-white">Total Episode: {{ count($video->episodes ?? []) }}</p>
                             <div class="mt-auto d-flex gap-2">
-                                <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+                                <a href="{{ route('dramabox.detail', ['id' => $video->id]) }}" class="btn btn-warning btn-sm bi bi-play-fill">Menonton</a>
                             </div>
                         </div>
                     </div>
@@ -265,7 +265,7 @@
                         <p id="modalDescription"></p>
                         <p><small class="text-white">Cast: <span id="modalCast"></span></small></p>
                         <p><small class="text-white">Genre: <span id="modalGenre"></span></small></p>
-                        <p><small class="text-white">Category: <span id="modalCategory"></span></small></p>
+                        <p><small class="text-white">Kategori: <span id="modalCategory"></span></small></p>
                     </div>
                 </div>
                 <div class="mb-3 mt-4" id="modalTrailerContainer">

@@ -135,7 +135,7 @@
                                     </button>
                                 @endauth
                                 <a href="{{ $video->is_dramabox ? route('dramabox.detail', $video) : route('video.detail', ['id' => $video->id]) }}"
-                                   class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+                                   class="btn btn-warning btn-sm bi bi-play-fill">Menonton</a>
                             </div>
                         </div>
                     </div>

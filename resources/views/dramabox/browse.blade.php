@@ -130,7 +130,7 @@
                                         </button>
                                     </form>
                                 @endif
-                                <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+                                <a href="{{ route('dramabox.detail', $video->id) }}" class="btn btn-warning btn-sm bi bi-play-fill">Menonton</a>
                             </div>
                         </div>
                     </div>

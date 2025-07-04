@@ -122,7 +122,7 @@
           <p class="card-text text-white"><small>Kategori: {{ is_array($video->category) ? implode(', ', $video->category) : $video->category }}</small></p>
           <p class="card-title text-truncate text-white"><small>Total {{ count($video->episodes ?? []) }} episode</small></p>
           <div class="mt-auto">
-            <a href="{{ route('video.detail', $video) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+            <a href="{{ route('video.detail', $video) }}" class="btn btn-warning btn-sm bi bi-play-fill">Menonton</a>
           </div>
         </div>
       </div>
@@ -153,7 +153,7 @@
           <h5 class="card-title text-truncate">{{ $recommendation->name }}</h5>
           <p class="card-text text-white"><small>Kategori: {{ is_array($recommendation->category) ? implode(', ', $recommendation->category) : $recommendation->category }}</small></p>
           <div class="mt-auto">
-            <a href="{{ route('recommendations.detail', ['id' => $recommendation->id]) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+            <a href="{{ route('recommendations.detail', ['id' => $recommendation->id]) }}" class="btn btn-warning btn-sm bi bi-play-fill">Menonton</a>
           </div>
         </div>
       </div>

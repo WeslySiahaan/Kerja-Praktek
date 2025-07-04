@@ -208,12 +208,13 @@
                             </p>
                             <div class="d-flex gap-3">
                                 <a href="{{ route('dramabox.detail', ['id' => $upcoming->id]) }}"
-                                   class="btn btn-light text-dark fw-semibold px-4 py-2 d-flex align-items-center gap-2 fs-5">
-                                    <i class="bi bi-play-fill"></i> Play
-                                </a>
+                                   class="btn text-dark fw-semibold px-4 py-2 d-flex align-items-center gap-2 fs-5"
+   style="background-color: rgba(245, 197, 24, 0.5);">
+    <i class="bi bi-play-fill"></i> Putar
+</a>
                                 <button type="button"
-                                        class="btn btn-secondary fw-semibold pxIron: 0 4px 12px rgba(0, 0, 0, 0.12);
-                                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+                                         class="btn btn-secondary fw-semibold px-4 py-2 d-flex align-items-center gap-2 fs-5"
+        style="background-color: rgba(128, 128, 128, 0.5); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06); border: none; border-radius: 12px; overflow: hidden;"
                                         border: none;
                                         border-radius: 12px;
                                         overflow: hidden;"
@@ -231,7 +232,7 @@
                                         data-synopsis="{{ $upcoming->synopsis ?? 'No synopsis available' }}"
                                         data-cast="{{ $upcoming->cast ?? 'N/A' }}"
                                         data-genre="{{ $upcoming->genre ?? 'N/A' }}">
-                                    <i class="bi bi-info-circle"></i> More Info
+                                    <i class="bi bi-info-circle"></i> Info Selengkapnya
                                 </button>
                             </div>
                         </div>
@@ -269,15 +270,15 @@
             </a>
             <div class="card-body d-flex flex-column">
               <h5 class="card-title text-truncate">{{ htmlspecialchars($video->name) }}</h5>
-              <p class="card-text text-danger">
-  @if(is_array($video->category))
-    {{ implode(', ', array_map('htmlspecialchars', $video->category)) }}
-  @else
-    {{ htmlspecialchars($video->category ?? 'No Category') }}
-  @endif
-</p>
-
-              <p class="card-title text-truncate text-white">Total Episodes: {{ count($video->episodes ?? []) }}</p>
+              <p class="card-text">
+              <strong style="color:rgb(255, 255, 255); font-weight: 600">Kategori:</strong>
+                @if(is_array($video->category))
+                  {{ implode(', ', array_map('htmlspecialchars', $video->category)) }}
+                @else
+                  {{ htmlspecialchars($video->category ?? 'No Category') }}
+                @endif
+              </p>
+              <p class="card-title text-truncate text-white">Total Episode: {{ count($video->episodes ?? []) }}</p>
               <div class="mt-auto d-flex gap-2">
                 @if (Auth::check())
                   <form action="{{ route('videos.like', $video) }}" method="POST">
@@ -301,7 +302,7 @@
                     <i class="bi bi-bookmark text-white fs-5"></i>
                   </button>
                 @endif
-                <a href="{{ route('video.detail', ['id' => $video->id]) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+                <a href="{{ route('video.detail', ['id' => $video->id]) }}" class="btn btn-warning btn-sm bi bi-play-fill">Menonton</a>
               </div>
             </div>
           </div>
@@ -337,7 +338,7 @@
                   {{ htmlspecialchars($recommendation->category ?? 'No Category') }}
                 @endif
               </p>
-              <p class="card-title text-truncate text-white">Total Episodes: {{ count($recommendation->episodes ?? []) }}</p>
+              <p class="card-title text-truncate text-white">Total Episode: {{ count($recommendation->episodes ?? []) }}</p>
               <div class="mt-auto d-flex gap-2">
                 @if (Auth::check())
                   <form action="{{ route('recommendations.like', $recommendation) }}" method="POST">
@@ -361,7 +362,7 @@
                     <i class="bi bi-bookmark text-white fs-5"></i>
                   </button>
                 @endif
-                <a href="{{ route('recommendations.detail', ['id' => $recommendation->id]) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+                <a href="{{ route('recommendations.detail', ['id' => $recommendation->id]) }}" class="btn btn-warning btn-sm bi bi-play-fill">Menonton</a>
               </div>
             </div>
           </div>
@@ -373,6 +374,11 @@
     </div>
   @endif
 </section>
+
+
+
+
+
 <style>
     .popular-section {
         margin-top: 5px;
@@ -400,14 +406,14 @@
                         </a>
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title text-truncate">{{ htmlspecialchars($video->name) }}</h5>
-                            <p class="card-text">Category: 
+                            <p class="card-text">Kategori: 
                                 @if(is_array($video->category))
                                     {{ implode(', ', array_map('htmlspecialchars', $video->category)) }}
                                 @else
                                     {{ htmlspecialchars($video->category ?? 'No Category') }}
                                 @endif
                             </p>
-                            <p class="card-title text-truncate text-white">Total Episodes: {{ count($video->episodes ?? []) }}</p>
+                            <p class="card-title text-truncate text-white">Total Episode: {{ count($video->episodes ?? []) }}</p>
                             <div class="mt-auto d-flex gap-2">
                                 @if (Auth::check())
                                     <form action="{{ route('videos.like', $video) }}" method="POST">
@@ -435,7 +441,7 @@
                                         <i class="bi bi-bookmark text-white fs-5"></i>
                                     </button>
                                 @endif
-                                <a href="{{ route('video.detail', ['id' => $video->id]) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+                                <a href="{{ route('video.detail', ['id' => $video->id]) }}" class="btn btn-warning btn-sm bi bi-play-fill">Menonton</a>
                             </div>
                         </div>
                     </div>
@@ -450,6 +456,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="globalDetailModal" tabindex="-1" aria-labelledby="globalDetailModalLabel" aria-hidden="true">
+>>>>>>> 451c1fdc8ab371fad46eafb72abebeff01c9386c
     <div class="modal-dialog modal-lg">
         <div class="modal-content bg-dark text-white">
             <div class="modal-header border-0">

@@ -32,11 +32,11 @@
                                     @if (Auth::check())
                             
                                       <!-- Tombol Menonton -->
-                                        <a href="{{ route('recommendations.detail', $video->id) }}" class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+                                        <a href="{{ route('recommendations.detail', $video->id) }}" class="btn btn-warning btn-sm bi bi-play-fill">Menonton</a>
                                     @else
 
                                         <!-- Tombol Menonton dengan redirect ke login -->
-                                        <a href="{{ route('login') }}" class="btn btn-primary btn-sm bi bi-play-fill" title="Login untuk Menonton">Menonton</a>
+                                        <a href="{{ route('login') }}" class="btn btn-warning btn-sm bi bi-play-fill" title="Login untuk Menonton">Menonton</a>
                                     @endif
                                 </div>
             </div>
