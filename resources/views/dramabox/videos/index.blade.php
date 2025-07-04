@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <div class="container mx-auto p-4">
     <h1 class="text-3xl font-bold mb-4">Video Management (CRUD)</h1>
 
@@ -72,10 +75,13 @@
                   </td>
                   <td>
                     <a href="{{ route('videos.edit', $video->id) }}" class="btn btn-warning btn-sm mb-1"><i class="bi bi-pencil me-1"></i>Edit</a>
-                    <form action="{{ route('videos.destroy', $video->id) }}" method="POST" style="display:inline;">
+
+                    <form action="{{ route('videos.destroy', $video->id) }}" method="POST" class="delete-form d-inline">
                       @csrf
                       @method('DELETE')
-                      <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus video ini?')"><i class="bi bi-trash me-1"></i>Hapus</button>
+                      <button type="button" class="btn btn-danger btn-sm btn-delete" data-name="{{ $video->name }}">
+                        <i class="bi bi-trash me-1"></i>Hapus
+                      </button>
                     </form>
                   </td>
                 </tr>
@@ -83,8 +89,37 @@
             </tbody>
           </table>
         </div>
-        {{ $videos->links() }} <!-- Tambahkan ini untuk paginasi -->
+        {{ $videos->links() }}
       @endif
     </div>
   </div>
+
+  <!-- Script untuk SweetAlert2 Konfirmasi Hapus -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const deleteButtons = document.querySelectorAll('.btn-delete');
+
+      deleteButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          const form = this.closest('form');
+          const videoName = this.dataset.name;
+
+          Swal.fire({
+            title: `Hapus video ${videoName}?`,
+            text: "Data yang dihapus tidak dapat dikembalikan",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batal'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              form.submit();
+            }
+          });
+        });
+      });
+    });
+  </script>
 @endsection

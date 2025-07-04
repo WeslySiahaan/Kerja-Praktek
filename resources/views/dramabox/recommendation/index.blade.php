@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+  <!-- SweetAlert2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <div class="container mx-auto p-4">
     <h1 class="text-3xl font-bold mb-4">Recommendation Management (CRUD)</h1>
 
@@ -72,11 +75,15 @@
                     @endforelse
                   </td>
                   <td>
-                    <a href="{{ route('recommendations.edit', $recommendation->id) }}" class="btn btn-warning btn-sm mb-1"><i class="bi bi-pencil me-1"></i>Edit</a>
-                    <form action="{{ route('recommendations.destroy', $recommendation->id) }}" method="POST" style="display:inline;">
+                    <a href="{{ route('recommendations.edit', $recommendation->id) }}" class="btn btn-warning btn-sm mb-1">
+                      <i class="bi bi-pencil me-1"></i>Edit
+                    </a>
+                    <form action="{{ route('recommendations.destroy', $recommendation->id) }}" method="POST" class="delete-form d-inline">
                       @csrf
                       @method('DELETE')
-                      <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus recommendation ini?')"><i class="bi bi-trash me-1"></i>Hapus</button>
+                      <button type="button" class="btn btn-danger btn-sm btn-delete" data-name="{{ $recommendation->name }}">
+                        <i class="bi bi-trash me-1"></i>Hapus
+                      </button>
                     </form>
                   </td>
                 </tr>
@@ -88,4 +95,33 @@
       @endif
     </div>
   </div>
+
+  <!-- Script SweetAlert2 untuk konfirmasi -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const deleteButtons = document.querySelectorAll('.btn-delete');
+
+      deleteButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          const form = this.closest('form');
+          const name = this.dataset.name;
+
+          Swal.fire({
+            title: `Hapus recommendation ${name}?`,
+            text: "Data yang dihapus tidak dapat dikembalikan",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batal'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              form.submit();
+            }
+          });
+        });
+      });
+    });
+  </script>
 @endsection
