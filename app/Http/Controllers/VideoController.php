@@ -389,14 +389,37 @@ class VideoController extends Controller
     }
 
     public function show(Video $video)
-    {
-        $video->load([
-            'likedByUsers',
-            'collectedByUsers',
-            'comments.user' => function ($query) {
-                $query->latest();
-            }
-        ]);
-        return view('users.detail', compact('video'));
-    }
+{
+    $video->load([
+        'likedByUsers',
+        'collectedByUsers',
+        'comments.user' => function ($query) {
+            $query->latest();
+        }
+    ]);
+
+    // Ambil recommended videos
+    $categories = is_array($video->category)
+        ? $video->category
+        : (json_decode($video->category, true) ?? []);
+
+    $recommendedVideos = Video::query()
+        ->where('id', '!=', $video->id)
+        ->when(!empty($categories), function ($query) use ($categories) {
+            $query->where(function ($q) use ($categories) {
+                foreach ($categories as $category) {
+                    $q->orWhereJsonContains('category', $category)
+                      ->orWhere('category', 'like', '%' . $category . '%');
+                }
+            });
+        }, function ($query) {
+            $query->where('is_popular', true);
+        })
+        ->orderBy('rating', 'desc')
+        ->take(6)
+        ->get();
+
+    return view('users.detail', compact('video', 'recommendedVideos'));
+}
+
 }

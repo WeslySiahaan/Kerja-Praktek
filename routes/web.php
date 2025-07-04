@@ -96,7 +96,6 @@ Route::middleware('auth')->group(function () {
 Route::post('/recommendations/{recommendation}/save', [RecommendationLandingController::class, 'save'])->name('recommendations.save');
 
   Route::get('/users/search', [HomeController::class, 'search'])->middleware('auth')->name('users.search');
-  Route::get('/users/video/detail/{id}', [HomeController::class, 'detailuser'])->name('video.detail');
 
   Route::post('/videos/{video}/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
   Route::get('/videos/{video}', [VideoController::class, 'show'])->name('videos.show');

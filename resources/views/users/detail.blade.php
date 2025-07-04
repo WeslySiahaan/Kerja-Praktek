@@ -2,58 +2,50 @@
 
 @section('breadcrumb')
 <nav aria-label="breadcrumb" class="container my-3">
-  <style>
-    .breadcrumb-item + .breadcrumb-item::before {
-      content: none !important; 
-    }
-  </style>
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item">
-      <a href="{{ route('users.dashboard') }}" class="text-white text-decoration-none fw-normal">
-        <i class="bi bi-house-fill"></i> {{-- Icon home --}}
-      </a>
-    </li>
-
-    <li class="breadcrumb-item">
-      <i class="bi bi-chevron-right mx-1"></i> {{-- Icon > --}}
-      <a href="{{ route('users.browse') }}?category={{ is_array($video->category) ? urlencode(implode(',', $video->category)) : urlencode($video->category ?? 'Kategori') }}" class="text-white text-decoration-none fw-normal">
-        {!! is_array($video->category) ? implode('<span class="separator"> / </span>', array_map('htmlspecialchars', $video->category)) : htmlspecialchars($video->category ?? 'Kategori') !!}
-      </a>
-    </li>
-
-    <li class="breadcrumb-item">
-      <i class="bi bi-chevron-right mx-1"></i> {{-- Icon > --}}
-      <a href="{{ route('video.detail', $video) }}" class="text-white text-decoration-none fw-normal">
-        {{ htmlspecialchars($video->name ?? 'Menonton') }}
-      </a>
-    </li>
-
-    <li class="breadcrumb-item active text-white fw-bold" aria-current="page" id="episode-breadcrumb">
-  <i class="bi bi-chevron-right mx-1"></i> {{-- Icon > --}}
-  <span id="episode-text">Episode {{ !empty($episodes) ? (request()->query('episode', 1)) : '1' }}</span>
-</li>
-
-  </ol>
-</nav>
-
-
-
-<style>
-        nav[aria-label="breadcrumb"] {
-            border-bottom: 0.5px solid; 
-            padding-bottom: 10px; 
-            margin-bottom: 20px; 
+    <style>
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: none !important;
         }
     </style>
-@endsection
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{{ route('users.dashboard') }}" class="text-white text-decoration-none fw-normal">
+                <i class="bi bi-house-fill"></i>
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <i class="bi bi-chevron-right mx-1"></i>
+            <a href="{{ route('users.browse') }}?category={{ is_array($video->category) ? urlencode(implode(',', $video->category)) : urlencode($video->category ?? 'Kategori') }}" class="text-white text-decoration-none fw-normal">
+                {!! is_array($video->category) ? implode('<span class="separator"> / </span>', array_map('htmlspecialchars', $video->category)) : htmlspecialchars($video->category ?? 'Kategori') !!}
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <i class="bi bi-chevron-right mx-1"></i>
+            <a href="{{ route('video.detail', $video) }}" class="text-white text-decoration-none fw-normal">
+                {{ htmlspecialchars($video->name ?? 'Menonton') }}
+            </a>
+        </li>
+        <li class="breadcrumb-item active text-white fw-bold" aria-current="page" id="episode-breadcrumb">
+            <i class="bi bi-chevron-right mx-1"></i>
+            <span id="episode-text">Episode {{ !empty($episodes) ? (request()->query('episode', 1)) : '1' }}</span>
+        </li>
+    </ol>
+</nav>
 
+<style>
+    nav[aria-label="breadcrumb"] {
+        border-bottom: 0.5px solid;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+</style>
+@endsection
 
 @section('content')
 <section class="container my-4">
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
-
     @if (session('error'))
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
@@ -87,35 +79,36 @@
                 <div class="bg-dark p-3 rounded h-100 overflow-auto" style="max-height: 485px;">
                     <h6 class="text-white">Daftar Episode</h6>
                     @guest
-                    <h6 class="text-danger mb-3">Anda harus login untuk mengakses semua Episode</h6>
+                        <h6 class="text-danger mb-3">Anda harus login untuk mengakses semua Episode</h6>
                     @endguest
 
                     @if (!empty($episodes))
-                    <div class="mb-2 text-white" id="episode-info">Episode 1 dari {{ count($episodes) }} episode</div>
-                    <div class="row row-cols-3 g-2">
-                        @foreach ($episodes as $index => $episodePath)
-                        <div class="col">
-                            <button class="btn btn-sm btn-episode w-100 {{ $index === 0 ? 'active' : '' }}"
-                                    onclick="handleEpisodeClick('{{ asset('storage/' . rawurlencode($episodePath)) }}', {{ $index + 1 }}, {{ count($episodes) }}, {{ $index }})"
-                                    data-episode-path="{{ asset('storage/' . rawurlencode($episodePath)) }}"
-                                    data-episode-index="{{ $index + 1 }}"
-                                    {{ $index > 0 && !Auth::check() ? 'disabled' : '' }}>
-                                Ep {{ $index + 1 }}
-                            </button>
+                        <div class="mb-2 text-white" id="episode-info">Episode 1 dari {{ count($episodes) }} episode</div>
+                        <div class="row row-cols-3 g-2">
+                            @foreach ($episodes as $index => $episodePath)
+                                <div class="col">
+                                    <button class="btn btn-sm btn-episode w-100 {{ $index === 0 ? 'active' : '' }}"
+                                            onclick="handleEpisodeClick('{{ asset('storage/' . rawurlencode($episodePath)) }}', {{ $index + 1 }}, {{ count($episodes) }}, {{ $index }})"
+                                            data-episode-path="{{ asset('storage/' . rawurlencode($episodePath)) }}"
+                                            data-episode-index="{{ $index + 1 }}"
+                                            {{ $index > 0 && !Auth::check() ? 'disabled' : '' }}>
+                                        Ep {{ $index + 1 }}
+                                    </button>
+                                </div>
+                            @endforeach
                         </div>
-                        @endforeach
-                    </div>
                     @else
-                    <small class="text-muted">Tidak ada episode yang tersedia.</small>
+                        <small class="text-muted">Tidak ada episode yang tersedia.</small>
                     @endif
                 </div>
             </div>
+
             <div class="col-12 mt-4">
                 <div class="card bg-dark text-white">
                     <div class="card-body">
                         <h5 class="card-title fw-bold">{{ $video->name }}</h5>
                         <p class="card-text text-break">{{ $video->description }}</p>
-                        <p class="card-text text-break">
+                        <p class="card-text text-break text-danger">
                             <span class="me-3"><strong>Category:</strong> 
                                 @if(is_array($video->category))
                                     {{ implode(', ', array_map('htmlspecialchars', $video->category)) }}
@@ -125,29 +118,29 @@
                             </span>
                         </p>
                         <div class="mt-auto d-flex gap-2">
-                            @if (Auth::check())
-                                <form action="{{ route('videos.like', $video) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-link p-0 like-btn" title="{{ $video->likedByUsers->contains(Auth::id()) ? 'Batal Suka' : 'Suka' }}">
-                                        <i class="bi {{ $video->likedByUsers->contains(Auth::id()) ? 'bi-heart-fill text-danger' : 'bi-heart text-white' }} fs-5"></i>
-                                    </button>
-                                </form>
-                                <form action="{{ route('videos.save', $video) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-link p-0" title="{{ $video->collectedByUsers->contains(Auth::id()) ? 'Sudah Disimpan' : 'Simpan' }}"
-                                            {{ $video->collectedByUsers->contains(Auth::id()) ? 'disabled' : '' }}>
-                                        <i class="bi {{ $video->collectedByUsers->contains(Auth::id()) ? 'bi-bookmark-fill text-success' : 'bi-bookmark text-white' }} fs-5"></i>
-                                    </button>
-                                </form>
-                            @else
-                                <a href="{{ route('login') }}" class="btn btn-link p-0" title="Suka">
-                                    <i class="bi bi-heart text-white fs-5"></i>
-                                </a>
-                                <a href="{{ route('login') }}" class="btn btn-link p-0" title="Simpan">
-                                    <i class="bi bi-bookmark text-white fs-5"></i>
-                                </a>
-                            @endif
-                        </div>
+                @if (Auth::check())
+                  <form action="{{ route('videos.like', $video) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-link p-0 like-btn" title="{{ $video->likedByUsers->contains(Auth::id()) ? 'Batal Suka' : 'Suka' }}">
+                      <i class="bi {{ $video->likedByUsers->contains(Auth::id()) ? 'bi-heart-fill text-danger' : 'bi-heart text-white' }} fs-5"></i>
+                    </button>
+                  </form>
+                  <form action="{{ route('videos.save', $video) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-link p-0" title="{{ $video->collectedByUsers->contains(Auth::id()) ? 'Sudah Disimpan' : 'Simpan' }}"
+                            {{ $video->collectedByUsers->contains(Auth::id()) ? 'disabled' : '' }}>
+                      <i class="bi {{ $video->collectedByUsers->contains(Auth::id()) ? 'bi-bookmark-fill text-success' : 'bi-bookmark text-white' }} fs-5"></i>
+                    </button>
+                  </form>
+                @else
+                  <button class="btn btn-link p-0" title="Login untuk Suka" disabled>
+                    <i class="bi bi-heart text-white fs-5"></i>
+                  </button>
+                  <button class="btn btn-link p-0" title="Login untuk Simpan" disabled>
+                    <i class="bi bi-bookmark text-white fs-5"></i>
+                  </button>
+                @endif
+              </div>
                     </div>
                 </div>
             </div>
@@ -240,6 +233,69 @@
                                 @endforeach
                             @endif
                         </div>
+                        <!-- Rekomendasi Serupa -->
+                        @if ($recommendedVideos->isEmpty())
+                            <p class="text-center text-muted py-4">Tidak ada rekomendasi serupa untuk saat ini.</p>
+                        @else
+                            <h5 class="text-white mt-4">Rekomendasi Serupa</h5>
+                            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 row-cols-xl-8 g-3">
+                                @foreach ($recommendedVideos as $video)
+                                    <div class="col">
+                                        <div class="card bg-dark text-white h-100 d-flex flex-column">
+                                            <a href="{{ $video->is_dramabox ? route('dramabox.detail', $video) : route('video.detail', ['id' => $video->id]) }}"
+                                               class="text-decoration-none text-white">
+                                                <img src="{{ $video->poster_image ? asset('storage/' . $video->poster_image) : asset('Drama__box.png') }}"
+                                                     class="card-img-top"
+                                                     alt="{{ htmlspecialchars($video->name) }} poster"
+                                                     style="height: 300px; object-fit: cover;">
+                                            </a>
+                                            <div class="card-body d-flex flex-column">
+                                                <h5 class="card-title text-truncate">{{ htmlspecialchars($video->name) }}</h5>
+                                                <p class="card-text text-danger">
+                                                    Category: 
+                                                    @if(is_array($video->category))
+                                                        {{ implode(', ', array_map('htmlspecialchars', $video->category)) }}
+                                                    @else
+                                                        {{ htmlspecialchars($video->category ?? 'No Category') }}
+                                                    @endif
+                                                </p>
+                                                <p class="card-title text-truncate text-white">Total Episodes: {{ count($video->episodes ?? []) }}</p>
+                                                <div class="mt-auto d-flex gap-2">
+                                                    @if (Auth::check())
+                                                        <form action="{{ route('videos.like', $video) }}" method="POST">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-link p-0 like-btn"
+                                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                    title="{{ $video->likedByUsers->contains(Auth::id()) ? 'Batal Suka' : 'Suka' }}">
+                                                                <i class="bi {{ $video->likedByUsers->contains(Auth::id()) ? 'bi-heart-fill text-danger' : 'bi-heart text-white' }} fs-5"></i>
+                                                            </button>
+                                                        </form>
+                                                        <form action="{{ route('videos.save', $video) }}" method="POST">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-link p-0 save-btn"
+                                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                    title="{{ $video->collectedByUsers->contains(Auth::id()) ? 'Sudah Disimpan' : 'Simpan' }}"
+                                                                    {{ $video->collectedByUsers->contains(Auth::id()) ? 'disabled' : '' }}>
+                                                                <i class="bi {{ $video->collectedByUsers->contains(Auth::id()) ? 'bi-bookmark-fill text-success' : 'bi-bookmark text-white' }} fs-5"></i>
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <a href="{{ route('login') }}" class="btn btn-link p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Login untuk Suka">
+                                                            <i class="bi bi-heart text-white fs-5"></i>
+                                                        </a>
+                                                        <a href="{{ route('login') }}" class="btn btn-link p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Login untuk Simpan">
+                                                            <i class="bi bi-bookmark text-white fs-5"></i>
+                                                        </a>
+                                                    @endif
+                                                    <a href="{{ $video->is_dramabox ? route('dramabox.detail', $video) : route('video.detail', ['id' => $video->id]) }}"
+                                                       class="btn btn-primary btn-sm bi bi-play-fill">Menonton</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -311,13 +367,11 @@
                     document.querySelector(`.btn-episode[data-episode-index="${episodeNumber}"]`).classList.add('active');
                     document.getElementById('episode-info').textContent = `Episode ${episodeNumber} dari ${totalEpisodes} episode`;
 
-                    // Update breadcrumb with episode number
                     if (episodeBreadcrumb) {
                         const episodeText = document.getElementById('episode-text');
-if (episodeText) {
-  episodeText.textContent = `Episode ${episodeNumber}`;
-}
-
+                        if (episodeText) {
+                            episodeText.textContent = `Episode ${episodeNumber}`;
+                        }
                     }
                 } catch (e) {
                     console.error('Error changing episode:', e);
@@ -385,6 +439,12 @@ if (episodeText) {
                     alert('Terjadi kesalahan saat menghapus komentar.');
                 });
             });
+        });
+
+        // Inisialisasi tooltip Bootstrap
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
         });
     });
 </script>

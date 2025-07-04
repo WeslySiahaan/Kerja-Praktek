@@ -269,13 +269,14 @@
             </a>
             <div class="card-body d-flex flex-column">
               <h5 class="card-title text-truncate">{{ htmlspecialchars($video->name) }}</h5>
-              <p class="card-text">Category: 
-                @if(is_array($video->category))
-                  {{ implode(', ', array_map('htmlspecialchars', $video->category)) }}
-                @else
-                  {{ htmlspecialchars($video->category ?? 'No Category') }}
-                @endif
-              </p>
+              <p class="card-text text-danger">
+  @if(is_array($video->category))
+    {{ implode(', ', array_map('htmlspecialchars', $video->category)) }}
+  @else
+    {{ htmlspecialchars($video->category ?? 'No Category') }}
+  @endif
+</p>
+
               <p class="card-title text-truncate text-white">Total Episodes: {{ count($video->episodes ?? []) }}</p>
               <div class="mt-auto d-flex gap-2">
                 @if (Auth::check())
@@ -372,11 +373,6 @@
     </div>
   @endif
 </section>
-
-
-
-
-
 <style>
     .popular-section {
         margin-top: 5px;
@@ -454,7 +450,6 @@
 
 <!-- Modal -->
 <div class="modal fade" id="globalDetailModal" tabindex="-1" aria-labelledby="globalDetailModalLabel" aria-hidden="true">
->>>>>>> 451c1fdc8ab371fad46eafb72abebeff01c9386c
     <div class="modal-dialog modal-lg">
         <div class="modal-content bg-dark text-white">
             <div class="modal-header border-0">

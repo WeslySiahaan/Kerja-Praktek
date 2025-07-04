@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Models\WatchHistory;
@@ -104,19 +105,39 @@ class HomeController extends Controller
         $populars = Popular::all();
         return view('dramabox.browse', compact('upcomings', 'videos', 'populars'));
     }
-
-    public function detailuser($id): View
-    {
-      $videos = Video::findOrFail($id);
-      return view('dramabox.detail', compact('videos'));
-    }
     
     public function detail1($id): View
     {
+        // Ambil video yang sedang ditonton dengan relasi
         $video = Video::with(['likedByUsers', 'collectedByUsers', 'comments' => function ($query) {
             $query->with('user')->latest();
         }])->findOrFail($id);
 
+        // Debugging
+        Log::info('Video loaded: ' . $video->id . ', Category: ' . json_encode($video->category));
+
+        // Ambil kategori dari video yang sedang ditonton
+        $categories = is_array($video->category) ? $video->category : (json_decode($video->category, true) ?? []);
+
+        // Ambil video rekomendasi berdasarkan kategori yang sama
+        $recommendedVideos = Video::query()
+            ->where('id', '!=', $video->id) // Kecualikan video yang sedang ditonton
+            ->when(!empty($categories), function ($query) use ($categories) {
+                $query->where(function ($q) use ($categories) {
+                    foreach ($categories as $category) {
+                        $q->orWhereJsonContains('category', $category)
+                          ->orWhere('category', 'like', '%' . $category . '%');
+                    }
+                });
+            }, function ($query) {
+                // Fallback ke video populer jika tidak ada kategori
+                $query->where('is_popular', true);
+            })
+            ->orderBy('rating', 'desc')
+            ->take(6) // Batasi 6 video untuk rekomendasi
+            ->get();
+
+        // Inisialisasi variabel untuk pengguna
         $isLiked = false;
         $isCollected = false;
         $watchHistory = null;
@@ -126,6 +147,7 @@ class HomeController extends Controller
             $isLiked = $video->likedByUsers()->where('user_id', $user->id)->exists();
             $isCollected = $video->collectedByUsers()->where('user_id', $user->id)->exists();
 
+            // Kelola riwayat tontonan
             $watchHistory = WatchHistory::firstOrNew([
                 'user_id' => $user->id,
                 'video_id' => $video->id,
@@ -154,9 +176,8 @@ class HomeController extends Controller
             $watchHistory->save();
         }
 
-        return view('users.detail', compact('video', 'isLiked', 'isCollected', 'watchHistory'));
+        return view('users.detail', compact('video', 'recommendedVideos', 'isLiked', 'isCollected', 'watchHistory'));
     }
-
     public function search(Request $request)
 {
     $query = $request->input('query');

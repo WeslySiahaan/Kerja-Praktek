@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Log;
 
 class RecommendationController extends Controller
 {
@@ -16,61 +17,71 @@ class RecommendationController extends Controller
             return redirect()->route('login')->with('error', 'Silakan login untuk melihat rekomendasi.');
         }
 
+        /** @var User $user */
         $user = Auth::user();
         if (!$user) {
             return redirect()->route('login')->with('error', 'Pengguna tidak ditemukan.');
         }
 
         // Debugging
-        \Log::info('User loaded: ' . $user->id);
-        \Log::info('Liked Videos count: ' . $user->likedVideos()->count());
-        \Log::info('Watch Histories count: ' . $user->watchHistories()->count());
-        \Log::info('Watch Histories video_ids: ' . $user->watchHistories()->pluck('video_id')->toJson());
+        Log::info('User loaded: ' . $user->id);
+        Log::info('Liked Videos count: ' . $user->likedVideos()->count());
 
-        $likedVideos = $user->likedVideos()->with('likedByUsers')->get();
-        $watchHistories = $user->watchHistories()->with('video')->get();
+        // Ambil video yang disukai
+        $likedVideos = $user->likedVideos()->get();
 
-        if ($likedVideos->isEmpty() && $watchHistories->isEmpty()) {
+        // Kumpulkan kategori dari video yang disukai
+        $likedCategories = $likedVideos->flatMap(function ($video) {
+            $category = $video->category;
+            if (is_string($category)) {
+                $category = json_decode($category, true) ?? [$category];
+            }
+            return is_array($category) ? array_map('trim', $category) : [];
+        })->unique()->filter()->values()->all();
+
+        // Kumpulkan ID video yang sudah disukai untuk dikecualikan
+        $excludedVideoIds = $likedVideos->pluck('id')->values()->all();
+
+        // Logika rekomendasi
+        if ($likedVideos->isEmpty()) {
+            // Jika tidak ada video yang disukai, rekomendasi video populer
             $recommendedVideos = Video::where('is_popular', true)
                 ->orderBy('rating', 'desc')
-                ->take(10)
-                ->get();
+                ->paginate(12);
         } else {
-            $excludedVideoIds = $likedVideos->pluck('id')
-                ->merge($watchHistories->pluck('video_id')->filter()->map(function ($id) {
-                    return (int)$id;
-                }))
-                ->unique()
-                ->values()
-                ->all();
+            $query = Video::query()
+                ->whereNotIn('id', array_filter($excludedVideoIds));
 
-            $watchedPreferences = $watchHistories->filter(function ($history) {
-                return $history->video_id && is_numeric($history->video_id) && Video::where('id', $history->video_id)->exists();
-            })->mapWithKeys(function ($history) {
-                $weight = $history->progress > 50 ? 2 : 1;
-                return [(int)$history->video_id => $weight];
-            });
+            // Prioritaskan video dengan kategori yang sama
+            if (!empty($likedCategories)) {
+                $query->where(function ($q) use ($likedCategories) {
+                    foreach ($likedCategories as $category) {
+                        $q->orWhereJsonContains('category', $category)
+                          ->orWhere('category', 'like', '%' . $category . '%');
+                    }
+                });
+            }
 
-            $recommendedVideos = Video::query()
-                ->whereNotIn('id', array_filter($excludedVideoIds))
-                ->when(!empty($watchedPreferences), function ($query) use ($watchedPreferences) {
-                    $videoIds = array_keys($watchedPreferences->toArray());
-                    return $query->orderByRaw("FIELD(id, " . implode(',', array_map('intval', $videoIds)) . ") DESC");
-                }, function ($query) {
-                    return $query; 
-                })
+            $recommendedVideos = $query
                 ->orderBy('rating', 'desc')
-                ->take(10)
-                ->get();
+                ->paginate(12);
 
-            // Jika kurang dari 5, isi dengan video populer lainnya
-            if ($recommendedVideos->count() < 5) {
+            // Jika kurang dari 6 video di halaman pertama, tambahkan video populer
+            if ($recommendedVideos->count() < 6 && $recommendedVideos->currentPage() === 1) {
                 $additionalVideos = Video::where('is_popular', true)
                     ->whereNotIn('id', array_filter($excludedVideoIds))
+                    ->when(!empty($likedCategories), function ($q) use ($likedCategories) {
+                        $q->where(function ($q) use ($likedCategories) {
+                            foreach ($likedCategories as $category) {
+                                $q->orWhereJsonContains('category', $category)
+                                  ->orWhere('category', 'like', '%' . $category . '%');
+                            }
+                        });
+                    })
                     ->orderBy('rating', 'desc')
-                    ->take(10 - $recommendedVideos->count())
+                    ->take(12 - $recommendedVideos->count())
                     ->get();
-                $recommendedVideos = $recommendedVideos->merge($additionalVideos)->unique('id')->take(5);
+                $recommendedVideos->getCollection()->merge($additionalVideos)->unique('id')->take(12);
             }
         }
 
